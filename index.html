@@ -10,23 +10,21 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-:root {
-  --bg:#0a0a0f; --surface:#13131a; --surface2:#1c1c26;
-  --border:rgba(255,255,255,0.08); --border2:rgba(255,255,255,0.14);
-  --text:#f0f0f5; --muted:#6b6b80;
-  --accent:#7c6af7; --accent2:#a599ff;
-  --green:#3ecf8e; --green2:#1a6644;
-  --amber:#f59e0b;
-  --red:#ef4444;
-  --mono:'DM Mono',monospace; --sans:'DM Sans',sans-serif;
-  --r:14px; --r2:20px;
+:root{
+  --bg:#0a0a0f;--surface:#13131a;--surface2:#1c1c26;
+  --border:rgba(255,255,255,0.08);--border2:rgba(255,255,255,0.14);
+  --text:#f0f0f5;--muted:#6b6b80;
+  --accent:#7c6af7;--accent2:#a599ff;
+  --green:#3ecf8e;--green2:#1a6644;
+  --amber:#f59e0b;--red:#ef4444;
+  --mono:'DM Mono',monospace;--sans:'DM Sans',sans-serif;
+  --r:14px;--r2:20px;
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);font-family:var(--sans)}
 body{display:flex;flex-direction:column}
 .app{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;padding:0 0 80px}
-.page{display:none;padding:24px 20px}
-.page.active{display:block}
+.page{display:none;padding:24px 20px}.page.active{display:block}
 
 .home-header{text-align:center;padding:32px 0 24px}
 .logo-mark{font-family:var(--mono);font-size:11px;letter-spacing:4px;color:var(--muted);text-transform:uppercase;margin-bottom:12px}
@@ -74,19 +72,16 @@ body{display:flex;flex-direction:column}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
 .blinking{animation:blink 1s infinite}
 
-/* REST FULLSCREEN */
 .rest-overlay{position:fixed;inset:0;background:rgba(10,10,15,.97);z-index:50;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px;text-align:center}
 .rest-overlay.hidden{display:none}
 .rest-type{font-size:11px;font-family:var(--mono);letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:16px}
 .rest-big{font-size:96px;font-family:var(--mono);font-weight:500;letter-spacing:-4px;line-height:1;margin-bottom:8px}
-.rest-big.gc{color:var(--green)}
-.rest-big.ac{color:var(--amber)}
+.rest-big.gc{color:var(--green)}.rest-big.ac{color:var(--amber)}
 .rest-sub{font-size:14px;color:var(--muted);margin-bottom:20px}
 .rest-next{font-size:15px;font-weight:500;color:var(--text);margin-bottom:36px;max-width:280px;line-height:1.6;padding:14px 20px;background:var(--surface);border-radius:var(--r);border:1px solid var(--border)}
 .rest-skip{background:transparent;border:1px solid var(--border2);border-radius:var(--r);padding:14px 36px;font-size:14px;font-family:var(--sans);font-weight:500;color:var(--muted);cursor:pointer}
 .rest-skip:active{transform:scale(.97)}
 
-/* MODAL */
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:60;display:flex;flex-direction:column;justify-content:flex-end}
 .modal-overlay.hidden{display:none}
 .modal-sheet{background:var(--surface);border-radius:24px 24px 0 0;padding:0;max-height:85vh;display:flex;flex-direction:column}
@@ -115,7 +110,6 @@ body{display:flex;flex-direction:column}
 .btn:active{transform:scale(.97)}
 .btn-start{background:linear-gradient(135deg,var(--accent),#5b4fcf);color:#fff}
 .btn-stop{background:linear-gradient(135deg,var(--green),#2aaa70);color:#fff}
-.btn-ghost{background:var(--surface);border:1px solid var(--border2);color:var(--muted)}
 .btn-skip{background:transparent;border:1px solid rgba(245,158,11,.3);color:var(--amber);font-size:13px;padding:12px}
 .btn-danger-ghost{background:transparent;border:1px solid rgba(239,68,68,.3);color:var(--red);font-size:13px;padding:12px}
 
@@ -182,7 +176,7 @@ body{display:flex;flex-direction:column}
     <div id="ex-card" class="ex-card"></div>
     <div id="series-done-wrap"></div>
     <div id="action-area"></div>
-    <button class="btn btn-skip" onclick="confirmarPular()">Pular este exercício</button>
+    <button class="btn btn-skip" onclick="pularExercicio()">Pular este exercício</button>
   </div>
 </div>
 
@@ -221,12 +215,11 @@ body{display:flex;flex-direction:column}
     <div id="hist-content"></div>
   </div>
 </div>
-
-</div><!-- /app -->
+</div>
 
 <!-- REST OVERLAY -->
 <div class="rest-overlay hidden" id="rest-overlay">
-  <div class="rest-type" id="rest-type">DESCANSO ENTRE SÉRIES</div>
+  <div class="rest-type" id="rest-type">DESCANSO</div>
   <div class="rest-big gc" id="rest-big">00:50</div>
   <div class="rest-sub" id="rest-sub">Respire, hidrate-se</div>
   <div class="rest-next" id="rest-next"></div>
@@ -304,25 +297,52 @@ const TREINOS={
 };
 
 const REST_SERIE=50, REST_EX=60;
-let E=null;
-let serieTimer=null,serieSegs=0,serieRodando=false;
-let esteiraTimer=null,esteiraSegs=0,_esteiraTipo=null;
-let restTimer=null,restSegs=0,_restCb=null;
 
-function save(){try{localStorage.setItem('gym_v4',JSON.stringify(E))}catch(e){}}
+/* ─── ESTADO ─── */
+let E=null;
+// Timers baseados em timestamps — continuam corretos mesmo com tela fechada
+let serieTickInterval=null;   // apenas atualiza o display
+let esteiraTickInterval=null;
+let restTickInterval=null;
+let _restCb=null;
+
+/* ─── STORAGE ─── */
+function save(){try{localStorage.setItem('gym_v5',JSON.stringify(E))}catch(e){}}
 function load(){
-  try{const d=JSON.parse(localStorage.getItem('gym_v4')||'null');
-    if(!d||d.data!==today())return null;return d}catch(e){return null}
+  try{
+    const d=JSON.parse(localStorage.getItem('gym_v5')||'null');
+    if(!d||d.data!==today())return null;
+    return d;
+  }catch(e){return null}
 }
 function saveHist(entry){
-  try{const h=JSON.parse(localStorage.getItem('gym_hist_v4')||'[]');
+  try{
+    const h=JSON.parse(localStorage.getItem('gym_hist_v5')||'[]');
     h.unshift(entry);if(h.length>60)h.splice(60);
-    localStorage.setItem('gym_hist_v4',JSON.stringify(h))}catch(e){}
+    localStorage.setItem('gym_hist_v5',JSON.stringify(h));
+  }catch(e){}
 }
-function loadHist(){try{return JSON.parse(localStorage.getItem('gym_hist_v4')||'[]')}catch(e){return[]}}
+function loadHist(){try{return JSON.parse(localStorage.getItem('gym_hist_v5')||'[]')}catch(e){return[]}}
 function today(){return new Date().toDateString()}
 function todayStr(){return new Date().toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit',year:'2-digit'})}
 
+/* ─── UTILS ─── */
+function pad(n){return String(Math.max(0,n)).padStart(2,'0')}
+function fmtHMS(ms){
+  const tot=Math.floor(ms/1000);
+  const h=Math.floor(tot/3600),m=Math.floor((tot%3600)/60),s=tot%60;
+  return pad(h)+':'+pad(m)+':'+pad(s);
+}
+function fmtMS(segs){
+  const s=Math.max(0,segs);
+  return pad(Math.floor(s/60))+':'+pad(s%60);
+}
+// segundos decorridos desde um timestamp
+function elapsed(ts){return Math.floor((Date.now()-ts)/1000)}
+// segundos restantes num descanso a partir de timestamp de início
+function restRemaining(startTs,total){return Math.max(0,total-elapsed(startTs))}
+
+/* ─── NAVIGATION ─── */
 function showPage(id){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.getElementById('page-'+id).classList.add('active');
@@ -335,15 +355,18 @@ function showNav(tab){
   if(tab==='hist'){showPage('hist');renderHist()}
 }
 function voltarHome(){
-  clearAll();fecharModalDireto();esconderDescanso();showNav('home');
+  clearAllTicks();fecharModalDireto();esconderDescanso();showNav('home');
 }
-function clearAll(){
-  clearInterval(serieTimer);clearInterval(esteiraTimer);clearInterval(restTimer);
-  serieRodando=false;
+function clearAllTicks(){
+  clearInterval(serieTickInterval);
+  clearInterval(esteiraTickInterval);
+  clearInterval(restTickInterval);
 }
 
+/* ─── HOME ─── */
 function checkPending(){
-  const d=load();const wrap=document.getElementById('pending-wrap');
+  const d=load();
+  const wrap=document.getElementById('pending-wrap');
   if(d&&!d.finalizado){
     const ex=TREINOS[d.tipo][d.exIdx];
     wrap.style.display='block';
@@ -356,27 +379,85 @@ function checkPending(){
   }else{wrap.style.display='none'}
 }
 function descartar(){
-  if(!confirm('Descartar treino em andamento?'))return;
-  try{localStorage.removeItem('gym_v4')}catch(e){}
+  try{localStorage.removeItem('gym_v5')}catch(e){}
   checkPending();
 }
 function iniciarTreino(tipo){
   const p=load();
   if(p&&!p.finalizado&&p.tipo===tipo){retomar();return}
-  if(p&&!p.finalizado&&p.tipo!==tipo){if(!confirm('Treino '+p.tipo+' em andamento. Descartar?'))return}
-  E={tipo,data:today(),exIdx:0,serieIdx:0,
+  if(p&&!p.finalizado&&p.tipo!==tipo){
+    // sem confirm() — não funciona bem no Safari iOS em arquivos locais
+    descartar();
+  }
+  E={
+    tipo,data:today(),exIdx:0,serieIdx:0,
     series:TREINOS[tipo].map(ex=>ex.tipo==='normal'?Array(ex.series||3).fill(null):[]),
-    pulados:[],finalizado:false,inicio:Date.now()};
+    pulados:[],finalizado:false,
+    inicio:Date.now(),
+    // timestamps para timers resistentes ao bloqueio de tela
+    serieStartTs:null,      // quando a série atual foi iniciada
+    restStartTs:null,       // quando o descanso atual foi iniciado
+    restTotal:0,            // duração total do descanso (50 ou 60s)
+    restTipo:null,          // 'serie' ou 'ex'
+    esteiraStartTs:null,    // quando a esteira foi iniciada
+    esteiraTipo:null,
+  };
   save();goExercicio();
 }
-function retomar(){E=load();if(!E){voltarHome();return}goExercicio()}
+function retomar(){
+  E=load();
+  if(!E){voltarHome();return}
+  // Verifica se há um descanso em andamento (tela fechou durante descanso)
+  if(E.restStartTs&&E.restTotal){
+    const rem=restRemaining(E.restStartTs,E.restTotal);
+    if(rem>0){
+      // reconstrói o descanso de onde parou
+      _restCb=E.restTipo==='serie'
+        ?()=>goExercicio()
+        :()=>avancarExercicio();
+      mostrarDescansoRetomado();
+      return;
+    }else{
+      // descanso já terminou enquanto tela estava fechada
+      E.restStartTs=null;E.restTotal=0;
+      if(E.restTipo==='serie'){goExercicio()}
+      else{avancarExercicio()}
+      return;
+    }
+  }
+  // Verifica esteira em andamento
+  if(E.esteiraStartTs&&E.esteiraTipo){
+    const rem=restRemaining(E.esteiraStartTs,600);
+    if(rem>0){mostrarEsteiraRetomada();return}
+    else{E.esteiraStartTs=null;terminarEsteira();return}
+  }
+  goExercicio();
+}
+
+/* ─── EXERCICIO ─── */
+function exFoiConcluido(idx){
+  // verifica se todas as séries do exercício idx foram preenchidas
+  const ex=TREINOS[E.tipo][idx];
+  if(ex.tipo!=='normal')return false;
+  return E.series[idx]&&E.series[idx].every(s=>s!==null);
+}
+function exFoiPulado(idx){
+  return E.pulados&&E.pulados.includes(idx);
+}
 
 function goExercicio(){
-  clearAll();
+  clearAllTicks();
+  // limpa estado de série/descanso anterior
+  E.restStartTs=null;E.restTotal=0;E.restTipo=null;
+  save();
   const ex=TREINOS[E.tipo][E.exIdx];
   if(ex.tipo!=='normal'){goEsteira(ex.tipo);return}
   showPage('ex');
   renderExCard();renderSeriesDone();renderActionArea();
+  // se havia série em andamento (tela fechou), retoma o cronômetro
+  if(E.serieStartTs){
+    retomaSerieCronometro();
+  }
 }
 
 function renderExCard(){
@@ -418,18 +499,19 @@ function renderSeriesDone(){
 function renderActionArea(){
   const ex=TREINOS[E.tipo][E.exIdx];
   const up=getUltimoPeso();
+  const jaRodando=!!E.serieStartTs;
   document.getElementById('action-area').innerHTML=`
     <div class="timer-block">
       <div class="timer-label">Cronômetro da série</div>
-      <div class="timer-num idle" id="stnum">00:00</div>
-      <div class="timer-pulse" id="stpulse"></div>
+      <div class="timer-num ${jaRodando?'blinking':'idle'}" id="stnum">${jaRodando?fmtMS(elapsed(E.serieStartTs)):'00:00'}</div>
+      <div class="timer-pulse" id="stpulse">${jaRodando?'● gravando':''}</div>
     </div>
     <div class="input-grid">
       <div class="field"><label>Peso (kg)</label><input type="number" id="inp-peso" min="0" step="0.5" inputmode="decimal" placeholder="0" value="${up}"></div>
       <div class="field"><label>${ex.isTime?'Meta (seg)':'Repetições'}</label><input type="number" id="inp-reps" min="1" step="1" inputmode="numeric" placeholder="${ex.isTime?ex.reps:'0'}"></div>
     </div>
-    <button class="btn btn-start" id="btn-start-serie" onclick="iniciarSerie()">▶ Iniciar série ${E.serieIdx+1}</button>
-    <button class="btn btn-stop" id="btn-stop-serie" style="display:none" onclick="finalizarSerie()">■ Finalizar série ${E.serieIdx+1}</button>`;
+    <button class="btn btn-start" id="btn-start-serie" style="${jaRodando?'display:none':''}" onclick="iniciarSerie()">▶ Iniciar série ${E.serieIdx+1}</button>
+    <button class="btn btn-stop" id="btn-stop-serie" style="${jaRodando?'':'display:none'}" onclick="finalizarSerie()">■ Finalizar série ${E.serieIdx+1}</button>`;
 }
 
 function getUltimoPeso(){
@@ -449,25 +531,34 @@ function getUltimoPeso(){
   return '';
 }
 
+/* ─── SÉRIE COM TIMESTAMP ─── */
 function iniciarSerie(){
-  serieSegs=0;serieRodando=true;
+  E.serieStartTs=Date.now();
+  save();
   document.getElementById('btn-start-serie').style.display='none';
   document.getElementById('btn-stop-serie').style.display='block';
   const n=document.getElementById('stnum');
   if(n){n.classList.remove('idle');n.classList.add('blinking')}
   const p=document.getElementById('stpulse');if(p)p.textContent='● gravando';
-  clearInterval(serieTimer);
-  serieTimer=setInterval(()=>{
-    if(!serieRodando)return;
-    serieSegs++;
-    const el=document.getElementById('stnum');
-    if(el){const m=Math.floor(serieSegs/60),s=serieSegs%60;el.textContent=pad(m)+':'+pad(s)}
-  },1000);
+  clearInterval(serieTickInterval);
+  serieTickInterval=setInterval(tickSerie,500);
+}
+function retomaSerieCronometro(){
+  document.getElementById('btn-start-serie').style.display='none';
+  document.getElementById('btn-stop-serie').style.display='block';
+  clearInterval(serieTickInterval);
+  serieTickInterval=setInterval(tickSerie,500);
+}
+function tickSerie(){
+  if(!E||!E.serieStartTs)return;
+  const el=document.getElementById('stnum');
+  if(el)el.textContent=fmtMS(elapsed(E.serieStartTs));
 }
 
 function finalizarSerie(){
-  clearInterval(serieTimer);serieRodando=false;
-  const tempo=serieSegs;
+  clearInterval(serieTickInterval);
+  const tempo=E.serieStartTs?elapsed(E.serieStartTs):0;
+  E.serieStartTs=null;
   const peso=parseFloat(document.getElementById('inp-peso').value)||0;
   const ex=TREINOS[E.tipo][E.exIdx];
   let reps=parseInt(document.getElementById('inp-reps').value)||0;
@@ -477,67 +568,90 @@ function finalizarSerie(){
   const totalS=ex.series||3;
 
   if(E.serieIdx<totalS-1){
-    // descanso entre séries (50s)
-    E.serieIdx++;save();
+    E.serieIdx++;
+    E.restStartTs=Date.now();E.restTotal=REST_SERIE;E.restTipo='serie';
+    save();
     const proxLabel=`${ex.nome} — Série ${E.serieIdx+1} de ${totalS}`;
-    iniciarDescanso(REST_SERIE,'DESCANSO ENTRE SÉRIES','gc',
-      'Respire e prepare-se',proxLabel,()=>goExercicio());
+    iniciarDescanso(REST_SERIE,'DESCANSO ENTRE SÉRIES','gc','Respire e prepare-se',proxLabel,()=>goExercicio());
   }else{
-    // descanso entre exercícios (60s)
-    E.serieIdx=0;save();
-    const proxIdx=proxNormalIdx(E.exIdx+1);
+    E.serieIdx=0;
+    // encontra o próximo exercício não concluído e não pulado
+    const proxIdx=proximoExPendente(E.exIdx+1);
+    E.restStartTs=Date.now();E.restTotal=REST_EX;E.restTipo='ex';
+    save();
     let proxLabel='Finalizar treino';
     if(proxIdx!==-1){
       const proxEx=TREINOS[E.tipo][proxIdx];
-      proxLabel=proxEx.nome+(proxEx.tipo==='esteira_fim'?' (10 min)':` — ${proxEx.series||3}×${proxEx.isTime?proxEx.reps+'s':proxEx.reps+' reps'}`);
+      proxLabel=proxEx.tipo==='esteira_fim'?'Esteira finalização (10 min)':
+        `${proxEx.nome} — ${proxEx.series||3}×${proxEx.isTime?proxEx.reps+'s':proxEx.reps+' reps'}`;
     }
-    iniciarDescanso(REST_EX,'DESCANSO ENTRE EXERCÍCIOS','ac',
-      'Troque de equipamento',proxLabel,()=>avancarExercicio());
+    iniciarDescanso(REST_EX,'DESCANSO ENTRE EXERCÍCIOS','ac','Troque de equipamento',proxLabel,()=>avancarExercicio());
   }
 }
 
-function proxNormalIdx(from){
+/* Encontra o próximo exercício normal que ainda não foi concluído nem pulado */
+function proximoExPendente(fromIdx){
   const exs=TREINOS[E.tipo];
-  for(let i=from;i<exs.length;i++){
-    if(exs[i].tipo==='normal'||exs[i].tipo==='esteira_fim')return i;
+  for(let i=fromIdx;i<exs.length;i++){
+    if(exs[i].tipo==='esteira_fim')return i;
+    if(exs[i].tipo==='normal'&&!exFoiConcluido(i)&&!exFoiPulado(i))return i;
   }
   return -1;
 }
 
-function pad(n){return String(n).padStart(2,'0')}
-
-/* DESCANSO */
-function iniciarDescanso(segs,tipo,cor,sub,prox,cb){
-  restSegs=segs;_restCb=cb;
+/* ─── DESCANSO COM TIMESTAMP ─── */
+function iniciarDescanso(total,tipo,cor,sub,prox,cb){
+  _restCb=cb;
   const o=document.getElementById('rest-overlay');o.classList.remove('hidden');
   document.getElementById('rest-type').textContent=tipo;
-  const big=document.getElementById('rest-big');
-  big.className='rest-big '+cor;
+  const big=document.getElementById('rest-big');big.className='rest-big '+cor;
   document.getElementById('rest-sub').textContent=sub;
   document.getElementById('rest-next').textContent='A seguir: '+prox;
-  atualizarRest();
-  clearInterval(restTimer);
-  restTimer=setInterval(()=>{restSegs--;atualizarRest();if(restSegs<=0){clearInterval(restTimer);esconderDescanso();if(_restCb)_restCb()}},1000);
+  clearInterval(restTickInterval);
+  restTickInterval=setInterval(()=>tickRest(total),500);
 }
-function atualizarRest(){
+function mostrarDescansoRetomado(){
+  // reconstrói overlay para descanso que estava rodando quando tela fechou
+  const rem=restRemaining(E.restStartTs,E.restTotal);
+  const cor=E.restTipo==='serie'?'gc':'ac';
+  const tipo=E.restTipo==='serie'?'DESCANSO ENTRE SÉRIES':'DESCANSO ENTRE EXERCÍCIOS';
+  const o=document.getElementById('rest-overlay');o.classList.remove('hidden');
+  document.getElementById('rest-type').textContent=tipo;
+  const big=document.getElementById('rest-big');big.className='rest-big '+cor;
+  document.getElementById('rest-sub').textContent='Retomando descanso...';
+  document.getElementById('rest-next').textContent='';
+  clearInterval(restTickInterval);
+  restTickInterval=setInterval(()=>tickRest(E.restTotal),500);
+}
+function tickRest(total){
+  if(!E||!E.restStartTs)return;
+  const rem=restRemaining(E.restStartTs,total);
   const el=document.getElementById('rest-big');
-  if(el){const m=Math.floor(restSegs/60),s=restSegs%60;el.textContent=pad(m)+':'+pad(s)}
-}
-function pularDescanso(){clearInterval(restTimer);esconderDescanso();if(_restCb)_restCb()}
-function esconderDescanso(){document.getElementById('rest-overlay').classList.add('hidden')}
-
-/* PULAR */
-function confirmarPular(){
-  const ex=TREINOS[E.tipo][E.exIdx];
-  if(confirm('Pular "'+ex.nome+'"?')){
-    clearAll();
-    if(!E.pulados)E.pulados=[];
-    E.pulados.push(E.exIdx);
-    E.serieIdx=0;save();avancarExercicio();
+  if(el)el.textContent=fmtMS(rem);
+  if(rem<=0){
+    clearInterval(restTickInterval);
+    E.restStartTs=null;E.restTotal=0;save();
+    esconderDescanso();
+    if(_restCb)_restCb();
   }
 }
+function pularDescanso(){
+  clearInterval(restTickInterval);
+  E.restStartTs=null;E.restTotal=0;save();
+  esconderDescanso();
+  if(_restCb)_restCb();
+}
+function esconderDescanso(){document.getElementById('rest-overlay').classList.add('hidden')}
 
-/* LISTA */
+/* ─── PULAR EXERCÍCIO ─── */
+function pularExercicio(){
+  if(!E.pulados)E.pulados=[];
+  E.pulados.push(E.exIdx);
+  E.serieStartTs=null;save();
+  avancarExercicio();
+}
+
+/* ─── LISTA ─── */
 function abrirLista(){
   const exs=TREINOS[E.tipo];
   document.getElementById('modal-titulo').textContent='Treino '+E.tipo;
@@ -549,8 +663,8 @@ function abrirLista(){
         <span class="mli-name" style="color:var(--muted)">🏃 ${ex.nome}</span>
       </div>`;return;
     }
-    const pulado=E.pulados&&E.pulados.includes(i);
-    const done=!pulado&&E.series[i]&&E.series[i].some(Boolean)&&i<E.exIdx;
+    const pulado=exFoiPulado(i);
+    const done=exFoiConcluido(i);
     const current=i===E.exIdx;
     let badge='';
     if(pulado)badge=`<span class="mli-badge mli-skip">pulado</span>`;
@@ -571,48 +685,93 @@ function abrirLista(){
 function fecharListaFora(e){if(e.target.id==='modal-lista')fecharModalDireto()}
 function fecharModalDireto(){document.getElementById('modal-lista').classList.add('hidden')}
 function irParaEx(idx){
-  fecharModalDireto();clearAll();
-  E.exIdx=idx;E.serieIdx=0;save();goExercicio();
+  fecharModalDireto();clearAllTicks();
+  E.exIdx=idx;E.serieIdx=0;E.serieStartTs=null;
+  E.restStartTs=null;E.restTotal=0;
+  save();goExercicio();
 }
 
-/* AVANÇAR */
+/* ─── AVANÇAR — pula exercícios já concluídos ─── */
 function avancarExercicio(){
   const exs=TREINOS[E.tipo];
-  if(E.exIdx<exs.length-1){E.exIdx++;E.serieIdx=0;save();goExercicio()}
-  else{finalizarTreino()}
+  let next=E.exIdx+1;
+  // pula exercícios já concluídos ou pulados
+  while(next<exs.length){
+    const ex=exs[next];
+    if(ex.tipo==='esteira_fim')break;
+    if(ex.tipo==='esteira_inicio'){next++;continue}
+    if(exFoiConcluido(next)||exFoiPulado(next)){next++;continue}
+    break;
+  }
+  if(next<exs.length){
+    E.exIdx=next;E.serieIdx=0;E.serieStartTs=null;save();goExercicio();
+  }else{
+    finalizarTreino();
+  }
 }
 
-/* ESTEIRA */
+/* ─── ESTEIRA COM TIMESTAMP ─── */
 function goEsteira(tipo){
-  _esteiraTipo=tipo;esteiraSegs=600;showPage('esteira');
+  E.esteiraTipo=tipo;
+  if(!E.esteiraStartTs)E.esteiraStartTs=Date.now();
+  save();
+  showPage('esteira');
   document.getElementById('esteira-title').textContent=tipo==='esteira_inicio'?'Esteira — aquecimento':'Esteira — finalização';
   document.getElementById('esteira-sub').textContent=tipo==='esteira_inicio'?'Aqueça bem antes de começar':'Ótimo trabalho! Recupere-se.';
   atualizarEsteira();
-  clearInterval(esteiraTimer);
-  esteiraTimer=setInterval(()=>{esteiraSegs--;atualizarEsteira();if(esteiraSegs<=0){clearInterval(esteiraTimer);terminarEsteira()}},1000);
+  clearInterval(esteiraTickInterval);
+  esteiraTickInterval=setInterval(atualizarEsteira,500);
+}
+function mostrarEsteiraRetomada(){
+  showPage('esteira');
+  document.getElementById('esteira-title').textContent=E.esteiraTipo==='esteira_inicio'?'Esteira — aquecimento':'Esteira — finalização';
+  document.getElementById('esteira-sub').textContent='Retomando...';
+  atualizarEsteira();
+  clearInterval(esteiraTickInterval);
+  esteiraTickInterval=setInterval(atualizarEsteira,500);
 }
 function atualizarEsteira(){
-  const m=Math.floor(esteiraSegs/60),s=esteiraSegs%60;
-  document.getElementById('esteira-timer').textContent=pad(m)+':'+pad(s);
+  if(!E||!E.esteiraStartTs)return;
+  const rem=restRemaining(E.esteiraStartTs,600);
+  document.getElementById('esteira-timer').textContent=fmtMS(rem);
+  if(rem<=0){
+    clearInterval(esteiraTickInterval);
+    E.esteiraStartTs=null;save();
+    terminarEsteira();
+  }
 }
-function pularEsteira(){clearInterval(esteiraTimer);terminarEsteira()}
-function terminarEsteira(){if(_esteiraTipo==='esteira_fim'){finalizarTreino();return}avancarExercicio()}
+function pularEsteira(){
+  clearInterval(esteiraTickInterval);
+  E.esteiraStartTs=null;save();
+  terminarEsteira();
+}
+function terminarEsteira(){
+  if(E.esteiraTipo==='esteira_fim'){finalizarTreino();return}
+  E.esteiraTipo=null;save();
+  avancarExercicio();
+}
 
-/* FINALIZAR */
+/* ─── FINALIZAR ─── */
 function finalizarTreino(){
-  clearAll();E.finalizado=true;E.fim=Date.now();save();
-  saveHist({tipo:E.tipo,data:today(),dataStr:todayStr(),inicio:E.inicio,fim:E.fim,
-    exNames:TREINOS[E.tipo].map(e=>e.nome),series:E.series,pulados:E.pulados||[]});
+  clearAllTicks();
+  E.finalizado=true;E.fim=Date.now();save();
+  saveHist({
+    tipo:E.tipo,data:today(),dataStr:todayStr(),
+    inicio:E.inicio,fim:E.fim,
+    exNames:TREINOS[E.tipo].map(e=>e.nome),
+    series:E.series,pulados:E.pulados||[]
+  });
   showPage('finished');renderFinished();
 }
+
 function renderFinished(){
   const exs=TREINOS[E.tipo];
-  const mins=Math.round((E.fim-E.inicio)/60000);
+  const durMs=E.fim-E.inicio;
   const totalS=E.series.flat().filter(Boolean).length;
   const vol=E.series.flat().filter(Boolean).reduce((a,s)=>a+(s.peso*s.reps),0);
   document.getElementById('fin-sub').textContent='Treino '+E.tipo+' · '+todayStr();
   document.getElementById('fin-stats').innerHTML=`
-    <div class="stat-card"><div class="stat-num">${mins}'</div><div class="stat-label">Duração</div></div>
+    <div class="stat-card"><div class="stat-num" style="font-size:20px">${fmtHMS(durMs)}</div><div class="stat-label">Duração</div></div>
     <div class="stat-card"><div class="stat-num">${totalS}</div><div class="stat-label">Séries</div></div>
     <div class="stat-card"><div class="stat-num">${Math.round(vol)}</div><div class="stat-label">Volume kg×rep</div></div>
     <div class="stat-card"><div class="stat-num">${exs.filter(e=>e.tipo==='normal').length}</div><div class="stat-label">Exercícios</div></div>`;
@@ -620,7 +779,7 @@ function renderFinished(){
   exs.forEach((ex,i)=>{
     if(ex.tipo!=='normal')return;
     const ss=E.series[i].filter(Boolean);
-    const pulado=E.pulados&&E.pulados.includes(i);
+    const pulado=exFoiPulado(i);
     html+=`<div class="hist-card">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
         <span style="font-size:14px;font-weight:500">${ex.nome}</span>
@@ -632,10 +791,14 @@ function renderFinished(){
   document.getElementById('fin-detail').innerHTML=html;
 }
 
-/* HISTÓRICO */
+/* ─── HISTÓRICO ─── */
 function renderHist(){
-  const hist=loadHist();const div=document.getElementById('hist-content');
-  if(!hist.length){div.innerHTML='<p style="color:var(--muted);font-size:14px;text-align:center;padding:32px 0">Nenhum treino registrado.<br>Conclua seu primeiro treino!</p>';return}
+  const hist=loadHist();
+  const div=document.getElementById('hist-content');
+  if(!hist.length){
+    div.innerHTML='<p style="color:var(--muted);font-size:14px;text-align:center;padding:32px 0">Nenhum treino registrado.<br>Conclua seu primeiro treino!</p>';
+    return;
+  }
   const byEx={};
   hist.forEach(h=>{
     TREINOS[h.tipo].forEach((ex,i)=>{
@@ -647,7 +810,7 @@ function renderHist(){
   });
   let html=`<div class="section-title" style="margin-bottom:16px">Registros recentes</div>`;
   hist.slice(0,15).forEach(h=>{
-    const mins=Math.round((h.fim-h.inicio)/60000);
+    const dur=fmtHMS(h.fim-h.inicio);
     let exHtml='';
     TREINOS[h.tipo].forEach((ex,i)=>{
       if(ex.tipo!=='normal')return;
@@ -659,24 +822,39 @@ function renderHist(){
         <div class="hist-series-row">${ss.map((s,j)=>`<span class="pill">S${j+1}: ${s.peso}kg×${s.reps} <span style="color:var(--muted)">${s.tempo}s</span></span>`).join(' ')}</div>
       </div>`;
     });
-    html+=`<div class="hist-card"><div class="hist-head"><span class="hist-treino">Treino ${h.tipo}</span><span class="hist-date">${h.dataStr} · ${mins}min</span></div>${exHtml}</div>`;
+    html+=`<div class="hist-card">
+      <div class="hist-head">
+        <span class="hist-treino">Treino ${h.tipo}</span>
+        <span class="hist-date">${h.dataStr} · ${dur}</span>
+      </div>${exHtml}
+    </div>`;
   });
   html+=`<div class="section-title" style="margin:24px 0 12px">Evolução de carga</div>`;
   const exsComDados=Object.keys(byEx).filter(k=>byEx[k].length>=2);
-  if(!exsComDados.length){html+=`<p style="color:var(--muted);font-size:13px">Registre mais treinos para ver evolução.</p>`}
-  else exsComDados.forEach(nome=>{
-    const d=byEx[nome];const u=d[0],p=d[1];
-    const diff=+(u.maxPeso-p.maxPeso).toFixed(1);
-    const seta=diff>0?`<span class="evol-up">▲ +${diff}kg</span>`:diff<0?`<span class="evol-down">▼ ${diff}kg</span>`:`<span style="color:var(--muted)">→ igual</span>`;
-    html+=`<div class="hist-card" style="padding:12px 16px">
-      <div style="font-size:13px;font-weight:500;margin-bottom:4px">${nome}</div>
-      <div style="display:flex;justify-content:space-between;align-items:center">
-        <span style="font-size:12px;color:var(--muted)">Último: <b style="color:var(--text)">${u.maxPeso}kg</b> · ${u.data}</span>${seta}
-      </div>
-    </div>`;
-  });
+  if(!exsComDados.length){
+    html+=`<p style="color:var(--muted);font-size:13px">Registre mais treinos para ver evolução.</p>`;
+  }else{
+    exsComDados.forEach(nome=>{
+      const d=byEx[nome];const u=d[0],p=d[1];
+      const diff=+(u.maxPeso-p.maxPeso).toFixed(1);
+      const seta=diff>0?`<span class="evol-up">▲ +${diff}kg</span>`:diff<0?`<span class="evol-down">▼ ${diff}kg</span>`:`<span style="color:var(--muted)">→ igual</span>`;
+      html+=`<div class="hist-card" style="padding:12px 16px">
+        <div style="font-size:13px;font-weight:500;margin-bottom:4px">${nome}</div>
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <span style="font-size:12px;color:var(--muted)">Último: <b style="color:var(--text)">${u.maxPeso}kg</b> · ${u.data}</span>${seta}
+        </div>
+      </div>`;
+    });
+  }
   div.innerHTML=html;
 }
+
+/* ─── VISIBILIDADE — reconecta ticks quando volta para a tela ─── */
+document.addEventListener('visibilitychange',()=>{
+  if(document.visibilityState==='visible'&&E&&!E.finalizado){
+    retomar();
+  }
+});
 
 checkPending();
 </script>
