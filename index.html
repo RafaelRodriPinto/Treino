@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Treino">
@@ -11,217 +11,252 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#0a0a0f;--surface:#13131a;--surface2:#1c1c26;
+  --bg:#0a0a0f;--surface:#13131a;--surface2:#1c1c26;--surface3:#22222f;
   --border:rgba(255,255,255,0.08);--border2:rgba(255,255,255,0.14);
   --text:#f0f0f5;--muted:#6b6b80;
   --accent:#7c6af7;--accent2:#a599ff;
   --green:#3ecf8e;--green2:#1a6644;
-  --amber:#f59e0b;--red:#ef4444;
+  --amber:#f59e0b;--amber2:rgba(245,158,11,0.15);
+  --red:#ef4444;--red2:rgba(239,68,68,0.15);
+  --blue:#38bdf8;--blue2:rgba(56,189,248,0.12);
   --mono:'DM Mono',monospace;--sans:'DM Sans',sans-serif;
   --r:14px;--r2:20px;
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);font-family:var(--sans)}
 body{display:flex;flex-direction:column}
-.app{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;padding:0 0 80px}
-.page{display:none;padding:24px 20px}.page.active{display:block}
+.app{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;padding:0 0 72px}
+.page{display:none;padding:16px 16px 8px}.page.active{display:block}
 
-.home-header{text-align:center;padding:32px 0 24px}
-.logo-mark{font-family:var(--mono);font-size:11px;letter-spacing:4px;color:var(--muted);text-transform:uppercase;margin-bottom:12px}
-.home-header h1{font-size:28px;font-weight:600;background:linear-gradient(135deg,#fff 0%,var(--accent2) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.pending-card{background:linear-gradient(135deg,rgba(124,106,247,.15),rgba(124,106,247,.05));border:1px solid rgba(124,106,247,.3);border-radius:var(--r2);padding:16px;margin-bottom:20px}
-.plabel{font-size:11px;font-family:var(--mono);letter-spacing:2px;color:var(--accent2);margin-bottom:8px;text-transform:uppercase}
-.pname{font-size:15px;font-weight:500;margin-bottom:14px}
-.treino-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:28px}
-.treino-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r2);padding:20px 12px;text-align:center;cursor:pointer;transition:all .2s}
-.treino-card:active{transform:scale(.96)}
-.treino-card .letra{font-size:32px;font-weight:600;font-family:var(--mono);background:linear-gradient(135deg,var(--accent2),var(--green));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.treino-card .info{font-size:11px;color:var(--muted);margin-top:4px}
-.section-title{font-size:11px;font-family:var(--mono);letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:12px}
+/* ── NAV TABS ── */
+.nav{position:fixed;bottom:0;left:0;right:0;background:var(--surface);border-top:1px solid var(--border);display:grid;grid-template-columns:repeat(4,1fr);z-index:20;padding-bottom:env(safe-area-inset-bottom)}
+.nav-btn{padding:10px 4px 8px;font-size:9px;font-family:var(--mono);letter-spacing:.5px;color:var(--muted);background:none;border:none;cursor:pointer;text-transform:uppercase;display:flex;flex-direction:column;align-items:center;gap:3px;transition:color .2s}
+.nav-btn svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.nav-btn.active{color:var(--accent2)}
 
-.prog-bar-wrap{margin-bottom:16px}
-.prog-meta{display:flex;justify-content:space-between;margin-bottom:8px;font-size:12px;color:var(--muted);font-family:var(--mono)}
-.prog-bar{height:3px;background:var(--surface2);border-radius:100px;overflow:hidden}
-.prog-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--green));border-radius:100px;transition:width .4s ease}
-
-.ex-list-btn{display:flex;align-items:center;justify-content:space-between;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:10px 14px;cursor:pointer;margin-bottom:14px;width:100%;font-family:var(--sans);color:var(--text)}
-.ex-list-btn span{font-size:13px;color:var(--accent2);font-family:var(--mono)}
-
-.ex-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r2);padding:20px;margin-bottom:12px}
-.ex-tag{font-size:10px;font-family:var(--mono);letter-spacing:2px;color:var(--accent2);text-transform:uppercase;margin-bottom:6px}
-.ex-name{font-size:20px;font-weight:500;line-height:1.3}
-.ex-meta{font-size:13px;color:var(--muted);margin-top:6px}
-.series-badges{display:flex;gap:6px;margin-top:12px}
-.s-badge{width:28px;height:28px;border-radius:50%;border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:11px;font-family:var(--mono);color:var(--muted)}
-.s-badge.done{background:var(--green2);border-color:var(--green);color:var(--green)}
-.s-badge.current{background:rgba(124,106,247,.2);border-color:var(--accent);color:var(--accent2)}
-
-.series-done{background:var(--surface);border:1px solid var(--border);border-radius:var(--r2);padding:16px;margin-bottom:12px}
-.serie-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border)}
-.serie-row:last-child{border-bottom:none}
-.s-label{font-size:12px;font-family:var(--mono);color:var(--muted)}
-.s-data{display:flex;gap:6px}
+/* ── COMMON ── */
+.section-title{font-size:10px;font-family:var(--mono);letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:10px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r2);padding:14px 16px;margin-bottom:10px}
+.btn{width:100%;padding:14px;border-radius:var(--r);font-size:14px;font-family:var(--sans);font-weight:500;cursor:pointer;border:none;transition:all .15s;margin-bottom:8px;display:block;text-align:center}
+.btn:active{transform:scale(.97)}
+.btn-primary{background:linear-gradient(135deg,var(--accent),#5b4fcf);color:#fff}
+.btn-green{background:linear-gradient(135deg,var(--green),#2aaa70);color:#fff}
+.btn-ghost{background:var(--surface);border:1px solid var(--border2);color:var(--muted)}
+.btn-amber{background:transparent;border:1px solid rgba(245,158,11,.35);color:var(--amber);font-size:13px;padding:11px}
+.btn-red{background:transparent;border:1px solid rgba(239,68,68,.35);color:var(--red);font-size:13px;padding:11px}
 .pill{background:var(--surface2);border-radius:8px;padding:3px 8px;font-size:11px;font-family:var(--mono);color:var(--text)}
-.pill.green{background:rgba(62,207,142,.12);color:var(--green)}
+.pill.g{background:rgba(62,207,142,.12);color:var(--green)}
+.pill.a{background:var(--amber2);color:var(--amber)}
+.tag{font-size:10px;font-family:var(--mono);padding:2px 8px;border-radius:6px}
+.tag-green{background:var(--green2);color:var(--green)}
+.tag-amber{background:var(--amber2);color:var(--amber)}
+.tag-red{background:var(--red2);color:var(--red)}
+.tag-blue{background:var(--blue2);color:var(--blue)}
+.tag-muted{background:var(--surface2);color:var(--muted)}
 
-.timer-block{background:var(--surface);border:1px solid var(--border);border-radius:var(--r2);padding:20px;margin-bottom:12px;text-align:center}
-.timer-label{font-size:11px;font-family:var(--mono);letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:10px}
-.timer-num{font-size:52px;font-family:var(--mono);font-weight:500;letter-spacing:-2px;color:var(--green);transition:color .3s}
-.timer-num.idle{color:var(--muted)}
-.timer-pulse{font-size:11px;font-family:var(--mono);color:var(--muted);margin-top:6px;min-height:16px}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
 .blinking{animation:blink 1s infinite}
 
-.rest-overlay{position:fixed;inset:0;background:rgba(10,10,15,.97);z-index:50;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px;text-align:center}
-.rest-overlay.hidden{display:none}
-.rest-type{font-size:11px;font-family:var(--mono);letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:16px}
-.rest-big{font-size:96px;font-family:var(--mono);font-weight:500;letter-spacing:-4px;line-height:1;margin-bottom:8px}
-.rest-big.gc{color:var(--green)}.rest-big.ac{color:var(--amber)}
-.rest-sub{font-size:14px;color:var(--muted);margin-bottom:20px}
-.rest-next{font-size:15px;font-weight:500;color:var(--text);margin-bottom:36px;max-width:280px;line-height:1.6;padding:14px 20px;background:var(--surface);border-radius:var(--r);border:1px solid var(--border)}
-.rest-skip{background:transparent;border:1px solid var(--border2);border-radius:var(--r);padding:14px 36px;font-size:14px;font-family:var(--sans);font-weight:500;color:var(--muted);cursor:pointer}
-.rest-skip:active{transform:scale(.97)}
+/* ── HOME ── */
+.home-header{text-align:center;padding:24px 0 20px}
+.logo-mark{font-family:var(--mono);font-size:10px;letter-spacing:4px;color:var(--muted);text-transform:uppercase;margin-bottom:8px}
+.home-header h1{font-size:26px;font-weight:600;background:linear-gradient(135deg,#fff 0%,var(--accent2) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:60;display:flex;flex-direction:column;justify-content:flex-end}
-.modal-overlay.hidden{display:none}
-.modal-sheet{background:var(--surface);border-radius:24px 24px 0 0;padding:0;max-height:85vh;display:flex;flex-direction:column}
-.modal-header{display:flex;align-items:center;justify-content:space-between;padding:20px 20px 16px;border-bottom:1px solid var(--border);flex-shrink:0}
-.modal-header h3{font-size:16px;font-weight:500}
-.modal-close{background:var(--surface2);border:none;border-radius:50%;width:32px;height:32px;font-size:20px;color:var(--muted);cursor:pointer;line-height:1}
-.modal-body{overflow-y:auto;-webkit-overflow-scrolling:touch;flex:1}
-.modal-list-item{display:flex;align-items:center;gap:12px;padding:14px 20px;border-bottom:1px solid var(--border);cursor:pointer}
-.modal-list-item:active{background:var(--surface2)}
-.modal-list-item:last-child{border-bottom:none}
-.modal-list-item.done-ex .mli-name{color:var(--muted)}
-.modal-list-item.current-ex{background:rgba(124,106,247,.08)}
-.mli-num{font-size:11px;font-family:var(--mono);color:var(--muted);min-width:22px}
-.mli-name{font-size:14px;flex:1;line-height:1.4}
-.mli-badge{font-size:10px;font-family:var(--mono);padding:3px 8px;border-radius:6px;white-space:nowrap}
-.mli-done{background:var(--green2);color:var(--green)}
-.mli-current{background:rgba(124,106,247,.2);color:var(--accent2)}
-.mli-skip{background:rgba(239,68,68,.15);color:var(--red)}
+.alert-banner{border-radius:var(--r);padding:12px 14px;margin-bottom:12px;font-size:13px;line-height:1.5}
+.alert-red{background:var(--red2);border:1px solid rgba(239,68,68,.3);color:#fca5a5}
+.alert-amber{background:var(--amber2);border:1px solid rgba(245,158,11,.3);color:#fcd34d}
 
-.input-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
-.field label{font-size:11px;font-family:var(--mono);letter-spacing:1px;color:var(--muted);display:block;margin-bottom:6px;text-transform:uppercase}
-.field input{width:100%;background:var(--surface2);border:1px solid var(--border2);border-radius:10px;padding:12px;font-size:18px;font-family:var(--mono);color:var(--text);outline:none;-webkit-appearance:none}
+.suggest-card{background:linear-gradient(135deg,rgba(124,106,247,.18),rgba(124,106,247,.06));border:1px solid rgba(124,106,247,.3);border-radius:var(--r2);padding:14px 16px;margin-bottom:12px}
+.suggest-label{font-size:10px;font-family:var(--mono);letter-spacing:2px;color:var(--accent2);text-transform:uppercase;margin-bottom:4px}
+.suggest-name{font-size:16px;font-weight:500;margin-bottom:12px}
+
+.pending-card{background:linear-gradient(135deg,rgba(62,207,142,.12),rgba(62,207,142,.04));border:1px solid rgba(62,207,142,.25);border-radius:var(--r2);padding:14px 16px;margin-bottom:12px}
+.pending-label{font-size:10px;font-family:var(--mono);letter-spacing:2px;color:var(--green);text-transform:uppercase;margin-bottom:4px}
+.pending-name{font-size:15px;font-weight:500;margin-bottom:12px}
+
+/* SESSÕES */
+.sess-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:16px}
+.sess-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:10px 6px;text-align:center}
+.sess-letra{font-size:20px;font-weight:600;font-family:var(--mono);background:linear-gradient(135deg,var(--accent2),var(--green));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.sess-num{font-size:18px;font-weight:600;color:var(--text);font-family:var(--mono)}
+.sess-label{font-size:9px;color:var(--muted);margin-top:2px;font-family:var(--mono)}
+.sess-bar{height:3px;background:var(--surface2);border-radius:100px;margin-top:6px;overflow:hidden}
+.sess-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--green));border-radius:100px;transition:width .4s}
+
+.treino-grid-new{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px}
+.treino-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r2);padding:16px 12px;cursor:pointer;transition:all .2s}
+.treino-card:active{transform:scale(.96)}
+.treino-card .tc-letra{font-size:28px;font-weight:600;font-family:var(--mono);background:linear-gradient(135deg,var(--accent2),var(--green));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.treino-card .tc-info{font-size:11px;color:var(--muted);margin-top:2px;line-height:1.4}
+.treino-card .tc-sess{font-size:11px;font-family:var(--mono);color:var(--accent2);margin-top:6px}
+
+/* ── EXERCICIO ── */
+.prog-bar-wrap{margin-bottom:12px}
+.prog-meta{display:flex;justify-content:space-between;margin-bottom:6px;font-size:11px;color:var(--muted);font-family:var(--mono)}
+.prog-bar{height:3px;background:var(--surface2);border-radius:100px;overflow:hidden}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--green));border-radius:100px;transition:width .4s}
+
+.ex-list-btn{display:flex;align-items:center;justify-content:space-between;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:9px 14px;cursor:pointer;margin-bottom:10px;width:100%;font-family:var(--sans);color:var(--text)}
+
+.ex-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r2);padding:16px;margin-bottom:10px}
+.ex-tag{font-size:10px;font-family:var(--mono);letter-spacing:2px;color:var(--accent2);text-transform:uppercase;margin-bottom:5px}
+.ex-name{font-size:18px;font-weight:500;line-height:1.35}
+.ex-name a{color:var(--accent2);text-decoration:none;border-bottom:1px solid rgba(165,153,255,.3)}
+.ex-conjugado{font-size:12px;color:var(--amber);margin-top:4px;font-family:var(--mono)}
+.ex-meta{font-size:13px;color:var(--muted);margin-top:5px}
+.series-badges{display:flex;gap:5px;margin-top:10px}
+.s-badge{width:26px;height:26px;border-radius:50%;border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:10px;font-family:var(--mono);color:var(--muted)}
+.s-badge.done{background:var(--green2);border-color:var(--green);color:var(--green)}
+.s-badge.current{background:rgba(124,106,247,.2);border-color:var(--accent);color:var(--accent2)}
+
+.link-row{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+.link-btn{display:inline-flex;align-items:center;gap:5px;background:var(--blue2);border:1px solid rgba(56,189,248,.2);border-radius:8px;padding:5px 10px;font-size:11px;font-family:var(--mono);color:var(--blue);text-decoration:none;cursor:pointer}
+
+.series-done{background:var(--surface);border:1px solid var(--border);border-radius:var(--r2);padding:14px;margin-bottom:10px}
+.serie-row{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid var(--border)}
+.serie-row:last-child{border-bottom:none}
+.s-label{font-size:11px;font-family:var(--mono);color:var(--muted)}
+.s-data{display:flex;gap:5px}
+
+.timer-block{background:var(--surface);border:1px solid var(--border);border-radius:var(--r2);padding:16px;margin-bottom:10px;text-align:center}
+.timer-label{font-size:10px;font-family:var(--mono);letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:8px}
+.timer-num{font-size:48px;font-family:var(--mono);font-weight:500;letter-spacing:-2px;color:var(--green)}
+.timer-num.idle{color:var(--muted)}
+.timer-pulse{font-size:10px;font-family:var(--mono);color:var(--muted);margin-top:4px;min-height:14px}
+
+.input-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+.field label{font-size:10px;font-family:var(--mono);letter-spacing:1px;color:var(--muted);display:block;margin-bottom:5px;text-transform:uppercase}
+.field input{width:100%;background:var(--surface2);border:1px solid var(--border2);border-radius:10px;padding:11px;font-size:17px;font-family:var(--mono);color:var(--text);outline:none;-webkit-appearance:none}
 .field input:focus{border-color:var(--accent)}
 
-.btn{width:100%;padding:16px;border-radius:var(--r);font-size:15px;font-family:var(--sans);font-weight:500;cursor:pointer;border:none;transition:all .15s;margin-bottom:8px;display:block}
-.btn:active{transform:scale(.97)}
-.btn-start{background:linear-gradient(135deg,var(--accent),#5b4fcf);color:#fff}
-.btn-stop{background:linear-gradient(135deg,var(--green),#2aaa70);color:#fff}
-.btn-skip{background:transparent;border:1px solid rgba(245,158,11,.3);color:var(--amber);font-size:13px;padding:12px}
-.btn-danger-ghost{background:transparent;border:1px solid rgba(239,68,68,.3);color:var(--red);font-size:13px;padding:12px}
+/* ── REST OVERLAY ── */
+.rest-overlay{position:fixed;inset:0;background:rgba(10,10,15,.97);z-index:50;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px;text-align:center}
+.rest-overlay.hidden{display:none}
+.rest-type{font-size:10px;font-family:var(--mono);letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:14px}
+.rest-big{font-size:88px;font-family:var(--mono);font-weight:500;letter-spacing:-4px;line-height:1;margin-bottom:6px}
+.rest-big.gc{color:var(--green)}.rest-big.ac{color:var(--amber)}
+.rest-sub{font-size:13px;color:var(--muted);margin-bottom:16px}
+.rest-next{font-size:14px;font-weight:500;color:var(--text);margin-bottom:32px;max-width:280px;line-height:1.6;padding:12px 18px;background:var(--surface);border-radius:var(--r);border:1px solid var(--border)}
+.rest-skip{background:transparent;border:1px solid var(--border2);border-radius:var(--r);padding:13px 32px;font-size:13px;font-family:var(--sans);font-weight:500;color:var(--muted);cursor:pointer}
 
-.esteira-hero{text-align:center;padding:32px 0}
-.esteira-icon{font-size:48px;margin-bottom:16px}
-.esteira-title{font-size:20px;font-weight:500;margin-bottom:6px}
-.esteira-sub{font-size:14px;color:var(--muted)}
-.esteira-timer{font-size:72px;font-family:var(--mono);font-weight:500;color:var(--green);letter-spacing:-3px;margin:24px 0}
+/* ── MODAL ── */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:60;display:flex;flex-direction:column;justify-content:flex-end}
+.modal-overlay.hidden{display:none}
+.modal-sheet{background:var(--surface);border-radius:24px 24px 0 0;max-height:85vh;display:flex;flex-direction:column}
+.modal-header{display:flex;align-items:center;justify-content:space-between;padding:18px 18px 14px;border-bottom:1px solid var(--border);flex-shrink:0}
+.modal-header h3{font-size:15px;font-weight:500}
+.modal-close{background:var(--surface2);border:none;border-radius:50%;width:30px;height:30px;font-size:18px;color:var(--muted);cursor:pointer;line-height:1}
+.modal-body{overflow-y:auto;-webkit-overflow-scrolling:touch;flex:1}
+.modal-item{display:flex;align-items:center;gap:10px;padding:13px 18px;border-bottom:1px solid var(--border);cursor:pointer}
+.modal-item:active{background:var(--surface2)}
+.modal-item:last-child{border-bottom:none}
+.modal-item.done-ex .mi-name{color:var(--muted)}
+.modal-item.current-ex{background:rgba(124,106,247,.08)}
+.mi-num{font-size:10px;font-family:var(--mono);color:var(--muted);min-width:20px}
+.mi-name{font-size:13px;flex:1;line-height:1.4}
 
-.finish-hero{text-align:center;padding:32px 0 24px}
-.finish-check{width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,var(--green),#2aaa70);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;font-size:32px}
-.finish-title{font-size:26px;font-weight:600;margin-bottom:6px}
-.finish-sub{font-size:14px;color:var(--muted)}
-.finish-stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px}
-.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:16px;text-align:center}
-.stat-num{font-size:24px;font-family:var(--mono);font-weight:500;color:var(--accent2)}
-.stat-label{font-size:11px;color:var(--muted);margin-top:4px;font-family:var(--mono);letter-spacing:1px}
+/* ── ESTEIRA ── */
+.esteira-wrap{text-align:center;padding:28px 0}
+.esteira-icon{font-size:44px;margin-bottom:14px}
+.esteira-timer{font-size:68px;font-family:var(--mono);font-weight:500;color:var(--green);letter-spacing:-3px;margin:20px 0}
 
-.hist-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r2);padding:16px;margin-bottom:10px}
-.hist-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
-.hist-treino{font-size:16px;font-weight:500}
-.hist-date{font-size:11px;font-family:var(--mono);color:var(--muted)}
-.hist-ex{margin-bottom:10px}
-.hist-ex-name{font-size:12px;color:var(--muted);margin-bottom:4px}
-.hist-series-row{display:flex;gap:4px;flex-wrap:wrap}
-.evol-up{color:var(--green);font-size:11px}
-.evol-down{color:var(--red);font-size:11px}
+/* ── FINISHED ── */
+.finish-hero{text-align:center;padding:28px 0 20px}
+.finish-check{width:68px;height:68px;border-radius:50%;background:linear-gradient(135deg,var(--green),#2aaa70);display:flex;align-items:center;justify-content:center;margin:0 auto 18px;font-size:30px}
+.finish-stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:14px;text-align:center}
+.stat-num{font-size:22px;font-family:var(--mono);font-weight:500;color:var(--accent2)}
+.stat-label{font-size:10px;color:var(--muted);margin-top:3px;font-family:var(--mono)}
 
-.nav{position:fixed;bottom:0;left:0;right:0;background:var(--surface);border-top:1px solid var(--border);display:flex;z-index:20;padding-bottom:env(safe-area-inset-bottom)}
-.nav-btn{flex:1;padding:12px 8px;font-size:10px;font-family:var(--mono);letter-spacing:1px;color:var(--muted);background:none;border:none;cursor:pointer;text-transform:uppercase;display:flex;flex-direction:column;align-items:center;gap:4px;transition:color .2s}
-.nav-btn svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
-.nav-btn.active{color:var(--accent2)}
+/* ── HISTORICO / EVOLUCAO ── */
+.hist-tabs{display:flex;gap:8px;margin-bottom:14px}
+.hist-tab{flex:1;padding:8px;border-radius:var(--r);font-size:12px;font-family:var(--mono);border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;text-align:center}
+.hist-tab.active{background:var(--accent);border-color:var(--accent);color:#fff}
 </style>
 </head>
 <body>
 <div class="app" id="app">
 
-<!-- HOME -->
+<!-- ══ HOME ══ -->
 <div class="page active" id="page-home">
   <div class="home-header">
     <div class="logo-mark">Academia</div>
     <h1>Meu Treino</h1>
   </div>
-  <div id="pending-wrap" style="display:none"></div>
-  <div class="section-title">Selecionar treino</div>
-  <div class="treino-grid">
-    <div class="treino-card" onclick="iniciarTreino('A')"><div class="letra">A</div><div class="info">Peito · Tríceps</div></div>
-    <div class="treino-card" onclick="iniciarTreino('B')"><div class="letra">B</div><div class="info">Costas · Bíceps</div></div>
-    <div class="treino-card" onclick="iniciarTreino('C')"><div class="letra">C</div><div class="info">Ombros · Core</div></div>
-  </div>
+  <div id="home-alerts"></div>
+  <div id="home-pending"></div>
+  <div id="home-suggest"></div>
+  <div class="section-title">Sessões concluídas</div>
+  <div class="sess-grid" id="sess-grid"></div>
+  <div class="section-title">Treino de hoje</div>
+  <div class="treino-grid-new" id="treino-grid"></div>
 </div>
 
-<!-- EXERCICIO -->
+<!-- ══ EXERCICIO ══ -->
 <div class="page" id="page-ex">
-  <div style="padding:20px 20px 0">
+  <div>
     <div class="prog-bar-wrap">
-      <div class="prog-meta"><span id="prog-label">Treino A</span><span id="prog-count">1/14</span></div>
+      <div class="prog-meta"><span id="prog-label">Treino A</span><span id="prog-count">1/10</span></div>
       <div class="prog-bar"><div class="prog-fill" id="prog-fill" style="width:0%"></div></div>
     </div>
     <button class="ex-list-btn" onclick="abrirLista()">
-      <span style="font-size:13px">Ver / escolher exercício</span>
-      <span>≡</span>
+      <span style="font-size:13px">Ver / escolher exercício</span><span style="color:var(--accent2);font-family:var(--mono)">≡</span>
     </button>
     <div id="ex-card" class="ex-card"></div>
     <div id="series-done-wrap"></div>
     <div id="action-area"></div>
-    <button class="btn btn-skip" onclick="pularExercicio()">Pular este exercício</button>
+    <button class="btn btn-amber" onclick="pularExercicio()">Pular este exercício</button>
   </div>
 </div>
 
-<!-- ESTEIRA -->
+<!-- ══ ESTEIRA ══ -->
 <div class="page" id="page-esteira">
-  <div style="padding:20px">
-    <div class="esteira-hero">
+  <div>
+    <div class="esteira-wrap">
       <div class="esteira-icon">🏃</div>
-      <div class="esteira-title" id="esteira-title">Esteira</div>
-      <div class="esteira-sub" id="esteira-sub">Prepare-se</div>
+      <div style="font-size:18px;font-weight:500;margin-bottom:4px" id="esteira-title">Esteira</div>
+      <div style="font-size:13px;color:var(--muted)" id="esteira-sub">Prepare-se</div>
       <div class="esteira-timer" id="esteira-timer">10:00</div>
     </div>
-    <button class="btn btn-stop" onclick="pularEsteira()">Pular esteira</button>
+    <button class="btn btn-green" onclick="pularEsteira()">Pular esteira</button>
   </div>
 </div>
 
-<!-- FINISHED -->
+<!-- ══ CONCLUÍDO ══ -->
 <div class="page" id="page-finished">
-  <div style="padding:20px">
+  <div>
     <div class="finish-hero">
       <div class="finish-check">✓</div>
-      <div class="finish-title">Treino concluído!</div>
-      <div class="finish-sub" id="fin-sub"></div>
+      <div style="font-size:24px;font-weight:600;margin-bottom:4px">Treino concluído!</div>
+      <div style="font-size:13px;color:var(--muted)" id="fin-sub"></div>
     </div>
     <div class="finish-stats" id="fin-stats"></div>
     <div class="section-title">Resumo</div>
     <div id="fin-detail"></div>
-    <button class="btn btn-start" style="margin-top:16px" onclick="voltarHome()">Novo treino</button>
+    <button class="btn btn-primary" style="margin-top:14px" onclick="voltarHome()">Voltar ao início</button>
   </div>
 </div>
 
-<!-- HISTORICO -->
+<!-- ══ HISTÓRICO ══ -->
 <div class="page" id="page-hist">
-  <div style="padding:20px">
-    <div class="section-title">Histórico & Evolução</div>
+  <div>
+    <div class="hist-tabs" style="display:grid;grid-template-columns:repeat(4,1fr)">
+      <button class="hist-tab active" id="htab-atual" onclick="switchHistTab('atual')">Atual</button>
+      <button class="hist-tab" id="htab-antigo" onclick="switchHistTab('antigo')">Anteriores</button>
+      <button class="hist-tab" id="htab-evol" onclick="switchHistTab('evol')">Evolução</button>
+      <button class="hist-tab" id="htab-treinos" onclick="switchHistTab('treinos')">Treinos</button>
+    </div>
     <div id="hist-content"></div>
   </div>
 </div>
-</div>
+
+</div><!-- /app -->
 
 <!-- REST OVERLAY -->
 <div class="rest-overlay hidden" id="rest-overlay">
   <div class="rest-type" id="rest-type">DESCANSO</div>
   <div class="rest-big gc" id="rest-big">00:50</div>
-  <div class="rest-sub" id="rest-sub">Respire, hidrate-se</div>
+  <div class="rest-sub" id="rest-sub"></div>
   <div class="rest-next" id="rest-next"></div>
   <button class="rest-skip" onclick="pularDescanso()">Pular descanso →</button>
 </div>
@@ -233,116 +268,232 @@ body{display:flex;flex-direction:column}
       <h3 id="modal-titulo">Exercícios</h3>
       <button class="modal-close" onclick="fecharModalDireto()">×</button>
     </div>
-    <div class="modal-body" id="modal-lista-items"></div>
+    <div class="modal-body" id="modal-items"></div>
   </div>
 </div>
 
 <!-- NAV -->
 <nav class="nav">
   <button class="nav-btn active" id="nav-home" onclick="showNav('home')">
-    <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-    Início
+    <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Início
   </button>
   <button class="nav-btn" id="nav-hist" onclick="showNav('hist')">
-    <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-    Evolução
+    <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>Histórico
   </button>
 </nav>
 
 <script>
-const TREINOS={
-  A:[
-    {nome:'Esteira (aquecimento)',tipo:'esteira_inicio'},
-    {nome:'Supino Máquina',tipo:'normal',series:3,reps:12},
-    {nome:'Voador Peitoral',tipo:'normal',series:3,reps:12},
-    {nome:'Hammer Inclinado',tipo:'normal',series:3,reps:12},
-    {nome:'Crucifixo Aberto c/ HBC',tipo:'normal',series:3,reps:12},
-    {nome:'Tríceps Pulley',tipo:'normal',series:3,reps:12},
-    {nome:'Tríceps Corda',tipo:'normal',series:3,reps:12},
-    {nome:'Tríceps Francês Unilateral',tipo:'normal',series:3,reps:12},
-    {nome:'Cadeira Extensora',tipo:'normal',series:3,reps:12},
-    {nome:'Cadeira Adutora',tipo:'normal',series:3,reps:15},
-    {nome:'Leg Horizontal (pés abduzidos)',tipo:'normal',series:3,reps:12},
-    {nome:'Flexão Quadril c/ Caneleira',tipo:'normal',series:3,reps:12},
-    {nome:'Abdominal Supra (solo)',tipo:'normal',series:3,reps:15},
-    {nome:'Esteira (finalização)',tipo:'esteira_fim'},
-  ],
-  B:[
-    {nome:'Esteira (aquecimento)',tipo:'esteira_inicio'},
-    {nome:'Puxada Frente Aberta',tipo:'normal',series:3,reps:12},
-    {nome:'Remada Sentada (pegada neutra)',tipo:'normal',series:3,reps:12},
-    {nome:'Voador Dorsal',tipo:'normal',series:3,reps:12},
-    {nome:'Puxada Supinada',tipo:'normal',series:3,reps:12},
-    {nome:'Bíceps c/ HBC (supinado)',tipo:'normal',series:3,reps:12},
-    {nome:'Bíceps Martelo c/ HBC (neutro)',tipo:'normal',series:3,reps:12},
-    {nome:'Bíceps Invertido (polia baixa)',tipo:'normal',series:3,reps:12},
-    {nome:'Mesa Flexora',tipo:'normal',series:3,reps:12},
-    {nome:'Cadeira Abdutora',tipo:'normal',series:3,reps:15},
-    {nome:'Flexão Joelho c/ Caneleira',tipo:'normal',series:3,reps:12},
-    {nome:'Panturrilha Máquina',tipo:'normal',series:3,reps:15},
-    {nome:'Abdominal Prancha',tipo:'normal',series:3,reps:20,isTime:true},
-    {nome:'Esteira (finalização)',tipo:'esteira_fim'},
-  ],
-  C:[
-    {nome:'Esteira (aquecimento)',tipo:'esteira_inicio'},
-    {nome:'Abdução de Ombros c/ HBC',tipo:'normal',series:3,reps:12},
-    {nome:'Flexão de Ombros c/ HBC',tipo:'normal',series:3,reps:12},
-    {nome:'Desenvolvimento Máquina (neutro)',tipo:'normal',series:3,reps:12},
-    {nome:'Desenvolvimento Arnold c/ HBC',tipo:'normal',series:3,reps:12},
-    {nome:'Remada Alta (polia baixa)',tipo:'normal',series:3,reps:15},
-    {nome:'Encolhimento Ombro c/ HBC',tipo:'normal',series:3,reps:15},
-    {nome:'Abdominal Infra (solo)',tipo:'normal',series:3,reps:15},
-    {nome:'Esteira (finalização)',tipo:'esteira_fim'},
-  ]
+/* ════════════════════════════════════════════
+   DADOS DOS TREINOS
+════════════════════════════════════════════ */
+const PRAZO = new Date('2026-06-09T23:59:59');
+const META_SESSOES = 20;
+
+// tipo: 'esteira_inicio'|'esteira_fim'|'normal'|'conjugado'
+// conjugado = dois exercícios no mesmo slot
+const TREINOS = {
+  A:{
+    nome:'Treino A', info:'Peito · Tríceps · Ombros',
+    exercicios:[
+      {tipo:'esteira_inicio'},
+      {tipo:'conjugado', nome:'Supino inclinado c/ halter', nome2:'Crucifixo inclinado c/ halter',
+       link:'https://www.youtube.com/watch?v=g9X0oHBuMQc', link2:'https://www.youtube.com/watch?v=ZMFCua60Gus',
+       series:3,reps:10},
+      {tipo:'normal', nome:'Supino reto c/ halter', link:'https://www.youtube.com/watch?v=BZEnjisP_CY', series:3,reps:12},
+      {tipo:'normal', nome:'Crucifixo máquina', link:'https://www.youtube.com/watch?v=SQW-rwYDBWE', series:3,reps:12},
+      {tipo:'normal', nome:'Tríceps barra cross', link:'https://w12evostorage.w12app.com.br/exercicios-gifs/02011305-Cable-Pushdown_Upper-Arms-FIX_360.gif', series:3,reps:12},
+      {tipo:'normal', nome:'Tríceps testa c/ barra', link:'https://www.youtube.com/watch?v=Vhb_zXyeOSc', series:3,reps:12},
+      {tipo:'normal', nome:'Tríceps banco', link:'https://www.youtube.com/watch?v=w7RqgKFygBQ', series:3,reps:12},
+      {tipo:'normal', nome:'Elevação lateral sentado', link:'https://www.youtube.com/watch?v=Y-oDA1AfYTU', series:3,reps:10},
+      {tipo:'normal', nome:'Elevação lateral no cross', link:'https://www.youtube.com/watch?v=U0ZM4qcWB8M', series:3,reps:10},
+      {tipo:'esteira_fim'},
+    ]
+  },
+  B:{
+    nome:'Treino B', info:'Costas · Bíceps · Abdômen',
+    exercicios:[
+      {tipo:'esteira_inicio'},
+      {tipo:'conjugado', nome:'Puxada aberta', nome2:'Puxada fechada',
+       link:'https://www.youtube.com/watch?v=WEEnNiJwV-8', link2:'https://www.youtube.com/watch?v=bhXztQz1FSE',
+       series:3,reps:10},
+      {tipo:'normal', nome:'Facepull', link:'https://www.youtube.com/watch?v=w0jdtWXUE84', series:3,reps:15},
+      {tipo:'normal', nome:'Remada cavalinho', link:'https://www.youtube.com/watch?v=pM72YW95_DY', series:3,reps:12},
+      {tipo:'normal', nome:'Remada máquina fechada', link:'https://www.youtube.com/watch?v=paOfeVlogwk', series:3,reps:12},
+      {tipo:'normal', nome:'Rosca martelo', link:'https://www.youtube.com/watch?v=SHewBqisWrA', series:3,reps:12},
+      {tipo:'normal', nome:'Rosca bíceps barra W', link:'', series:3,reps:12},
+      {tipo:'normal', nome:'Abdominal remador', link:'https://www.youtube.com/watch?v=PomBnhZH5a0', series:3,reps:12},
+      {tipo:'esteira_fim'},
+    ]
+  },
+  C:{
+    nome:'Treino C', info:'Pernas · Glúteos',
+    exercicios:[
+      {tipo:'esteira_inicio'},
+      {tipo:'normal', nome:'Cadeira extensora', link:'https://www.youtube.com/watch?v=KpXT1dzKUUQ', series:3,reps:12},
+      {tipo:'normal', nome:'Leg press 45°', link:'https://www.youtube.com/watch?v=-BDtKDpL-Cg', series:3,reps:10},
+      {tipo:'normal', nome:'Hack articulado', link:'https://www.youtube.com/watch?v=LjiAtELOQWk', series:3,reps:12},
+      {tipo:'normal', nome:'Mesa flexora', link:'https://www.youtube.com/watch?v=9e3AvkskqVM', series:3,reps:12},
+      {tipo:'normal', nome:'Sky-flexão de joelho máquina', link:'https://www.youtube.com/watch?v=Kk-J3wdxEhU', series:3,reps:10},
+      {tipo:'normal', nome:'Agachamento sumô c/ halter', link:'https://www.youtube.com/watch?v=wd7LPBlSm28', series:3,reps:12},
+      {tipo:'normal', nome:'Cadeira abdutora', link:'https://www.youtube.com/watch?v=02Hw1nvierA', series:3,reps:10},
+      {tipo:'normal', nome:'Cadeira adutora', link:'https://www.youtube.com/watch?v=eluVAjrSNNQ', series:3,reps:15},
+      {tipo:'esteira_fim'},
+    ]
+  },
+  D:{
+    nome:'Treino D', info:'Ombros · Bíceps · Tríceps · Core',
+    exercicios:[
+      {tipo:'esteira_inicio'},
+      {tipo:'normal', nome:'Elevação lateral', link:'https://www.youtube.com/watch?v=1UH9BySUGXg', series:3,reps:12},
+      {tipo:'normal', nome:'Elevação frontal anilha', link:'https://www.youtube.com/watch?v=FzL_52qjNis', series:3,reps:12},
+      {tipo:'normal', nome:'Desenvolvimento c/ halter', link:'https://www.youtube.com/watch?v=Qq3W5a5yalI', series:3,reps:12},
+      {tipo:'normal', nome:'Crucifixo invertido máquina', link:'https://www.youtube.com/watch?v=6vJHWnfmmi0', series:3,reps:15},
+      {tipo:'normal', nome:'Bíceps concentrado', link:'https://w12evostorage.w12app.com.br/exercicios-gifs/16141305-Lever-Preacher-Curl-(version-2)_Upper-Arms_360.gif', series:3,reps:10},
+      {tipo:'normal', nome:'Bíceps martelo', link:'https://w12evostorage.w12app.com.br/exercicios-gifs/24851305-Dumbbell-Hammer-Curl-(female)_Upper-Arms-FIX_360.gif', series:3,reps:10},
+      {tipo:'normal', nome:'Tríceps corda', link:'https://www.youtube.com/watch?v=eXKX6pSYrVE', series:3,reps:12},
+      {tipo:'normal', nome:'Tríceps barra W', link:'https://www.youtube.com/watch?v=yi-MlJARlSg', series:3,reps:10},
+      {tipo:'conjugado', nome:'Prancha ventral', nome2:'Abdômen paralela',
+       link:'https://www.youtube.com/watch?v=ypA5NH4hqTU', link2:'https://www.youtube.com/watch?v=9xAOQbJdq3A',
+       series:3, reps:30, isTime:true, reps2:12, isTime2:false},
+      {tipo:'esteira_fim'},
+    ]
+  }
 };
 
-const REST_SERIE=50, REST_EX=60;
+const ORDEM = ['A','B','C','D'];
+const REST_SERIE = 50, REST_EX = 60;
 
-/* ─── ESTADO ─── */
-let E=null;
-// Timers baseados em timestamps — continuam corretos mesmo com tela fechada
-let serieTickInterval=null;   // apenas atualiza o display
-let esteiraTickInterval=null;
-let restTickInterval=null;
+/* ════ STATE ════ */
+let E = null;
+let serieTickInterval=null, esteiraTickInterval=null, restTickInterval=null;
 let _restCb=null;
+let _histTab='atual';
 
-/* ─── STORAGE ─── */
-function save(){try{localStorage.setItem('gym_v5',JSON.stringify(E))}catch(e){}}
+/* ════ TREINOS ANTIGOS (referência para histórico) ════ */
+const TREINOS_ANTIGOS = {
+  A:{
+    nome:'Treino A (anterior)', info:'Peito · Tríceps · Pernas',
+    exercicios:[
+      {tipo:'esteira_inicio'},
+      {tipo:'normal',nome:'Supino Máquina',series:3,reps:12},
+      {tipo:'normal',nome:'Voador Peitoral',series:3,reps:12},
+      {tipo:'normal',nome:'Hammer Inclinado',series:3,reps:12},
+      {tipo:'normal',nome:'Crucifixo Aberto c/ HBC',series:3,reps:12},
+      {tipo:'normal',nome:'Tríceps Pulley',series:3,reps:12},
+      {tipo:'normal',nome:'Tríceps Corda',series:3,reps:12},
+      {tipo:'normal',nome:'Tríceps Francês Unilateral',series:3,reps:12},
+      {tipo:'normal',nome:'Cadeira Extensora',series:3,reps:12},
+      {tipo:'normal',nome:'Cadeira Adutora',series:3,reps:15},
+      {tipo:'normal',nome:'Leg Horizontal (pés abduzidos)',series:3,reps:12},
+      {tipo:'normal',nome:'Flexão Quadril c/ Caneleira',series:3,reps:12},
+      {tipo:'normal',nome:'Abdominal Supra (solo)',series:3,reps:15},
+      {tipo:'esteira_fim'},
+    ]
+  },
+  B:{
+    nome:'Treino B (anterior)', info:'Costas · Bíceps · Pernas',
+    exercicios:[
+      {tipo:'esteira_inicio'},
+      {tipo:'normal',nome:'Puxada Frente Aberta',series:3,reps:12},
+      {tipo:'normal',nome:'Remada Sentada (pegada neutra)',series:3,reps:12},
+      {tipo:'normal',nome:'Voador Dorsal',series:3,reps:12},
+      {tipo:'normal',nome:'Puxada Supinada',series:3,reps:12},
+      {tipo:'normal',nome:'Bíceps c/ HBC (supinado)',series:3,reps:12},
+      {tipo:'normal',nome:'Bíceps Martelo c/ HBC (neutro)',series:3,reps:12},
+      {tipo:'normal',nome:'Bíceps Invertido (polia baixa)',series:3,reps:12},
+      {tipo:'normal',nome:'Mesa Flexora',series:3,reps:12},
+      {tipo:'normal',nome:'Cadeira Abdutora',series:3,reps:15},
+      {tipo:'normal',nome:'Flexão Joelho c/ Caneleira',series:3,reps:12},
+      {tipo:'normal',nome:'Panturrilha Máquina',series:3,reps:15},
+      {tipo:'normal',nome:'Abdominal Prancha',series:3,reps:20,isTime:true},
+      {tipo:'esteira_fim'},
+    ]
+  },
+  C:{
+    nome:'Treino C (anterior)', info:'Ombros · Core',
+    exercicios:[
+      {tipo:'esteira_inicio'},
+      {tipo:'normal',nome:'Abdução de Ombros c/ HBC',series:3,reps:12},
+      {tipo:'normal',nome:'Flexão de Ombros c/ HBC',series:3,reps:12},
+      {tipo:'normal',nome:'Desenvolvimento Máquina (neutro)',series:3,reps:12},
+      {tipo:'normal',nome:'Desenvolvimento Arnold c/ HBC',series:3,reps:12},
+      {tipo:'normal',nome:'Remada Alta (polia baixa)',series:3,reps:15},
+      {tipo:'normal',nome:'Encolhimento Ombro c/ HBC',series:3,reps:15},
+      {tipo:'normal',nome:'Abdominal Infra (solo)',series:3,reps:15},
+      {tipo:'esteira_fim'},
+    ]
+  }
+};
+
+/* ════ STORAGE ════ */
+function save(){try{localStorage.setItem('gym_v6',JSON.stringify(E))}catch(e){}}
 function load(){
-  try{
-    const d=JSON.parse(localStorage.getItem('gym_v5')||'null');
-    if(!d||d.data!==today())return null;
-    return d;
-  }catch(e){return null}
+  try{const d=JSON.parse(localStorage.getItem('gym_v6')||'null');
+    if(!d||d.data!==today())return null; return d}catch(e){return null}
 }
 function saveHist(entry){
   try{
-    const h=JSON.parse(localStorage.getItem('gym_hist_v5')||'[]');
-    h.unshift(entry);if(h.length>60)h.splice(60);
-    localStorage.setItem('gym_hist_v5',JSON.stringify(h));
+    const h=JSON.parse(localStorage.getItem('gym_hist_v6')||'[]');
+    h.unshift(entry); if(h.length>120)h.splice(120);
+    localStorage.setItem('gym_hist_v6',JSON.stringify(h));
   }catch(e){}
 }
-function loadHist(){try{return JSON.parse(localStorage.getItem('gym_hist_v5')||'[]')}catch(e){return[]}}
+function loadHist(){try{return JSON.parse(localStorage.getItem('gym_hist_v6')||'[]')}catch(e){return[]}}
+
+/* Migração: importa histórico de versões anteriores (v3, v4, v5) na primeira vez */
+function migrarHistoricoAntigo(){
+  if(localStorage.getItem('gym_migrated_v6'))return;
+  const keys=['gym_hist_v5','gym_hist_v4','gym_hist_v3'];
+  let importados=0;
+  keys.forEach(k=>{
+    try{
+      const old=JSON.parse(localStorage.getItem(k)||'[]');
+      old.forEach(h=>{
+        // marca como plano antigo se não tiver plano definido
+        if(!h.plano) h.plano='antigo';
+        // garante campos mínimos
+        if(!h.dataStr) h.dataStr=h.data?new Date(h.data).toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit',year:'2-digit'}):'?';
+        saveHist(h);
+        importados++;
+      });
+    }catch(e){}
+  });
+  localStorage.setItem('gym_migrated_v6','1');
+  if(importados>0) console.log('Migrados '+importados+' treinos do histórico anterior.');
+}
+// sessões concluídas por tipo (apenas treinos novos A-D)
+function loadSessoes(){try{return JSON.parse(localStorage.getItem('gym_sess_v6')||'{"A":0,"B":0,"C":0,"D":0}')}catch(e){return{A:0,B:0,C:0,D:0}}}
+function addSessao(tipo){
+  const s=loadSessoes(); s[tipo]=(s[tipo]||0)+1;
+  localStorage.setItem('gym_sess_v6',JSON.stringify(s));
+}
 function today(){return new Date().toDateString()}
 function todayStr(){return new Date().toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit',year:'2-digit'})}
 
-/* ─── UTILS ─── */
+/* ════ UTILS ════ */
 function pad(n){return String(Math.max(0,n)).padStart(2,'0')}
-function fmtHMS(ms){
-  const tot=Math.floor(ms/1000);
-  const h=Math.floor(tot/3600),m=Math.floor((tot%3600)/60),s=tot%60;
-  return pad(h)+':'+pad(m)+':'+pad(s);
-}
-function fmtMS(segs){
-  const s=Math.max(0,segs);
-  return pad(Math.floor(s/60))+':'+pad(s%60);
-}
-// segundos decorridos desde um timestamp
+function fmtHMS(ms){const t=Math.floor(ms/1000),h=Math.floor(t/3600),m=Math.floor((t%3600)/60),s=t%60;return pad(h)+':'+pad(m)+':'+pad(s)}
+function fmtMS(s){s=Math.max(0,s);return pad(Math.floor(s/60))+':'+pad(s%60)}
 function elapsed(ts){return Math.floor((Date.now()-ts)/1000)}
-// segundos restantes num descanso a partir de timestamp de início
-function restRemaining(startTs,total){return Math.max(0,total-elapsed(startTs))}
+function restRem(ts,total){return Math.max(0,total-elapsed(ts))}
 
-/* ─── NAVIGATION ─── */
+function diasAtePrazo(){
+  const now=new Date(); now.setHours(0,0,0,0);
+  const p=new Date(PRAZO); p.setHours(0,0,0,0);
+  return Math.ceil((p-now)/(1000*60*60*24));
+}
+
+// sugestão: próximo treino na rotação A→B→C→D→A...
+function sugerirTreino(){
+  const hist=loadHist();
+  // busca último treino concluído nos treinos novos (que tem 'plano':'novo')
+  const ultimo=hist.find(h=>h.plano==='novo');
+  if(!ultimo) return 'A';
+  const idx=ORDEM.indexOf(ultimo.tipo);
+  return ORDEM[(idx+1)%ORDEM.length];
+}
+
+/* ════ NAV ════ */
 function showPage(id){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.getElementById('page-'+id).classList.add('active');
@@ -351,137 +502,186 @@ function showPage(id){
 function showNav(tab){
   document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
   document.getElementById('nav-'+tab).classList.add('active');
-  if(tab==='home'){showPage('home');checkPending()}
-  if(tab==='hist'){showPage('hist');renderHist()}
+  if(tab==='home'){showPage('home');renderHome()}
+  if(tab==='hist'){showPage('hist');renderHist(_histTab)}
 }
 function voltarHome(){
   clearAllTicks();fecharModalDireto();esconderDescanso();showNav('home');
 }
 function clearAllTicks(){
-  clearInterval(serieTickInterval);
-  clearInterval(esteiraTickInterval);
-  clearInterval(restTickInterval);
+  clearInterval(serieTickInterval);clearInterval(esteiraTickInterval);clearInterval(restTickInterval);
 }
 
-/* ─── HOME ─── */
-function checkPending(){
-  const d=load();
-  const wrap=document.getElementById('pending-wrap');
-  if(d&&!d.finalizado){
-    const ex=TREINOS[d.tipo][d.exIdx];
-    wrap.style.display='block';
-    wrap.innerHTML=`<div class="pending-card">
-      <div class="plabel">● Treino em andamento</div>
-      <div class="pname">Treino ${d.tipo} · ${ex.nome}<br><span style="font-size:13px;color:var(--muted)">Série ${d.serieIdx+1} de ${ex.series||3}</span></div>
-      <button class="btn btn-start" onclick="retomar()" style="margin-bottom:8px">↩ Retomar de onde parei</button>
-      <button class="btn btn-danger-ghost" onclick="descartar()">Descartar treino</button>
+/* ════ HOME ════ */
+function renderHome(){
+  // Alertas de prazo
+  const dias=diasAtePrazo();
+  let alertHtml='';
+  if(dias<=0){
+    alertHtml=`<div class="alert-banner alert-red">⚠️ O prazo do treino encerrou em ${PRAZO.toLocaleDateString('pt-BR')}.</div>`;
+  }else if(dias<=7){
+    alertHtml=`<div class="alert-banner alert-amber">⏰ Faltam <b>${dias} dia${dias>1?'s':''}</b> para o fim do treino (${PRAZO.toLocaleDateString('pt-BR')}).</div>`;
+  }else if(dias<=14){
+    alertHtml=`<div class="alert-banner alert-amber" style="opacity:.7">📅 Faltam <b>${dias} dias</b> para o fim do treino.</div>`;
+  }
+  document.getElementById('home-alerts').innerHTML=alertHtml;
+
+  // Treino pendente (não concluído hoje)
+  const pend=load();
+  if(pend&&!pend.finalizado){
+    const ex=TREINOS[pend.tipo].exercicios[pend.exIdx];
+    document.getElementById('home-pending').innerHTML=`<div class="pending-card">
+      <div class="pending-label">● Em andamento</div>
+      <div class="pending-name">Treino ${pend.tipo} · ${exNome(ex)}<br><span style="font-size:12px;color:var(--muted)">Série ${pend.serieIdx+1}/3</span></div>
+      <button class="btn btn-primary" onclick="retomar()" style="margin-bottom:6px">↩ Retomar de onde parei</button>
+      <button class="btn btn-red" onclick="descartar()">Descartar</button>
     </div>`;
-  }else{wrap.style.display='none'}
+  }else{
+    document.getElementById('home-pending').innerHTML='';
+    // Sugestão apenas se não há pendente
+    const sug=sugerirTreino();
+    const t=TREINOS[sug];
+    document.getElementById('home-suggest').innerHTML=`<div class="suggest-card">
+      <div class="suggest-label">Sugestão de hoje</div>
+      <div class="suggest-name">Treino ${sug} — ${t.info}</div>
+      <button class="btn btn-primary" style="margin:0" onclick="iniciarTreino('${sug}')">Fazer Treino ${sug} agora</button>
+    </div>`;
+  }
+
+  // Sessões
+  const sess=loadSessoes();
+  let sgHtml='';
+  ORDEM.forEach(t=>{
+    const n=sess[t]||0;
+    const pct=Math.min(100,Math.round((n/META_SESSOES)*100));
+    sgHtml+=`<div class="sess-card">
+      <div class="sess-letra">${t}</div>
+      <div class="sess-num">${n}</div>
+      <div class="sess-label">/${META_SESSOES}</div>
+      <div class="sess-bar"><div class="sess-fill" style="width:${pct}%"></div></div>
+    </div>`;
+  });
+  document.getElementById('sess-grid').innerHTML=sgHtml;
+
+  // Grid de treinos
+  let tgHtml='';
+  ORDEM.forEach(t=>{
+    const tr=TREINOS[t];
+    const n=sess[t]||0;
+    tgHtml+=`<div class="treino-card" onclick="iniciarTreino('${t}')">
+      <div class="tc-letra">${t}</div>
+      <div class="tc-info">${tr.info}</div>
+      <div class="tc-sess">${n}/${META_SESSOES} sessões</div>
+    </div>`;
+  });
+  document.getElementById('treino-grid').innerHTML=tgHtml;
 }
+
 function descartar(){
-  try{localStorage.removeItem('gym_v5')}catch(e){}
-  checkPending();
+  try{localStorage.removeItem('gym_v6')}catch(e){}
+  renderHome();
 }
 function iniciarTreino(tipo){
   const p=load();
   if(p&&!p.finalizado&&p.tipo===tipo){retomar();return}
-  if(p&&!p.finalizado&&p.tipo!==tipo){
-    // sem confirm() — não funciona bem no Safari iOS em arquivos locais
-    descartar();
-  }
+  if(p&&!p.finalizado){descartar()}
+  const tr=TREINOS[tipo];
   E={
-    tipo,data:today(),exIdx:0,serieIdx:0,
-    series:TREINOS[tipo].map(ex=>ex.tipo==='normal'?Array(ex.series||3).fill(null):[]),
-    pulados:[],finalizado:false,
-    inicio:Date.now(),
-    // timestamps para timers resistentes ao bloqueio de tela
-    serieStartTs:null,      // quando a série atual foi iniciada
-    restStartTs:null,       // quando o descanso atual foi iniciado
-    restTotal:0,            // duração total do descanso (50 ou 60s)
-    restTipo:null,          // 'serie' ou 'ex'
-    esteiraStartTs:null,    // quando a esteira foi iniciada
-    esteiraTipo:null,
+    tipo, plano:'novo', data:today(), exIdx:0, serieIdx:0,
+    series:tr.exercicios.map(ex=>(ex.tipo==='normal'||ex.tipo==='conjugado')?Array(ex.series||3).fill(null):[]),
+    pulados:[], finalizado:false, inicio:Date.now(),
+    serieStartTs:null, restStartTs:null, restTotal:0, restTipo:null,
+    esteiraStartTs:null, esteiraTipo:null,
   };
-  save();goExercicio();
+  save(); goExercicio();
 }
 function retomar(){
-  E=load();
-  if(!E){voltarHome();return}
-  // Verifica se há um descanso em andamento (tela fechou durante descanso)
+  E=load(); if(!E){voltarHome();return}
   if(E.restStartTs&&E.restTotal){
-    const rem=restRemaining(E.restStartTs,E.restTotal);
-    if(rem>0){
-      // reconstrói o descanso de onde parou
-      _restCb=E.restTipo==='serie'
-        ?()=>goExercicio()
-        :()=>avancarExercicio();
-      mostrarDescansoRetomado();
-      return;
-    }else{
-      // descanso já terminou enquanto tela estava fechada
-      E.restStartTs=null;E.restTotal=0;
-      if(E.restTipo==='serie'){goExercicio()}
-      else{avancarExercicio()}
-      return;
-    }
+    const rem=restRem(E.restStartTs,E.restTotal);
+    if(rem>0){_restCb=E.restTipo==='serie'?()=>goExercicio():()=>avancarExercicio();mostrarDescansoRetomado();return}
+    E.restStartTs=null;E.restTotal=0;
+    if(E.restTipo==='serie')goExercicio(); else avancarExercicio(); return;
   }
-  // Verifica esteira em andamento
   if(E.esteiraStartTs&&E.esteiraTipo){
-    const rem=restRemaining(E.esteiraStartTs,600);
+    const rem=restRem(E.esteiraStartTs,600);
     if(rem>0){mostrarEsteiraRetomada();return}
-    else{E.esteiraStartTs=null;terminarEsteira();return}
+    E.esteiraStartTs=null;terminarEsteira();return;
   }
   goExercicio();
 }
 
-/* ─── EXERCICIO ─── */
+/* ════ EXERCICIO ════ */
+function exNome(ex){
+  if(!ex)return'';
+  if(ex.tipo==='esteira_inicio')return'Esteira (aquecimento)';
+  if(ex.tipo==='esteira_fim')return'Esteira (finalização)';
+  if(ex.tipo==='conjugado')return ex.nome+' + '+ex.nome2;
+  return ex.nome||'';
+}
 function exFoiConcluido(idx){
-  // verifica se todas as séries do exercício idx foram preenchidas
-  const ex=TREINOS[E.tipo][idx];
-  if(ex.tipo!=='normal')return false;
+  const ex=TREINOS[E.tipo].exercicios[idx];
+  if(!ex||ex.tipo==='esteira_inicio'||ex.tipo==='esteira_fim')return false;
   return E.series[idx]&&E.series[idx].every(s=>s!==null);
 }
-function exFoiPulado(idx){
-  return E.pulados&&E.pulados.includes(idx);
-}
+function exFoiPulado(idx){return E.pulados&&E.pulados.includes(idx)}
 
 function goExercicio(){
   clearAllTicks();
-  // limpa estado de série/descanso anterior
-  E.restStartTs=null;E.restTotal=0;E.restTipo=null;
-  save();
-  const ex=TREINOS[E.tipo][E.exIdx];
-  if(ex.tipo!=='normal'){goEsteira(ex.tipo);return}
+  E.restStartTs=null;E.restTotal=0;E.restTipo=null; save();
+  const ex=TREINOS[E.tipo].exercicios[E.exIdx];
+  if(!ex){finalizarTreino();return}
+  if(ex.tipo==='esteira_inicio'||ex.tipo==='esteira_fim'){goEsteira(ex.tipo);return}
   showPage('ex');
   renderExCard();renderSeriesDone();renderActionArea();
-  // se havia série em andamento (tela fechou), retoma o cronômetro
-  if(E.serieStartTs){
-    retomaSerieCronometro();
-  }
+  if(E.serieStartTs)retomaSerieCronometro();
 }
 
 function renderExCard(){
-  const exs=TREINOS[E.tipo];
+  const exs=TREINOS[E.tipo].exercicios;
   const ex=exs[E.exIdx];
-  const normTotal=exs.filter(e=>e.tipo==='normal').length;
-  const normDone=exs.slice(0,E.exIdx).filter(e=>e.tipo==='normal').length;
+  const normTotal=exs.filter(e=>e.tipo==='normal'||e.tipo==='conjugado').length;
+  const normDone=exs.slice(0,E.exIdx).filter(e=>e.tipo==='normal'||e.tipo==='conjugado').length;
   document.getElementById('prog-label').textContent='Treino '+E.tipo;
   document.getElementById('prog-count').textContent=(E.exIdx+1)+'/'+exs.length;
   document.getElementById('prog-fill').style.width=Math.round((E.exIdx/exs.length)*100)+'%';
+
   let badges='';
   for(let i=0;i<(ex.series||3);i++){
     const c=i<E.serieIdx?'done':i===E.serieIdx?'current':'';
     badges+=`<div class="s-badge ${c}">${i+1}</div>`;
   }
+
+  let nomeHtml='', linkHtml='';
+  if(ex.tipo==='conjugado'){
+    // links separados para cada exercício conjugado
+    const n1=ex.link?`<a href="${ex.link}" target="_blank">${ex.nome}</a>`:ex.nome;
+    const n2=ex.link2?`<a href="${ex.link2}" target="_blank">${ex.nome2}</a>`:ex.nome2;
+    nomeHtml=`${n1} <span style="color:var(--amber)">+</span> ${n2}`;
+    linkHtml=`<div class="link-row">
+      ${ex.link?`<a class="link-btn" href="${ex.link}" target="_blank">▶ Ver ${ex.nome.split(' ')[0]}</a>`:''}
+      ${ex.link2?`<a class="link-btn" href="${ex.link2}" target="_blank">▶ Ver ${ex.nome2.split(' ')[0]}</a>`:''}
+    </div>`;
+  }else{
+    nomeHtml=ex.link?`<a href="${ex.link}" target="_blank">${ex.nome}</a>`:ex.nome;
+    if(ex.link)linkHtml=`<div class="link-row"><a class="link-btn" href="${ex.link}" target="_blank">▶ Ver exercício</a></div>`;
+  }
+
+  const metaText=ex.tipo==='conjugado'
+    ?`${ex.series||3} séries × ${ex.isTime?ex.reps+'s':ex.reps+' reps'} cada`
+    :`${ex.series||3} séries × ${ex.isTime?ex.reps+'s':ex.reps+' reps'}`;
+
   document.getElementById('ex-card').innerHTML=`
-    <div class="ex-tag">Exercício ${normDone+1} de ${normTotal}</div>
-    <div class="ex-name">${ex.nome}</div>
-    <div class="ex-meta">${ex.series||3} séries × ${ex.isTime?ex.reps+'s':ex.reps+' reps'}</div>
-    <div class="series-badges">${badges}</div>`;
+    <div class="ex-tag">Exercício ${normDone+1} de ${normTotal}${ex.tipo==='conjugado'?' · conjugado':''}</div>
+    <div class="ex-name">${nomeHtml}</div>
+    ${ex.tipo==='conjugado'?`<div class="ex-conjugado">⚡ Faça os dois em sequência</div>`:''}
+    <div class="ex-meta">${metaText}</div>
+    <div class="series-badges">${badges}</div>
+    ${linkHtml}`;
 }
 
 function renderSeriesDone(){
-  const ex=TREINOS[E.tipo][E.exIdx];
+  const ex=TREINOS[E.tipo].exercicios[E.exIdx];
   const done=E.series[E.exIdx].slice(0,E.serieIdx).filter(Boolean);
   if(!done.length){document.getElementById('series-done-wrap').innerHTML='';return}
   const rows=done.map((s,i)=>`
@@ -490,16 +690,18 @@ function renderSeriesDone(){
       <div class="s-data">
         <span class="pill">${s.peso}kg</span>
         <span class="pill">${ex.isTime?s.tempo+'s':s.reps+' reps'}</span>
-        <span class="pill green">${s.tempo}s</span>
+        <span class="pill g">${s.tempo}s</span>
       </div>
     </div>`).join('');
   document.getElementById('series-done-wrap').innerHTML=`<div class="series-done">${rows}</div>`;
 }
 
 function renderActionArea(){
-  const ex=TREINOS[E.tipo][E.exIdx];
+  const ex=TREINOS[E.tipo].exercicios[E.exIdx];
   const up=getUltimoPeso();
   const jaRodando=!!E.serieStartTs;
+  const repsLabel=ex.isTime?'Meta (seg)':'Repetições';
+  const repsPlaceholder=ex.isTime?ex.reps:'0';
   document.getElementById('action-area').innerHTML=`
     <div class="timer-block">
       <div class="timer-label">Cronômetro da série</div>
@@ -508,194 +710,165 @@ function renderActionArea(){
     </div>
     <div class="input-grid">
       <div class="field"><label>Peso (kg)</label><input type="number" id="inp-peso" min="0" step="0.5" inputmode="decimal" placeholder="0" value="${up}"></div>
-      <div class="field"><label>${ex.isTime?'Meta (seg)':'Repetições'}</label><input type="number" id="inp-reps" min="1" step="1" inputmode="numeric" placeholder="${ex.isTime?ex.reps:'0'}"></div>
+      <div class="field"><label>${repsLabel}</label><input type="number" id="inp-reps" min="1" step="1" inputmode="numeric" placeholder="${repsPlaceholder}"></div>
     </div>
-    <button class="btn btn-start" id="btn-start-serie" style="${jaRodando?'display:none':''}" onclick="iniciarSerie()">▶ Iniciar série ${E.serieIdx+1}</button>
-    <button class="btn btn-stop" id="btn-stop-serie" style="${jaRodando?'':'display:none'}" onclick="finalizarSerie()">■ Finalizar série ${E.serieIdx+1}</button>`;
+    <button class="btn btn-primary" id="btn-start-serie" style="${jaRodando?'display:none':''}" onclick="iniciarSerie()">▶ Iniciar série ${E.serieIdx+1}</button>
+    <button class="btn btn-green" id="btn-stop-serie" style="${jaRodando?'':'display:none'}" onclick="finalizarSerie()">■ Finalizar série ${E.serieIdx+1}</button>`;
 }
 
 function getUltimoPeso(){
   for(let i=E.serieIdx-1;i>=0;i--){const s=E.series[E.exIdx][i];if(s&&s.peso)return s.peso}
   const hist=loadHist();
   for(const h of hist){
-    if(h.tipo===E.tipo){
-      const nome=TREINOS[E.tipo][E.exIdx].nome;
+    if(h.tipo===E.tipo&&h.plano==='novo'){
+      const nome=TREINOS[E.tipo].exercicios[E.exIdx].nome||'';
       const idx=h.exNames?h.exNames.indexOf(nome):-1;
-      if(idx>=0&&h.series&&h.series[idx]){
-        const last=h.series[idx].filter(Boolean).pop();
-        if(last&&last.peso)return last.peso;
-      }
+      if(idx>=0&&h.series&&h.series[idx]){const last=h.series[idx].filter(Boolean).pop();if(last&&last.peso)return last.peso}
       break;
     }
   }
   return '';
 }
 
-/* ─── SÉRIE COM TIMESTAMP ─── */
+/* série */
 function iniciarSerie(){
-  E.serieStartTs=Date.now();
-  save();
+  E.serieStartTs=Date.now();save();
   document.getElementById('btn-start-serie').style.display='none';
   document.getElementById('btn-stop-serie').style.display='block';
-  const n=document.getElementById('stnum');
-  if(n){n.classList.remove('idle');n.classList.add('blinking')}
+  const n=document.getElementById('stnum');if(n){n.classList.remove('idle');n.classList.add('blinking')}
   const p=document.getElementById('stpulse');if(p)p.textContent='● gravando';
   clearInterval(serieTickInterval);
-  serieTickInterval=setInterval(tickSerie,500);
+  serieTickInterval=setInterval(()=>{
+    if(!E||!E.serieStartTs)return;
+    const el=document.getElementById('stnum');if(el)el.textContent=fmtMS(elapsed(E.serieStartTs));
+  },500);
 }
 function retomaSerieCronometro(){
   document.getElementById('btn-start-serie').style.display='none';
   document.getElementById('btn-stop-serie').style.display='block';
   clearInterval(serieTickInterval);
-  serieTickInterval=setInterval(tickSerie,500);
+  serieTickInterval=setInterval(()=>{
+    if(!E||!E.serieStartTs)return;
+    const el=document.getElementById('stnum');if(el)el.textContent=fmtMS(elapsed(E.serieStartTs));
+  },500);
 }
-function tickSerie(){
-  if(!E||!E.serieStartTs)return;
-  const el=document.getElementById('stnum');
-  if(el)el.textContent=fmtMS(elapsed(E.serieStartTs));
-}
-
 function finalizarSerie(){
   clearInterval(serieTickInterval);
   const tempo=E.serieStartTs?elapsed(E.serieStartTs):0;
   E.serieStartTs=null;
   const peso=parseFloat(document.getElementById('inp-peso').value)||0;
-  const ex=TREINOS[E.tipo][E.exIdx];
+  const ex=TREINOS[E.tipo].exercicios[E.exIdx];
   let reps=parseInt(document.getElementById('inp-reps').value)||0;
   if(!reps&&!ex.isTime){alert('Informe as repetições');iniciarSerie();return}
   if(!reps&&ex.isTime)reps=ex.reps;
   E.series[E.exIdx][E.serieIdx]={peso,reps,tempo};
   const totalS=ex.series||3;
-
   if(E.serieIdx<totalS-1){
     E.serieIdx++;
-    E.restStartTs=Date.now();E.restTotal=REST_SERIE;E.restTipo='serie';
-    save();
-    const proxLabel=`${ex.nome} — Série ${E.serieIdx+1} de ${totalS}`;
+    E.restStartTs=Date.now();E.restTotal=REST_SERIE;E.restTipo='serie';save();
+    const proxLabel=`${exNome(ex)} — Série ${E.serieIdx+1} de ${totalS}`;
     iniciarDescanso(REST_SERIE,'DESCANSO ENTRE SÉRIES','gc','Respire e prepare-se',proxLabel,()=>goExercicio());
   }else{
     E.serieIdx=0;
-    // encontra o próximo exercício não concluído e não pulado
     const proxIdx=proximoExPendente(E.exIdx+1);
-    E.restStartTs=Date.now();E.restTotal=REST_EX;E.restTipo='ex';
-    save();
+    E.restStartTs=Date.now();E.restTotal=REST_EX;E.restTipo='ex';save();
     let proxLabel='Finalizar treino';
     if(proxIdx!==-1){
-      const proxEx=TREINOS[E.tipo][proxIdx];
-      proxLabel=proxEx.tipo==='esteira_fim'?'Esteira finalização (10 min)':
-        `${proxEx.nome} — ${proxEx.series||3}×${proxEx.isTime?proxEx.reps+'s':proxEx.reps+' reps'}`;
+      const pex=TREINOS[E.tipo].exercicios[proxIdx];
+      proxLabel=pex.tipo==='esteira_fim'?'Esteira finalização (10 min)':
+        `${exNome(pex)} — ${pex.series||3}×${pex.isTime?pex.reps+'s':pex.reps+' reps'}`;
     }
     iniciarDescanso(REST_EX,'DESCANSO ENTRE EXERCÍCIOS','ac','Troque de equipamento',proxLabel,()=>avancarExercicio());
   }
 }
-
-/* Encontra o próximo exercício normal que ainda não foi concluído nem pulado */
-function proximoExPendente(fromIdx){
-  const exs=TREINOS[E.tipo];
-  for(let i=fromIdx;i<exs.length;i++){
+function proximoExPendente(from){
+  const exs=TREINOS[E.tipo].exercicios;
+  for(let i=from;i<exs.length;i++){
     if(exs[i].tipo==='esteira_fim')return i;
-    if(exs[i].tipo==='normal'&&!exFoiConcluido(i)&&!exFoiPulado(i))return i;
+    if((exs[i].tipo==='normal'||exs[i].tipo==='conjugado')&&!exFoiConcluido(i)&&!exFoiPulado(i))return i;
   }
   return -1;
 }
 
-/* ─── DESCANSO COM TIMESTAMP ─── */
+/* descanso */
 function iniciarDescanso(total,tipo,cor,sub,prox,cb){
   _restCb=cb;
-  const o=document.getElementById('rest-overlay');o.classList.remove('hidden');
+  document.getElementById('rest-overlay').classList.remove('hidden');
   document.getElementById('rest-type').textContent=tipo;
-  const big=document.getElementById('rest-big');big.className='rest-big '+cor;
+  document.getElementById('rest-big').className='rest-big '+cor;
   document.getElementById('rest-sub').textContent=sub;
   document.getElementById('rest-next').textContent='A seguir: '+prox;
   clearInterval(restTickInterval);
   restTickInterval=setInterval(()=>tickRest(total),500);
 }
 function mostrarDescansoRetomado(){
-  // reconstrói overlay para descanso que estava rodando quando tela fechou
-  const rem=restRemaining(E.restStartTs,E.restTotal);
-  const cor=E.restTipo==='serie'?'gc':'ac';
-  const tipo=E.restTipo==='serie'?'DESCANSO ENTRE SÉRIES':'DESCANSO ENTRE EXERCÍCIOS';
-  const o=document.getElementById('rest-overlay');o.classList.remove('hidden');
-  document.getElementById('rest-type').textContent=tipo;
-  const big=document.getElementById('rest-big');big.className='rest-big '+cor;
-  document.getElementById('rest-sub').textContent='Retomando descanso...';
+  document.getElementById('rest-overlay').classList.remove('hidden');
+  document.getElementById('rest-type').textContent=E.restTipo==='serie'?'DESCANSO ENTRE SÉRIES':'DESCANSO ENTRE EXERCÍCIOS';
+  document.getElementById('rest-big').className='rest-big '+(E.restTipo==='serie'?'gc':'ac');
+  document.getElementById('rest-sub').textContent='Retomando...';
   document.getElementById('rest-next').textContent='';
   clearInterval(restTickInterval);
   restTickInterval=setInterval(()=>tickRest(E.restTotal),500);
 }
 function tickRest(total){
   if(!E||!E.restStartTs)return;
-  const rem=restRemaining(E.restStartTs,total);
-  const el=document.getElementById('rest-big');
-  if(el)el.textContent=fmtMS(rem);
+  const rem=restRem(E.restStartTs,total);
+  const el=document.getElementById('rest-big');if(el)el.textContent=fmtMS(rem);
   if(rem<=0){
     clearInterval(restTickInterval);
     E.restStartTs=null;E.restTotal=0;save();
-    esconderDescanso();
-    if(_restCb)_restCb();
+    esconderDescanso();if(_restCb)_restCb();
   }
 }
 function pularDescanso(){
-  clearInterval(restTickInterval);
-  E.restStartTs=null;E.restTotal=0;save();
-  esconderDescanso();
-  if(_restCb)_restCb();
+  clearInterval(restTickInterval);E.restStartTs=null;E.restTotal=0;save();
+  esconderDescanso();if(_restCb)_restCb();
 }
 function esconderDescanso(){document.getElementById('rest-overlay').classList.add('hidden')}
 
-/* ─── PULAR EXERCÍCIO ─── */
+/* pular */
 function pularExercicio(){
   if(!E.pulados)E.pulados=[];
-  E.pulados.push(E.exIdx);
-  E.serieStartTs=null;save();
-  avancarExercicio();
+  E.pulados.push(E.exIdx);E.serieStartTs=null;save();avancarExercicio();
 }
 
-/* ─── LISTA ─── */
+/* lista */
 function abrirLista(){
-  const exs=TREINOS[E.tipo];
+  const exs=TREINOS[E.tipo].exercicios;
   document.getElementById('modal-titulo').textContent='Treino '+E.tipo;
   let html='';
   exs.forEach((ex,i)=>{
     if(ex.tipo==='esteira_inicio'||ex.tipo==='esteira_fim'){
-      html+=`<div class="modal-list-item" style="opacity:.35;cursor:default">
-        <span class="mli-num">${i+1}</span>
-        <span class="mli-name" style="color:var(--muted)">🏃 ${ex.nome}</span>
-      </div>`;return;
+      html+=`<div class="modal-item" style="opacity:.35;cursor:default">
+        <span class="mi-num">${i+1}</span><span class="mi-name" style="color:var(--muted)">🏃 ${exNome(ex)}</span></div>`;return;
     }
-    const pulado=exFoiPulado(i);
-    const done=exFoiConcluido(i);
-    const current=i===E.exIdx;
+    const pulado=exFoiPulado(i),done=exFoiConcluido(i),current=i===E.exIdx;
     let badge='';
-    if(pulado)badge=`<span class="mli-badge mli-skip">pulado</span>`;
-    else if(done)badge=`<span class="mli-badge mli-done">✓</span>`;
-    else if(current)badge=`<span class="mli-badge mli-current">atual</span>`;
+    if(pulado)badge=`<span class="tag tag-red">pulado</span>`;
+    else if(done)badge=`<span class="tag tag-green">✓</span>`;
+    else if(current)badge=`<span class="tag tag-blue">atual</span>`;
     const locked=done||pulado;
     const cls=locked?'done-ex':current?'current-ex':'';
     const click=locked?'':`onclick="irParaEx(${i})"`;
-    html+=`<div class="modal-list-item ${cls}" ${click}>
-      <span class="mli-num">${i+1}</span>
-      <span class="mli-name">${ex.nome}<br><span style="font-size:11px;color:var(--muted)">${ex.series||3}×${ex.isTime?ex.reps+'s':ex.reps+' reps'}</span></span>
-      ${badge}
-    </div>`;
+    html+=`<div class="modal-item ${cls}" ${click}>
+      <span class="mi-num">${i+1}</span>
+      <span class="mi-name">${exNome(ex)}<br><span style="font-size:10px;color:var(--muted)">${ex.series||3}×${ex.isTime?ex.reps+'s':ex.reps+' reps'}</span></span>
+      ${badge}</div>`;
   });
-  document.getElementById('modal-lista-items').innerHTML=html;
+  document.getElementById('modal-items').innerHTML=html;
   document.getElementById('modal-lista').classList.remove('hidden');
 }
 function fecharListaFora(e){if(e.target.id==='modal-lista')fecharModalDireto()}
 function fecharModalDireto(){document.getElementById('modal-lista').classList.add('hidden')}
 function irParaEx(idx){
   fecharModalDireto();clearAllTicks();
-  E.exIdx=idx;E.serieIdx=0;E.serieStartTs=null;
-  E.restStartTs=null;E.restTotal=0;
-  save();goExercicio();
+  E.exIdx=idx;E.serieIdx=0;E.serieStartTs=null;E.restStartTs=null;E.restTotal=0;save();goExercicio();
 }
 
-/* ─── AVANÇAR — pula exercícios já concluídos ─── */
+/* avançar */
 function avancarExercicio(){
-  const exs=TREINOS[E.tipo];
+  const exs=TREINOS[E.tipo].exercicios;
   let next=E.exIdx+1;
-  // pula exercícios já concluídos ou pulados
   while(next<exs.length){
     const ex=exs[next];
     if(ex.tipo==='esteira_fim')break;
@@ -703,21 +876,16 @@ function avancarExercicio(){
     if(exFoiConcluido(next)||exFoiPulado(next)){next++;continue}
     break;
   }
-  if(next<exs.length){
-    E.exIdx=next;E.serieIdx=0;E.serieStartTs=null;save();goExercicio();
-  }else{
-    finalizarTreino();
-  }
+  if(next<exs.length){E.exIdx=next;E.serieIdx=0;E.serieStartTs=null;save();goExercicio()}
+  else finalizarTreino();
 }
 
-/* ─── ESTEIRA COM TIMESTAMP ─── */
+/* esteira */
 function goEsteira(tipo){
-  E.esteiraTipo=tipo;
-  if(!E.esteiraStartTs)E.esteiraStartTs=Date.now();
-  save();
+  E.esteiraTipo=tipo;if(!E.esteiraStartTs)E.esteiraStartTs=Date.now();save();
   showPage('esteira');
   document.getElementById('esteira-title').textContent=tipo==='esteira_inicio'?'Esteira — aquecimento':'Esteira — finalização';
-  document.getElementById('esteira-sub').textContent=tipo==='esteira_inicio'?'Aqueça bem antes de começar':'Ótimo trabalho! Recupere-se.';
+  document.getElementById('esteira-sub').textContent=tipo==='esteira_inicio'?'Aqueça bem antes de começar':'Ótimo trabalho!';
   atualizarEsteira();
   clearInterval(esteiraTickInterval);
   esteiraTickInterval=setInterval(atualizarEsteira,500);
@@ -726,137 +894,209 @@ function mostrarEsteiraRetomada(){
   showPage('esteira');
   document.getElementById('esteira-title').textContent=E.esteiraTipo==='esteira_inicio'?'Esteira — aquecimento':'Esteira — finalização';
   document.getElementById('esteira-sub').textContent='Retomando...';
-  atualizarEsteira();
-  clearInterval(esteiraTickInterval);
-  esteiraTickInterval=setInterval(atualizarEsteira,500);
+  atualizarEsteira();clearInterval(esteiraTickInterval);esteiraTickInterval=setInterval(atualizarEsteira,500);
 }
 function atualizarEsteira(){
   if(!E||!E.esteiraStartTs)return;
-  const rem=restRemaining(E.esteiraStartTs,600);
+  const rem=restRem(E.esteiraStartTs,600);
   document.getElementById('esteira-timer').textContent=fmtMS(rem);
-  if(rem<=0){
-    clearInterval(esteiraTickInterval);
-    E.esteiraStartTs=null;save();
-    terminarEsteira();
-  }
+  if(rem<=0){clearInterval(esteiraTickInterval);E.esteiraStartTs=null;save();terminarEsteira()}
 }
-function pularEsteira(){
-  clearInterval(esteiraTickInterval);
-  E.esteiraStartTs=null;save();
-  terminarEsteira();
-}
+function pularEsteira(){clearInterval(esteiraTickInterval);E.esteiraStartTs=null;save();terminarEsteira()}
 function terminarEsteira(){
   if(E.esteiraTipo==='esteira_fim'){finalizarTreino();return}
-  E.esteiraTipo=null;save();
-  avancarExercicio();
+  E.esteiraTipo=null;save();avancarExercicio();
 }
 
-/* ─── FINALIZAR ─── */
+/* finalizar */
 function finalizarTreino(){
-  clearAllTicks();
-  E.finalizado=true;E.fim=Date.now();save();
+  clearAllTicks();E.finalizado=true;E.fim=Date.now();save();
+  addSessao(E.tipo);
   saveHist({
-    tipo:E.tipo,data:today(),dataStr:todayStr(),
+    tipo:E.tipo,plano:'novo',data:today(),dataStr:todayStr(),
     inicio:E.inicio,fim:E.fim,
-    exNames:TREINOS[E.tipo].map(e=>e.nome),
+    exNames:TREINOS[E.tipo].exercicios.map(ex=>ex.nome||exNome(ex)),
     series:E.series,pulados:E.pulados||[]
   });
   showPage('finished');renderFinished();
 }
-
 function renderFinished(){
-  const exs=TREINOS[E.tipo];
-  const durMs=E.fim-E.inicio;
+  const exs=TREINOS[E.tipo].exercicios;
+  const dur=E.fim-E.inicio;
   const totalS=E.series.flat().filter(Boolean).length;
-  const vol=E.series.flat().filter(Boolean).reduce((a,s)=>a+(s.peso*s.reps),0);
+  const vol=E.series.flat().filter(Boolean).reduce((a,s)=>a+(s.peso*(s.reps||0)),0);
+  const sess=loadSessoes();
   document.getElementById('fin-sub').textContent='Treino '+E.tipo+' · '+todayStr();
   document.getElementById('fin-stats').innerHTML=`
-    <div class="stat-card"><div class="stat-num" style="font-size:20px">${fmtHMS(durMs)}</div><div class="stat-label">Duração</div></div>
+    <div class="stat-card"><div class="stat-num" style="font-size:19px">${fmtHMS(dur)}</div><div class="stat-label">Duração</div></div>
     <div class="stat-card"><div class="stat-num">${totalS}</div><div class="stat-label">Séries</div></div>
     <div class="stat-card"><div class="stat-num">${Math.round(vol)}</div><div class="stat-label">Volume kg×rep</div></div>
-    <div class="stat-card"><div class="stat-num">${exs.filter(e=>e.tipo==='normal').length}</div><div class="stat-label">Exercícios</div></div>`;
+    <div class="stat-card"><div class="stat-num">${sess[E.tipo]}/${META_SESSOES}</div><div class="stat-label">Sessões ${E.tipo}</div></div>`;
   let html='';
   exs.forEach((ex,i)=>{
-    if(ex.tipo!=='normal')return;
+    if(ex.tipo==='esteira_inicio'||ex.tipo==='esteira_fim')return;
     const ss=E.series[i].filter(Boolean);
     const pulado=exFoiPulado(i);
-    html+=`<div class="hist-card">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
-        <span style="font-size:14px;font-weight:500">${ex.nome}</span>
-        ${pulado?'<span style="font-size:10px;font-family:var(--mono);background:rgba(239,68,68,.15);color:var(--red);padding:2px 8px;border-radius:6px">pulado</span>':''}
+    html+=`<div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:7px">
+        <span style="font-size:13px;font-weight:500">${exNome(ex)}</span>
+        ${pulado?'<span class="tag tag-red">pulado</span>':''}
       </div>
-      <div class="hist-series-row">${ss.map((s,j)=>`<span class="pill">S${j+1}: ${s.peso}kg×${s.reps} <span style="color:var(--muted)">${s.tempo}s</span></span>`).join(' ')}</div>
+      <div style="display:flex;gap:4px;flex-wrap:wrap">${ss.map((s,j)=>`<span class="pill">S${j+1}: ${s.peso}kg×${s.reps} <span style="color:var(--muted)">${s.tempo}s</span></span>`).join('')}</div>
     </div>`;
   });
   document.getElementById('fin-detail').innerHTML=html;
 }
 
-/* ─── HISTÓRICO ─── */
-function renderHist(){
+/* ════ HISTÓRICO ════ */
+function switchHistTab(tab){
+  _histTab=tab;
+  ['atual','antigo','evol','treinos'].forEach(t=>{
+    document.getElementById('htab-'+t).classList.toggle('active',t===tab);
+  });
+  renderHist(tab);
+}
+function renderHist(tab){
   const hist=loadHist();
   const div=document.getElementById('hist-content');
-  if(!hist.length){
-    div.innerHTML='<p style="color:var(--muted);font-size:14px;text-align:center;padding:32px 0">Nenhum treino registrado.<br>Conclua seu primeiro treino!</p>';
-    return;
-  }
-  const byEx={};
-  hist.forEach(h=>{
-    TREINOS[h.tipo].forEach((ex,i)=>{
-      if(ex.tipo!=='normal')return;
-      if(!byEx[ex.nome])byEx[ex.nome]=[];
-      const ss=(h.series[i]||[]).filter(Boolean);
-      if(ss.length){const mp=Math.max(...ss.map(s=>s.peso||0));byEx[ex.nome].push({data:h.dataStr,maxPeso:mp,series:ss})}
-    });
-  });
-  let html=`<div class="section-title" style="margin-bottom:16px">Registros recentes</div>`;
-  hist.slice(0,15).forEach(h=>{
-    const dur=fmtHMS(h.fim-h.inicio);
-    let exHtml='';
-    TREINOS[h.tipo].forEach((ex,i)=>{
-      if(ex.tipo!=='normal')return;
-      const ss=(h.series[i]||[]).filter(Boolean);
-      const pulado=h.pulados&&h.pulados.includes(i);
-      if(!ss.length&&!pulado)return;
-      exHtml+=`<div class="hist-ex">
-        <div class="hist-ex-name">${ex.nome}${pulado?' <span style="color:var(--red);font-size:10px">(pulado)</span>':''}</div>
-        <div class="hist-series-row">${ss.map((s,j)=>`<span class="pill">S${j+1}: ${s.peso}kg×${s.reps} <span style="color:var(--muted)">${s.tempo}s</span></span>`).join(' ')}</div>
-      </div>`;
-    });
-    html+=`<div class="hist-card">
-      <div class="hist-head">
-        <span class="hist-treino">Treino ${h.tipo}</span>
-        <span class="hist-date">${h.dataStr} · ${dur}</span>
-      </div>${exHtml}
+
+  if(tab==='atual'){
+    // treinos novos (plano=novo) mais recentes
+    const novos=hist.filter(h=>h.plano==='novo');
+    if(!novos.length){div.innerHTML='<p style="color:var(--muted);font-size:13px;text-align:center;padding:24px 0">Nenhum treino do plano atual ainda.</p>';return}
+    // resumo de sessões
+    const sess=loadSessoes();
+    const dias=diasAtePrazo();
+    let html=`<div class="card" style="margin-bottom:14px">
+      <div class="section-title" style="margin-bottom:8px">Progresso do plano</div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:8px">Prazo: ${PRAZO.toLocaleDateString('pt-BR')} · ${dias>0?'Faltam '+dias+' dias':'Encerrado'}</div>
+      ${ORDEM.map(t=>{
+        const n=sess[t]||0,pct=Math.min(100,Math.round((n/META_SESSOES)*100));
+        return`<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+          <span style="font-size:12px;font-family:var(--mono);color:var(--accent2);min-width:14px">${t}</span>
+          <div style="flex:1;height:5px;background:var(--surface2);border-radius:100px;overflow:hidden">
+            <div style="width:${pct}%;height:100%;background:linear-gradient(90deg,var(--accent),var(--green));border-radius:100px"></div>
+          </div>
+          <span style="font-size:11px;font-family:var(--mono);color:var(--muted)">${n}/${META_SESSOES}</span>
+        </div>`;
+      }).join('')}
     </div>`;
-  });
-  html+=`<div class="section-title" style="margin:24px 0 12px">Evolução de carga</div>`;
-  const exsComDados=Object.keys(byEx).filter(k=>byEx[k].length>=2);
-  if(!exsComDados.length){
-    html+=`<p style="color:var(--muted);font-size:13px">Registre mais treinos para ver evolução.</p>`;
-  }else{
-    exsComDados.forEach(nome=>{
-      const d=byEx[nome];const u=d[0],p=d[1];
+    novos.slice(0,20).forEach(h=>html+=buildHistCard(h));
+    div.innerHTML=html;
+  }else if(tab==='antigo'){
+    const antigos=hist.filter(h=>!h.plano||h.plano==='antigo');
+    if(!antigos.length){div.innerHTML='<p style="color:var(--muted);font-size:13px;text-align:center;padding:24px 0">Nenhum treino anterior registrado.</p>';return}
+    div.innerHTML=antigos.slice(0,30).map(h=>buildHistCard(h)).join('');
+  }else if(tab==='evol'){
+    // evolução de carga
+    const novos=hist.filter(h=>h.plano==='novo');
+    if(novos.length<2){div.innerHTML='<p style="color:var(--muted);font-size:13px;text-align:center;padding:24px 0">Registre pelo menos 2 treinos para ver evolução.</p>';return}
+    const byEx={};
+    novos.forEach(h=>{
+      const exs=TREINOS[h.tipo]?TREINOS[h.tipo].exercicios:[];
+      exs.forEach((ex,i)=>{
+        if(ex.tipo==='esteira_inicio'||ex.tipo==='esteira_fim')return;
+        const nm=exNome(ex);if(!byEx[nm])byEx[nm]=[];
+        const ss=(h.series[i]||[]).filter(Boolean);
+        if(ss.length){const mp=Math.max(...ss.map(s=>s.peso||0));byEx[nm].push({data:h.dataStr,maxPeso:mp})}
+      });
+    });
+    let html='';
+    Object.keys(byEx).filter(k=>byEx[k].length>=2).forEach(nome=>{
+      const d=byEx[nome],u=d[0],p=d[1];
       const diff=+(u.maxPeso-p.maxPeso).toFixed(1);
-      const seta=diff>0?`<span class="evol-up">▲ +${diff}kg</span>`:diff<0?`<span class="evol-down">▼ ${diff}kg</span>`:`<span style="color:var(--muted)">→ igual</span>`;
-      html+=`<div class="hist-card" style="padding:12px 16px">
-        <div style="font-size:13px;font-weight:500;margin-bottom:4px">${nome}</div>
+      const seta=diff>0?`<span class="evol-up">▲ +${diff}kg</span>`:diff<0?`<span style="color:var(--red);font-size:11px">▼ ${diff}kg</span>`:`<span style="color:var(--muted)">→</span>`;
+      html+=`<div class="card" style="padding:11px 14px">
+        <div style="font-size:13px;font-weight:500;margin-bottom:3px">${nome}</div>
         <div style="display:flex;justify-content:space-between;align-items:center">
-          <span style="font-size:12px;color:var(--muted)">Último: <b style="color:var(--text)">${u.maxPeso}kg</b> · ${u.data}</span>${seta}
+          <span style="font-size:11px;color:var(--muted)">Último: <b style="color:var(--text)">${u.maxPeso}kg</b> · ${u.data}</span>${seta}
         </div>
       </div>`;
     });
+    div.innerHTML=html||'<p style="color:var(--muted);font-size:13px;text-align:center;padding:24px 0">Dados insuficientes para evolução.</p>';
+  }else if(tab==='treinos'){
+    // Lista dos treinos antigos A, B, C para referência
+    let html='<div class="card" style="margin-bottom:14px;background:rgba(245,158,11,.07);border-color:rgba(245,158,11,.2)"><div style="font-size:12px;color:var(--amber);line-height:1.6">📋 Lista dos treinos anteriores para consulta. Estes treinos não estão disponíveis para execução — são apenas referência.</div></div>';
+    Object.keys(TREINOS_ANTIGOS).forEach(t=>{
+      const tr=TREINOS_ANTIGOS[t];
+      const exs=tr.exercicios.filter(e=>e.tipo==='normal'||e.tipo==='conjugado');
+      html+=`<div class="card">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+          <span style="font-size:22px;font-weight:600;font-family:var(--mono);background:linear-gradient(135deg,var(--accent2),var(--green));-webkit-background-clip:text;-webkit-text-fill-color:transparent">${t}</span>
+          <div>
+            <div style="font-size:14px;font-weight:500">${tr.nome}</div>
+            <div style="font-size:11px;color:var(--muted)">${tr.info}</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:6px;margin-bottom:10px;padding:8px 10px;background:var(--surface2);border-radius:8px">
+          <span style="font-size:11px;color:var(--muted);font-family:var(--mono)">🏃 Esteira aquecimento 10min</span>
+        </div>
+        ${exs.map((ex,i)=>`
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;padding:9px 0;border-bottom:1px solid var(--border)">
+            <div style="flex:1">
+              <div style="font-size:13px;font-weight:500">${ex.nome}</div>
+              ${ex.nome2?`<div style="font-size:11px;color:var(--amber);margin-top:2px">+ ${ex.nome2}</div>`:''}
+            </div>
+            <span style="font-size:11px;font-family:var(--mono);color:var(--muted);white-space:nowrap;margin-left:10px">${ex.series||3}×${ex.isTime?ex.reps+'s':ex.reps+' reps'}</span>
+          </div>`).join('')}
+        <div style="display:flex;align-items:center;gap:6px;margin-top:10px;padding:8px 10px;background:var(--surface2);border-radius:8px">
+          <span style="font-size:11px;color:var(--muted);font-family:var(--mono)">🏃 Esteira finalização 10min</span>
+        </div>
+      </div>`;
+    });
+    div.innerHTML=html;
   }
-  div.innerHTML=html;
+}
+function buildHistCard(h){
+  const dur=fmtHMS((h.fim||0)-(h.inicio||0));
+  // tenta treinos novos primeiro, depois antigos
+  const exs=(TREINOS[h.tipo]?TREINOS[h.tipo].exercicios:null)
+    ||(TREINOS_ANTIGOS[h.tipo]?TREINOS_ANTIGOS[h.tipo].exercicios:null)
+    ||[];
+  let exHtml='';
+  if(exs.length>0){
+    exs.forEach((ex,i)=>{
+      if(ex.tipo==='esteira_inicio'||ex.tipo==='esteira_fim')return;
+      const ss=(h.series&&h.series[i])?h.series[i].filter(Boolean):[];
+      const pulado=h.pulados&&h.pulados.includes(i);
+      if(!ss.length&&!pulado)return;
+      const nm=ex.tipo==='conjugado'?ex.nome+' + '+ex.nome2:ex.nome;
+      exHtml+=`<div style="margin-bottom:7px">
+        <div style="font-size:11px;color:var(--muted);margin-bottom:3px">${nm}${pulado?' <span style="color:var(--red)">(pulado)</span>':''}</div>
+        <div style="display:flex;gap:3px;flex-wrap:wrap">${ss.map((s,j)=>`<span class="pill">S${j+1}: ${s.peso}kg×${s.reps} <span style="color:var(--muted)">${s.tempo}s</span></span>`).join('')}</div>
+      </div>`;
+    });
+  }else if(h.exNames){
+    // fallback: usa exNames salvos no registro
+    h.exNames.forEach((nm,i)=>{
+      if(!nm||nm.includes('Esteira'))return;
+      const ss=(h.series&&h.series[i])?h.series[i].filter(Boolean):[];
+      if(!ss.length)return;
+      exHtml+=`<div style="margin-bottom:7px">
+        <div style="font-size:11px;color:var(--muted);margin-bottom:3px">${nm}</div>
+        <div style="display:flex;gap:3px;flex-wrap:wrap">${ss.map((s,j)=>`<span class="pill">S${j+1}: ${s.peso}kg×${s.reps} <span style="color:var(--muted)">${s.tempo}s</span></span>`).join('')}</div>
+      </div>`;
+    });
+  }
+  const planoTag=h.plano==='novo'
+    ?`<span class="tag tag-blue" style="margin-left:6px">atual</span>`
+    :`<span class="tag tag-muted" style="margin-left:6px">anterior</span>`;
+  return`<div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+      <span style="font-size:15px;font-weight:500">Treino ${h.tipo}${planoTag}</span>
+      <span style="font-size:11px;font-family:var(--mono);color:var(--muted)">${h.dataStr||'?'} · ${dur}</span>
+    </div>${exHtml}
+  </div>`;
 }
 
-/* ─── VISIBILIDADE — reconecta ticks quando volta para a tela ─── */
+/* visibilidade */
 document.addEventListener('visibilitychange',()=>{
-  if(document.visibilityState==='visible'&&E&&!E.finalizado){
-    retomar();
-  }
+  if(document.visibilityState==='visible'&&E&&!E.finalizado)retomar();
 });
 
-checkPending();
+/* INIT */
+migrarHistoricoAntigo();
+renderHome();
 </script>
 </body>
 </html>
