@@ -246,6 +246,14 @@ body{display:flex;flex-direction:column}
       <button class="hist-tab" id="htab-evol" onclick="switchHistTab('evol')">Evolução</button>
       <button class="hist-tab" id="htab-treinos" onclick="switchHistTab('treinos')">Treinos</button>
     </div>
+    <!-- IMPORTAR -->
+    <div id="import-section" style="background:linear-gradient(135deg,rgba(56,189,248,.1),rgba(56,189,248,.03));border:1px solid rgba(56,189,248,.2);border-radius:16px;padding:14px;margin-bottom:12px">
+      <div style="font-size:10px;font-family:'DM Mono',monospace;letter-spacing:2px;color:#38bdf8;text-transform:uppercase;margin-bottom:5px">📥 Importar histórico antigo</div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:10px;line-height:1.5">Cole o código gerado no app antigo e toque em Importar.</div>
+      <textarea id="import-text" placeholder="Cole o código aqui..." style="width:100%;height:90px;background:var(--surface2);border:1px solid var(--border2);border-radius:10px;padding:10px;font-size:11px;font-family:'DM Mono',monospace;color:var(--text);resize:none;margin-bottom:8px;outline:none"></textarea>
+      <button onclick="importarHistorico()" style="width:100%;padding:12px;border-radius:12px;background:linear-gradient(135deg,#38bdf8,#0ea5e9);color:#fff;font-size:13px;font-family:'DM Sans',sans-serif;font-weight:500;border:none;cursor:pointer;margin-bottom:6px">Importar histórico</button>
+      <button onclick="document.getElementById('import-section').style.display='none'" style="width:100%;padding:10px;border-radius:12px;background:transparent;border:1px solid var(--border);color:var(--muted);font-size:12px;font-family:'DM Sans',sans-serif;cursor:pointer">Fechar</button>
+    </div>
     <div id="hist-content"></div>
   </div>
 </div>
@@ -286,8 +294,9 @@ body{display:flex;flex-direction:column}
 /* ════════════════════════════════════════════
    DADOS DOS TREINOS
 ════════════════════════════════════════════ */
-const PRAZO = new Date('2026-06-09T23:59:59');
-const META_SESSOES = 20;
+const PRAZO = new Date('2026-07-09T23:59:59');
+const META_SESSOES = 11;
+const INICIO_PLANO = new Date('2026-05-09T00:00:00');
 
 // tipo: 'esteira_inicio'|'esteira_fim'|'normal'|'conjugado'
 // conjugado = dois exercícios no mesmo slot
@@ -514,15 +523,22 @@ function clearAllTicks(){
 
 /* ════ HOME ════ */
 function renderHome(){
-  // Alertas de prazo
+  // Alertas de prazo — avisa a partir de 09/05
   const dias=diasAtePrazo();
+  const now=new Date(); now.setHours(0,0,0,0);
+  const inicioPlazo=new Date(INICIO_PLANO); inicioPlazo.setHours(0,0,0,0);
+  const planoAtivo=now>=inicioPlazo;
   let alertHtml='';
-  if(dias<=0){
-    alertHtml=`<div class="alert-banner alert-red">⚠️ O prazo do treino encerrou em ${PRAZO.toLocaleDateString('pt-BR')}.</div>`;
-  }else if(dias<=7){
-    alertHtml=`<div class="alert-banner alert-amber">⏰ Faltam <b>${dias} dia${dias>1?'s':''}</b> para o fim do treino (${PRAZO.toLocaleDateString('pt-BR')}).</div>`;
-  }else if(dias<=14){
-    alertHtml=`<div class="alert-banner alert-amber" style="opacity:.7">📅 Faltam <b>${dias} dias</b> para o fim do treino.</div>`;
+  if(planoAtivo){
+    if(dias<=0){
+      alertHtml=`<div class="alert-banner alert-red">⚠️ O prazo do plano encerrou em ${PRAZO.toLocaleDateString('pt-BR')}.</div>`;
+    }else if(dias<=14){
+      alertHtml=`<div class="alert-banner alert-red">🔴 Faltam <b>${dias} dia${dias>1?'s':''}</b> para o fim do plano (${PRAZO.toLocaleDateString('pt-BR')})!</div>`;
+    }else if(dias<=30){
+      alertHtml=`<div class="alert-banner alert-amber">⏰ Faltam <b>${dias} dias</b> para o fim do plano (${PRAZO.toLocaleDateString('pt-BR')}).</div>`;
+    }else{
+      alertHtml=`<div class="alert-banner alert-amber" style="opacity:.75">📅 Plano ativo até ${PRAZO.toLocaleDateString('pt-BR')} · Faltam ${dias} dias.</div>`;
+    }
   }
   document.getElementById('home-alerts').innerHTML=alertHtml;
 
@@ -1094,7 +1110,38 @@ document.addEventListener('visibilitychange',()=>{
   if(document.visibilityState==='visible'&&E&&!E.finalizado)retomar();
 });
 
-/* INIT */
+/* ════ IMPORTAR HISTÓRICO ════ */
+function importarHistorico(){
+  try{
+    const raw = document.getElementById('import-text').value.trim();
+    if(!raw){alert('Cole o código antes de importar.');return}
+    const json = decodeURIComponent(escape(atob(raw)));
+    const payload = JSON.parse(json);
+    if(!payload.v||!payload.hist){alert('Código inválido. Gere novamente no app antigo.');return}
+    let importados=0, duplicados=0;
+    const histAtual = loadHist();
+    const chaves = new Set(histAtual.map(h=>h.data+'_'+h.tipo+'_'+(h.inicio||0)));
+    payload.hist.forEach(h=>{
+      // marca como antigo
+      h.plano = 'antigo';
+      if(!h.dataStr) h.dataStr = h.data ? new Date(h.data).toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit',year:'2-digit'}) : '?';
+      const chave = h.data+'_'+h.tipo+'_'+(h.inicio||0);
+      if(chaves.has(chave)){duplicados++;return}
+      chaves.add(chave);
+      saveHist(h);
+      importados++;
+    });
+    document.getElementById('import-text').value='';
+    document.getElementById('import-section').style.display='none';
+    alert('✓ Importados '+importados+' treinos!'+(duplicados?' ('+duplicados+' já existiam)':''));
+    renderHist('antigo');
+    switchHistTab('antigo');
+  }catch(e){
+    alert('Erro ao importar. Verifique se o código foi copiado corretamente.\n'+e.message);
+  }
+}
+
+/* ════ INIT ════ */
 migrarHistoricoAntigo();
 renderHome();
 </script>
