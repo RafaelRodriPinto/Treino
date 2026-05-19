@@ -6,7 +6,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Treino">
-<title>Treino Academia</title>
+<title>Rafael Pinto</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -887,12 +887,55 @@ function avancarExercicio(){
   let next=E.exIdx+1;
   while(next<exs.length){
     const ex=exs[next];
-    if(ex.tipo==='esteira_fim')break;
     if(ex.tipo==='esteira_inicio'){next++;continue}
+    if(ex.tipo==='esteira_fim'){
+      // verifica se ainda há exercícios normais pendentes
+      const pendentes=exs.filter((e,i)=>
+        (e.tipo==='normal'||e.tipo==='conjugado')&&
+        !exFoiConcluido(i)&&!exFoiPulado(i)
+      );
+      if(pendentes.length>0){
+        // monta lista dos pendentes
+        const nomes=pendentes.map(e=>e.tipo==='conjugado'?e.nome+' + '+e.nome2:e.nome);
+        mostrarConfirmacaoEsteira(nomes);
+        return;
+      }
+      break; // sem pendentes, vai para esteira normalmente
+    }
     if(exFoiConcluido(next)||exFoiPulado(next)){next++;continue}
     break;
   }
   if(next<exs.length){E.exIdx=next;E.serieIdx=0;E.serieStartTs=null;save();goExercicio()}
+  else finalizarTreino();
+}
+
+function mostrarConfirmacaoEsteira(pendentes){
+  // cria modal de confirmação na própria página
+  const existing=document.getElementById('modal-esteira-confirm');
+  if(existing)existing.remove();
+  const lista=pendentes.map(n=>`<div style="padding:6px 0;border-bottom:1px solid var(--border);font-size:13px">• ${n}</div>`).join('');
+  const div=document.createElement('div');
+  div.id='modal-esteira-confirm';
+  div.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:70;display:flex;flex-direction:column;justify-content:flex-end;padding:20px';
+  div.innerHTML=`
+    <div style="background:var(--surface);border-radius:24px;padding:20px">
+      <div style="font-size:10px;font-family:var(--mono);letter-spacing:2px;color:var(--amber);text-transform:uppercase;margin-bottom:8px">⚠️ Exercícios pendentes</div>
+      <div style="font-size:14px;font-weight:500;margin-bottom:12px">Ainda há exercícios não realizados:</div>
+      <div style="margin-bottom:16px;max-height:200px;overflow-y:auto">${lista}</div>
+      <div style="font-size:13px;color:var(--muted);margin-bottom:16px">Deseja ir para a esteira de finalização mesmo assim?</div>
+      <button onclick="confirmarIrEsteira()" style="width:100%;padding:14px;border-radius:14px;background:linear-gradient(135deg,var(--green),#2aaa70);color:#fff;font-size:14px;font-family:var(--sans);font-weight:500;border:none;cursor:pointer;margin-bottom:8px">Sim, ir para esteira</button>
+      <button onclick="document.getElementById('modal-esteira-confirm').remove()" style="width:100%;padding:14px;border-radius:14px;background:transparent;border:1px solid var(--border2);color:var(--muted);font-size:14px;font-family:var(--sans);font-weight:500;cursor:pointer">Não, continuar exercícios</button>
+    </div>`;
+  document.body.appendChild(div);
+}
+
+function confirmarIrEsteira(){
+  const modal=document.getElementById('modal-esteira-confirm');
+  if(modal)modal.remove();
+  // vai direto para esteira_fim
+  const exs=TREINOS[E.tipo].exercicios;
+  const idxEsteira=exs.findIndex(e=>e.tipo==='esteira_fim');
+  if(idxEsteira>=0){E.exIdx=idxEsteira;E.serieIdx=0;E.serieStartTs=null;save();goExercicio()}
   else finalizarTreino();
 }
 
