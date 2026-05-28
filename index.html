@@ -700,34 +700,72 @@ function renderSeriesDone(){
   const ex=TREINOS[E.tipo].exercicios[E.exIdx];
   const done=E.series[E.exIdx].slice(0,E.serieIdx).filter(Boolean);
   if(!done.length){document.getElementById('series-done-wrap').innerHTML='';return}
-  const rows=done.map((s,i)=>`
-    <div class="serie-row">
+  const rows=done.map((s,i)=>{
+    if(ex.tipo==='conjugado'){
+      return`<div class="serie-row" style="flex-direction:column;align-items:flex-start;gap:4px">
+        <span class="s-label">S${i+1}</span>
+        <div style="display:flex;gap:4px;flex-wrap:wrap">
+          <span style="font-size:10px;color:var(--accent2);font-family:var(--mono)">${ex.nome.split(' ')[0]}:</span>
+          <span class="pill">${s.peso}kg</span><span class="pill">${s.reps} reps</span><span class="pill g">${s.tempo}s</span>
+        </div>
+        <div style="display:flex;gap:4px;flex-wrap:wrap">
+          <span style="font-size:10px;color:var(--amber);font-family:var(--mono)">${ex.nome2.split(' ')[0]}:</span>
+          <span class="pill">${s.peso2}kg</span><span class="pill">${s.reps2} reps</span>
+        </div>
+      </div>`;
+    }
+    return`<div class="serie-row">
       <span class="s-label">S${i+1}</span>
       <div class="s-data">
         <span class="pill">${s.peso}kg</span>
         <span class="pill">${ex.isTime?s.tempo+'s':s.reps+' reps'}</span>
         <span class="pill g">${s.tempo}s</span>
       </div>
-    </div>`).join('');
+    </div>`;
+  }).join('');
   document.getElementById('series-done-wrap').innerHTML=`<div class="series-done">${rows}</div>`;
 }
 
 function renderActionArea(){
   const ex=TREINOS[E.tipo].exercicios[E.exIdx];
   const up=getUltimoPeso();
+  const up2=getUltimoPeso2();
   const jaRodando=!!E.serieStartTs;
   const repsLabel=ex.isTime?'Meta (seg)':'Repetições';
   const repsPlaceholder=ex.isTime?ex.reps:'0';
+
+  let inputsHtml='';
+  if(ex.tipo==='conjugado'){
+    // dois blocos separados
+    inputsHtml=`
+      <div style="background:var(--surface2);border-radius:12px;padding:10px;margin-bottom:8px">
+        <div style="font-size:10px;font-family:var(--mono);color:var(--accent2);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px">① ${ex.nome}</div>
+        <div class="input-grid">
+          <div class="field"><label>Peso (kg)</label><input type="number" id="inp-peso" min="0" step="0.5" inputmode="decimal" placeholder="0" value="${up}"></div>
+          <div class="field"><label>Repetições</label><input type="number" id="inp-reps" min="1" step="1" inputmode="numeric" placeholder="${ex.reps||'0'}"></div>
+        </div>
+      </div>
+      <div style="background:var(--surface2);border-radius:12px;padding:10px;margin-bottom:8px">
+        <div style="font-size:10px;font-family:var(--mono);color:var(--amber);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px">② ${ex.nome2}</div>
+        <div class="input-grid">
+          <div class="field"><label>Peso (kg)</label><input type="number" id="inp-peso2" min="0" step="0.5" inputmode="decimal" placeholder="0" value="${up2}"></div>
+          <div class="field"><label>${ex.isTime2===false?'Repetições':'Meta (seg)'}</label><input type="number" id="inp-reps2" min="1" step="1" inputmode="numeric" placeholder="${ex.reps2||ex.reps||'0'}"></div>
+        </div>
+      </div>`;
+  }else{
+    inputsHtml=`<div class="input-grid">
+      <div class="field"><label>Peso (kg)</label><input type="number" id="inp-peso" min="0" step="0.5" inputmode="decimal" placeholder="0" value="${up}"></div>
+      <div class="field"><label>${repsLabel}</label><input type="number" id="inp-reps" min="1" step="1" inputmode="numeric" placeholder="${repsPlaceholder}"></div>
+    </div>`;
+  }
+
   document.getElementById('action-area').innerHTML=`
     <div class="timer-block">
       <div class="timer-label">Cronômetro da série</div>
       <div class="timer-num ${jaRodando?'blinking':'idle'}" id="stnum">${jaRodando?fmtMS(elapsed(E.serieStartTs)):'00:00'}</div>
       <div class="timer-pulse" id="stpulse">${jaRodando?'● gravando':''}</div>
     </div>
-    <div class="input-grid">
-      <div class="field"><label>Peso (kg)</label><input type="number" id="inp-peso" min="0" step="0.5" inputmode="decimal" placeholder="0" value="${up}"></div>
-      <div class="field"><label>${repsLabel}</label><input type="number" id="inp-reps" min="1" step="1" inputmode="numeric" placeholder="${repsPlaceholder}"></div>
-    </div>
+    ${inputsHtml}
     <button class="btn btn-primary" id="btn-start-serie" style="${jaRodando?'display:none':''}" onclick="iniciarSerie()">▶ Iniciar série ${E.serieIdx+1}</button>
     <button class="btn btn-green" id="btn-stop-serie" style="${jaRodando?'':'display:none'}" onclick="finalizarSerie()">■ Finalizar série ${E.serieIdx+1}</button>`;
 }
@@ -740,6 +778,19 @@ function getUltimoPeso(){
       const nome=TREINOS[E.tipo].exercicios[E.exIdx].nome||'';
       const idx=h.exNames?h.exNames.indexOf(nome):-1;
       if(idx>=0&&h.series&&h.series[idx]){const last=h.series[idx].filter(Boolean).pop();if(last&&last.peso)return last.peso}
+      break;
+    }
+  }
+  return '';
+}
+function getUltimoPeso2(){
+  for(let i=E.serieIdx-1;i>=0;i--){const s=E.series[E.exIdx][i];if(s&&s.peso2)return s.peso2}
+  const hist=loadHist();
+  for(const h of hist){
+    if(h.tipo===E.tipo&&h.plano==='novo'){
+      const nome=TREINOS[E.tipo].exercicios[E.exIdx].nome||'';
+      const idx=h.exNames?h.exNames.indexOf(nome):-1;
+      if(idx>=0&&h.series&&h.series[idx]){const last=h.series[idx].filter(Boolean).pop();if(last&&last.peso2)return last.peso2}
       break;
     }
   }
@@ -772,12 +823,22 @@ function finalizarSerie(){
   clearInterval(serieTickInterval);
   const tempo=E.serieStartTs?elapsed(E.serieStartTs):0;
   E.serieStartTs=null;
-  const peso=parseFloat(document.getElementById('inp-peso').value)||0;
   const ex=TREINOS[E.tipo].exercicios[E.exIdx];
+  const peso=parseFloat(document.getElementById('inp-peso').value)||0;
   let reps=parseInt(document.getElementById('inp-reps').value)||0;
-  if(!reps&&!ex.isTime){alert('Informe as repetições');iniciarSerie();return}
-  if(!reps&&ex.isTime)reps=ex.reps;
-  E.series[E.exIdx][E.serieIdx]={peso,reps,tempo};
+
+  if(ex.tipo==='conjugado'){
+    const peso2=parseFloat(document.getElementById('inp-peso2').value)||0;
+    let reps2=parseInt(document.getElementById('inp-reps2').value)||0;
+    if(!reps){alert('Informe as repetições do 1º exercício');iniciarSerie();return}
+    if(!reps2){alert('Informe as repetições do 2º exercício');iniciarSerie();return}
+    E.series[E.exIdx][E.serieIdx]={peso,reps,peso2,reps2,tempo};
+  }else{
+    if(!reps&&!ex.isTime){alert('Informe as repetições');iniciarSerie();return}
+    if(!reps&&ex.isTime)reps=ex.reps;
+    E.series[E.exIdx][E.serieIdx]={peso,reps,tempo};
+  }
+
   const totalS=ex.series||3;
   if(E.serieIdx<totalS-1){
     E.serieIdx++;
@@ -983,7 +1044,7 @@ function renderFinished(){
   const exs=TREINOS[E.tipo].exercicios;
   const dur=E.fim-E.inicio;
   const totalS=E.series.flat().filter(Boolean).length;
-  const vol=E.series.flat().filter(Boolean).reduce((a,s)=>a+(s.peso*(s.reps||0)),0);
+  const vol=E.series.flat().filter(Boolean).reduce((a,s)=>a+(s.peso*(s.reps||0))+(s.peso2||0)*(s.reps2||0),0);
   const sess=loadSessoes();
   document.getElementById('fin-sub').textContent='Treino '+E.tipo+' · '+todayStr();
   document.getElementById('fin-stats').innerHTML=`
@@ -996,13 +1057,26 @@ function renderFinished(){
     if(ex.tipo==='esteira_inicio'||ex.tipo==='esteira_fim')return;
     const ss=E.series[i].filter(Boolean);
     const pulado=exFoiPulado(i);
-    html+=`<div class="card">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:7px">
-        <span style="font-size:13px;font-weight:500">${exNome(ex)}</span>
-        ${pulado?'<span class="tag tag-red">pulado</span>':''}
-      </div>
-      <div style="display:flex;gap:4px;flex-wrap:wrap">${ss.map((s,j)=>`<span class="pill">S${j+1}: ${s.peso}kg×${s.reps} <span style="color:var(--muted)">${s.tempo}s</span></span>`).join('')}</div>
-    </div>`;
+    if(ex.tipo==='conjugado'){
+      html+=`<div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+          <span style="font-size:11px;color:var(--amber);font-family:var(--mono)">⚡ conjugado</span>
+          ${pulado?'<span class="tag tag-red">pulado</span>':''}
+        </div>
+        <div style="font-size:13px;font-weight:500;margin-bottom:5px;color:var(--accent2)">① ${ex.nome}</div>
+        <div style="display:flex;gap:4px;flex-wrap:wrap;margin-bottom:12px">${ss.map((s,j)=>`<span class="pill">S${j+1}: ${s.peso}kg×${s.reps} <span style="color:var(--muted)">${s.tempo}s</span></span>`).join('')}</div>
+        <div style="font-size:13px;font-weight:500;margin-bottom:5px;color:var(--amber)">② ${ex.nome2}</div>
+        <div style="display:flex;gap:4px;flex-wrap:wrap">${ss.map((s,j)=>`<span class="pill">S${j+1}: ${s.peso2||0}kg×${s.reps2||0}</span>`).join('')}</div>
+      </div>`;
+    }else{
+      html+=`<div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:7px">
+          <span style="font-size:13px;font-weight:500">${ex.nome}</span>
+          ${pulado?'<span class="tag tag-red">pulado</span>':''}
+        </div>
+        <div style="display:flex;gap:4px;flex-wrap:wrap">${ss.map((s,j)=>`<span class="pill">S${j+1}: ${s.peso}kg×${s.reps} <span style="color:var(--muted)">${s.tempo}s</span></span>`).join('')}</div>
+      </div>`;
+    }
   });
   document.getElementById('fin-detail').innerHTML=html;
 }
@@ -1108,7 +1182,6 @@ function renderHist(tab){
 }
 function buildHistCard(h){
   const dur=fmtHMS((h.fim||0)-(h.inicio||0));
-  // tenta treinos novos primeiro, depois antigos
   const exs=(TREINOS[h.tipo]?TREINOS[h.tipo].exercicios:null)
     ||(TREINOS_ANTIGOS[h.tipo]?TREINOS_ANTIGOS[h.tipo].exercicios:null)
     ||[];
@@ -1119,14 +1192,22 @@ function buildHistCard(h){
       const ss=(h.series&&h.series[i])?h.series[i].filter(Boolean):[];
       const pulado=h.pulados&&h.pulados.includes(i);
       if(!ss.length&&!pulado)return;
-      const nm=ex.tipo==='conjugado'?ex.nome+' + '+ex.nome2:ex.nome;
-      exHtml+=`<div style="margin-bottom:7px">
-        <div style="font-size:11px;color:var(--muted);margin-bottom:3px">${nm}${pulado?' <span style="color:var(--red)">(pulado)</span>':''}</div>
-        <div style="display:flex;gap:3px;flex-wrap:wrap">${ss.map((s,j)=>`<span class="pill">S${j+1}: ${s.peso}kg×${s.reps} <span style="color:var(--muted)">${s.tempo}s</span></span>`).join('')}</div>
-      </div>`;
+      if(ex.tipo==='conjugado'){
+        exHtml+=`<div style="margin-bottom:10px;padding:8px;background:var(--surface2);border-radius:10px">
+          <div style="font-size:10px;color:var(--amber);font-family:var(--mono);margin-bottom:5px">⚡ conjugado${pulado?' <span style="color:var(--red)">(pulado)</span>':''}</div>
+          <div style="font-size:11px;color:var(--accent2);margin-bottom:3px">① ${ex.nome}</div>
+          <div style="display:flex;gap:3px;flex-wrap:wrap;margin-bottom:6px">${ss.map((s,j)=>`<span class="pill">S${j+1}: ${s.peso}kg×${s.reps} <span style="color:var(--muted)">${s.tempo}s</span></span>`).join('')}</div>
+          <div style="font-size:11px;color:var(--amber);margin-bottom:3px">② ${ex.nome2}</div>
+          <div style="display:flex;gap:3px;flex-wrap:wrap">${ss.map((s,j)=>`<span class="pill">S${j+1}: ${s.peso2||0}kg×${s.reps2||0}</span>`).join('')}</div>
+        </div>`;
+      }else{
+        exHtml+=`<div style="margin-bottom:7px">
+          <div style="font-size:11px;color:var(--muted);margin-bottom:3px">${ex.nome}${pulado?' <span style="color:var(--red)">(pulado)</span>':''}</div>
+          <div style="display:flex;gap:3px;flex-wrap:wrap">${ss.map((s,j)=>`<span class="pill">S${j+1}: ${s.peso}kg×${s.reps} <span style="color:var(--muted)">${s.tempo}s</span></span>`).join('')}</div>
+        </div>`;
+      }
     });
   }else if(h.exNames){
-    // fallback: usa exNames salvos no registro
     h.exNames.forEach((nm,i)=>{
       if(!nm||nm.includes('Esteira'))return;
       const ss=(h.series&&h.series[i])?h.series[i].filter(Boolean):[];
