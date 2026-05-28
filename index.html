@@ -1129,22 +1129,69 @@ function renderHist(tab){
       const exs=TREINOS[h.tipo]?TREINOS[h.tipo].exercicios:[];
       exs.forEach((ex,i)=>{
         if(ex.tipo==='esteira_inicio'||ex.tipo==='esteira_fim')return;
-        const nm=exNome(ex);if(!byEx[nm])byEx[nm]=[];
         const ss=(h.series[i]||[]).filter(Boolean);
-        if(ss.length){const mp=Math.max(...ss.map(s=>s.peso||0));byEx[nm].push({data:h.dataStr,maxPeso:mp})}
+        if(!ss.length)return;
+        if(ex.tipo==='conjugado'){
+          // registra cada exercício do conjugado separado
+          const nm1=ex.nome;
+          const nm2=ex.nome2;
+          if(!byEx[nm1])byEx[nm1]={conjugado:true,par:nm2,dados:[]};
+          if(!byEx[nm2])byEx[nm2]={conjugado:true,par:nm1,dados:[],isSecond:true};
+          const mp1=Math.max(...ss.map(s=>s.peso||0));
+          const mp2=Math.max(...ss.map(s=>s.peso2||0));
+          byEx[nm1].dados.push({data:h.dataStr,maxPeso:mp1});
+          byEx[nm2].dados.push({data:h.dataStr,maxPeso:mp2});
+        }else{
+          const nm=ex.nome;
+          if(!byEx[nm])byEx[nm]={conjugado:false,dados:[]};
+          const mp=Math.max(...ss.map(s=>s.peso||0));
+          byEx[nm].dados.push({data:h.dataStr,maxPeso:mp});
+        }
       });
     });
     let html='';
-    Object.keys(byEx).filter(k=>byEx[k].length>=2).forEach(nome=>{
-      const d=byEx[nome],u=d[0],p=d[1];
+    // agrupa conjugados juntos visualmente
+    const jaRenderizado=new Set();
+    Object.keys(byEx).forEach(nome=>{
+      if(jaRenderizado.has(nome))return;
+      const info=byEx[nome];
+      if(info.dados.length<2)return;
+      const u=info.dados[0],p=info.dados[1];
       const diff=+(u.maxPeso-p.maxPeso).toFixed(1);
       const seta=diff>0?`<span class="evol-up">▲ +${diff}kg</span>`:diff<0?`<span style="color:var(--red);font-size:11px">▼ ${diff}kg</span>`:`<span style="color:var(--muted)">→</span>`;
-      html+=`<div class="card" style="padding:11px 14px">
-        <div style="font-size:13px;font-weight:500;margin-bottom:3px">${nome}</div>
-        <div style="display:flex;justify-content:space-between;align-items:center">
-          <span style="font-size:11px;color:var(--muted)">Último: <b style="color:var(--text)">${u.maxPeso}kg</b> · ${u.data}</span>${seta}
-        </div>
-      </div>`;
+      if(info.conjugado&&info.par&&byEx[info.par]&&!info.isSecond){
+        // renderiza o par conjugado junto
+        const par=byEx[info.par];
+        const u2=par.dados[0],p2=par.dados[1];
+        const diff2=u2&&p2?+(u2.maxPeso-p2.maxPeso).toFixed(1):0;
+        const seta2=diff2>0?`<span class="evol-up">▲ +${diff2}kg</span>`:diff2<0?`<span style="color:var(--red);font-size:11px">▼ ${diff2}kg</span>`:`<span style="color:var(--muted)">→</span>`;
+        html+=`<div class="card" style="padding:12px 14px">
+          <div style="font-size:10px;color:var(--amber);font-family:var(--mono);margin-bottom:8px">⚡ conjugado</div>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+            <div>
+              <div style="font-size:12px;font-weight:500;color:var(--accent2)">① ${nome}</div>
+              <div style="font-size:11px;color:var(--muted)">Último: <b style="color:var(--text)">${u.maxPeso}kg</b> · ${u.data}</div>
+            </div>${seta}
+          </div>
+          <div style="height:1px;background:var(--border);margin:6px 0"></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:6px">
+            <div>
+              <div style="font-size:12px;font-weight:500;color:var(--amber)">② ${info.par}</div>
+              <div style="font-size:11px;color:var(--muted)">Último: <b style="color:var(--text)">${u2?u2.maxPeso:0}kg</b> · ${u2?u2.data:'-'}</div>
+            </div>${seta2}
+          </div>
+        </div>`;
+        jaRenderizado.add(nome);
+        jaRenderizado.add(info.par);
+      }else if(!info.conjugado){
+        html+=`<div class="card" style="padding:11px 14px">
+          <div style="font-size:13px;font-weight:500;margin-bottom:3px">${nome}</div>
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <span style="font-size:11px;color:var(--muted)">Último: <b style="color:var(--text)">${u.maxPeso}kg</b> · ${u.data}</span>${seta}
+          </div>
+        </div>`;
+        jaRenderizado.add(nome);
+      }
     });
     div.innerHTML=html||'<p style="color:var(--muted);font-size:13px;text-align:center;padding:24px 0">Dados insuficientes para evolução.</p>';
   }else if(tab==='treinos'){
