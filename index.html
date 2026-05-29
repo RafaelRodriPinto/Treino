@@ -8,7 +8,14 @@
 <meta name="apple-mobile-web-app-title" content="Treino">
 <title>Rafael Pinto</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" onerror="document.getElementById('font-fallback').disabled=false">
+<style id="font-fallback" disabled>
+/* fallback quando offline — usa fontes do sistema */
+:root{
+  --mono: ui-monospace, 'Courier New', monospace;
+  --sans: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+}
+</style>
 <style>
 :root{
   --bg:#0a0a0f;--surface:#13131a;--surface2:#1c1c26;--surface3:#22222f;
@@ -1315,6 +1322,13 @@ function importarHistorico(){
 /* ════ INIT ════ */
 migrarHistoricoAntigo();
 renderHome();
+
+/* ════ SERVICE WORKER (offline) ════ */
+if('serviceWorker' in navigator){
+  navigator.serviceWorker.register('./sw.js',{scope:'./'})
+    .then(()=>console.log('Service Worker registrado — app funciona offline'))
+    .catch(e=>console.log('SW não registrado:',e));
+}
 </script>
 </body>
 </html>
