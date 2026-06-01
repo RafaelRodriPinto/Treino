@@ -29,6 +29,30 @@
   --mono:'DM Mono',monospace;--sans:'DM Sans',sans-serif;
   --r:14px;--r2:20px;
 }
+body.light{
+  --bg:#f4f4f8;--surface:#ffffff;--surface2:#eeeef3;--surface3:#e4e4ec;
+  --border:rgba(0,0,0,0.08);--border2:rgba(0,0,0,0.14);
+  --text:#1a1a2e;--muted:#7070888;
+  --muted:#8080a0;
+  --accent:#6c5ce7;--accent2:#5a4bd1;
+  --green:#059669;--green2:#d1fae5;
+  --amber:#d97706;--amber2:rgba(217,119,6,0.12);
+  --red:#dc2626;--red2:rgba(220,38,38,0.1);
+  --blue:#0284c7;--blue2:rgba(2,132,199,0.1);
+}
+body.light .home-header h1{
+  background:linear-gradient(135deg,#1a1a2e 0%,var(--accent) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+body.light .treino-card .tc-letra,
+body.light .sess-letra{
+  background:linear-gradient(135deg,var(--accent),var(--green));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+body.light .prog-fill,body.light .sess-fill{
+  background:linear-gradient(90deg,var(--accent),var(--green));
+}
+*{transition:background-color .2s,color .2s,border-color .2s}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);font-family:var(--sans)}
 body{display:flex;flex-direction:column}
@@ -70,8 +94,8 @@ body{display:flex;flex-direction:column}
 .home-header h1{font-size:26px;font-weight:600;background:linear-gradient(135deg,#fff 0%,var(--accent2) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 
 .alert-banner{border-radius:var(--r);padding:12px 14px;margin-bottom:12px;font-size:13px;line-height:1.5}
-.alert-red{background:var(--red2);border:1px solid rgba(239,68,68,.3);color:#fca5a5}
-.alert-amber{background:var(--amber2);border:1px solid rgba(245,158,11,.3);color:#fcd34d}
+.alert-red{background:var(--red2);border:1px solid rgba(239,68,68,.3);color:var(--red)}
+.alert-amber{background:var(--amber2);border:1px solid rgba(245,158,11,.3);color:var(--amber)}
 
 .suggest-card{background:linear-gradient(135deg,rgba(124,106,247,.18),rgba(124,106,247,.06));border:1px solid rgba(124,106,247,.3);border-radius:var(--r2);padding:14px 16px;margin-bottom:12px}
 .suggest-label{font-size:10px;font-family:var(--mono);letter-spacing:2px;color:var(--accent2);text-transform:uppercase;margin-bottom:4px}
@@ -187,6 +211,11 @@ body{display:flex;flex-direction:column}
 <!-- ══ HOME ══ -->
 <div class="page active" id="page-home">
   <div class="home-header">
+    <div style="display:flex;justify-content:flex-end;margin-bottom:8px">
+      <button id="theme-btn" onclick="toggleTema()" style="background:var(--surface);border:1px solid var(--border2);border-radius:20px;padding:6px 12px;font-size:13px;cursor:pointer;color:var(--muted);font-family:var(--mono);display:flex;align-items:center;gap:5px">
+        <span id="theme-icon">☀️</span><span id="theme-label">Claro</span>
+      </button>
+    </div>
     <div class="logo-mark">Treino Academia</div>
     <h1>Rafael Pinto</h1>
   </div>
@@ -1318,7 +1347,33 @@ function importarHistorico(){
   }
 }
 
+/* ════ TEMA ════ */
+function aplicarTema(tema){
+  if(tema==='light'){
+    document.body.classList.add('light');
+    document.getElementById('theme-icon').textContent='🌙';
+    document.getElementById('theme-label').textContent='Escuro';
+  }else{
+    document.body.classList.remove('light');
+    document.getElementById('theme-icon').textContent='☀️';
+    document.getElementById('theme-label').textContent='Claro';
+  }
+}
+function toggleTema(){
+  const isLight=document.body.classList.contains('light');
+  const novoTema=isLight?'dark':'light';
+  try{localStorage.setItem('gym_tema',novoTema)}catch(e){}
+  aplicarTema(novoTema);
+}
+function carregarTema(){
+  try{
+    const t=localStorage.getItem('gym_tema')||'dark';
+    aplicarTema(t);
+  }catch(e){}
+}
+
 /* ════ INIT ════ */
+carregarTema();
 migrarHistoricoAntigo();
 renderHome();
 
