@@ -55,9 +55,9 @@ body.light .prog-fill,body.light .sess-fill{
 *{transition:background-color .2s,color .2s,border-color .2s}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);font-family:var(--sans)}
-body{display:flex;flex-direction:column}
-.app{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;padding:0 0 72px}
-.page{display:none;padding:16px 16px 8px}.page.active{display:block}
+body{display:flex;flex-direction:column;height:100%;max-height:100vh}
+.app{flex:1;overflow-y:scroll;overflow-x:hidden;-webkit-overflow-scrolling:touch;padding:0 0 90px;min-height:0}
+.page{display:none;padding:16px 16px 24px}.page.active{display:block}
 
 /* ── NAV TABS ── */
 .nav{position:fixed;bottom:0;left:0;right:0;background:var(--surface);border-top:1px solid var(--border);display:grid;grid-template-columns:repeat(4,1fr);z-index:20;padding-bottom:env(safe-area-inset-bottom)}
@@ -320,9 +320,155 @@ body{display:flex;flex-direction:column}
 </div>
 
 <!-- NAV -->
+<!-- ══ SAÚDE ══ -->
+<div class="page" id="page-saude">
+  <div style="padding-bottom:8px">
+    <!-- HEADER -->
+    <div style="background:linear-gradient(135deg,rgba(62,207,142,.15),rgba(124,106,247,.1));border:1px solid rgba(62,207,142,.2);border-radius:var(--r2);padding:16px;margin-bottom:14px">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px">
+        <div>
+          <div style="font-size:10px;font-family:var(--mono);letter-spacing:2px;color:var(--green);text-transform:uppercase;margin-bottom:4px">Avaliação Física</div>
+          <div style="font-size:22px;font-weight:600">Rafael Pinto</div>
+          <div style="font-size:12px;color:var(--muted)">11/05/2026 · 41 anos · 186cm</div>
+        </div>
+        <div style="text-align:center;background:var(--surface);border-radius:14px;padding:10px 14px;border:1px solid var(--border)">
+          <div style="font-size:32px;font-weight:700;color:var(--amber)">79</div>
+          <div style="font-size:10px;color:var(--muted);font-family:var(--mono)">MÉDIA</div>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:4px">
+        <div style="background:var(--surface);border-radius:10px;padding:8px;text-align:center">
+          <div style="font-size:17px;font-weight:600;color:var(--amber)">93<span style="font-size:10px;color:var(--muted)">kg</span></div>
+          <div style="font-size:9px;color:var(--muted);font-family:var(--mono)">PESO</div>
+        </div>
+        <div style="background:var(--surface);border-radius:10px;padding:8px;text-align:center">
+          <div style="font-size:17px;font-weight:600;color:var(--amber)">26.8</div>
+          <div style="font-size:9px;color:var(--muted);font-family:var(--mono)">IMC</div>
+        </div>
+        <div style="background:var(--surface);border-radius:10px;padding:8px;text-align:center">
+          <div style="font-size:17px;font-weight:600;color:var(--green)">82<span style="font-size:10px;color:var(--muted)">kg</span></div>
+          <div style="font-size:9px;color:var(--muted);font-family:var(--mono)">IDEAL</div>
+        </div>
+        <div style="background:var(--surface);border-radius:10px;padding:8px;text-align:center">
+          <div style="font-size:17px;font-weight:600;color:var(--red)">-11<span style="font-size:10px;color:var(--muted)">kg</span></div>
+          <div style="font-size:9px;color:var(--muted);font-family:var(--mono)">META</div>
+        </div>
+      </div>
+      <div style="font-size:11px;color:var(--muted);margin-top:8px;line-height:1.5;padding:8px;background:var(--surface);border-radius:10px">
+        ⚠️ O relatório indica 76.1kg como ideal, mas para sua altura de 186cm com excelente massa muscular esquelética (40.7kg), a faixa realista é <b style="color:var(--text)">82–86kg</b>. Meta de 82kg é mais adequada e sustentável.
+      </div>
+    </div>
+
+    <!-- COMPOSIÇÃO -->
+    <div style="font-size:10px;font-family:var(--mono);letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:10px">Composição Corporal</div>
+    <div class="card" style="padding:14px;margin-bottom:14px" id="comp-body"></div>
+
+    <!-- SUGESTÕES -->
+    <div style="font-size:10px;font-family:var(--mono);letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:10px">O que fazer — por métrica</div>
+
+    <!-- RUIM -->
+    <div style="background:var(--red2);border:1px solid rgba(239,68,68,.25);border-radius:var(--r2);padding:14px;margin-bottom:10px">
+      <div style="font-size:13px;font-weight:600;color:var(--red);margin-bottom:12px">🔴 Prioridade — Reduzir gordura</div>
+
+      <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:4px">Gordura visceral (atual: 9 — limite máximo)</div>
+      <div style="font-size:13px;color:var(--text);line-height:1.7;margin-bottom:12px">
+        É o tipo mais perigoso — envolve os órgãos internos e aumenta risco cardiovascular. Você está no teto do aceitável.<br>
+        • Fazer cardio de baixa/média intensidade 3-4x/semana (a esteira que já faz ajuda diretamente aqui)<br>
+        • Dormir 7-8h por noite — sono ruim eleva cortisol que deposita gordura visceral<br>
+        • Reduzir álcool, açúcar e frituras — são os principais causadores<br>
+        • Déficit calórico de 300-400 kcal/dia (seu BMR é 1910 kcal, consuma ~2100-2200 kcal)
+      </div>
+
+      <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:4px">Gordura subcutânea (atual: 19.2kg — alto)</div>
+      <div style="font-size:13px;color:var(--text);line-height:1.7;margin-bottom:12px">
+        Menos perigosa que a visceral mas indica excesso calórico acumulado.<br>
+        • Combinação de treino de força (já faz) + cardio é o mais eficaz<br>
+        • Hidratação adequada (3L+ de água/dia) melhora o metabolismo da gordura<br>
+        • Progresso esperado: com déficit moderado, redução de 1-2kg/mês
+      </div>
+
+      <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:4px">Relação cintura-quadril (atual: 0.9 — alto)</div>
+      <div style="font-size:13px;color:var(--text);line-height:1.7">
+        Indica concentração de gordura na região abdominal.<br>
+        • Exercícios abdominais já estão nos seus treinos — ótimo<br>
+        • A redução da gordura visceral e subcutânea vai melhorar automaticamente este índice<br>
+        • Meta: abaixo de 0.85 (considerado bom para homens)
+      </div>
+    </div>
+
+    <!-- OK -->
+    <div style="background:var(--amber2);border:1px solid rgba(245,158,11,.25);border-radius:var(--r2);padding:14px;margin-bottom:10px">
+      <div style="font-size:13px;font-weight:600;color:var(--amber);margin-bottom:12px">🟡 Atenção — Melhorar</div>
+
+      <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:4px">Massa proteica (atual: 14.2kg — abaixo do ideal)</div>
+      <div style="font-size:13px;color:var(--text);line-height:1.7;margin-bottom:12px">
+        Indica que a ingestão de proteína pode estar insuficiente para seu tamanho e nível de treino.<br>
+        • Meta: 1.8 a 2.2g de proteína por kg → <b>167-204g de proteína por dia</b><br>
+        • Fontes: frango, ovos, peixe, carne vermelha magra, whey protein<br>
+        • Refeição pós-treino em até 1h com pelo menos 30-40g de proteína<br>
+        • Distribuir em 4-5 refeições ao longo do dia para melhor absorção
+      </div>
+
+      <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:4px">Massa muscular total (atual: 66.5kg — dentro do padrão)</div>
+      <div style="font-size:13px;color:var(--text);line-height:1.7">
+        Está na faixa normal mas pode crescer mais com os treinos atuais.<br>
+        • Progressão de carga a cada 2 semanas nos exercícios principais<br>
+        • Garantir descanso de pelo menos 48h entre treinos do mesmo grupo<br>
+        • Priorizar sono — 70% do crescimento muscular acontece dormindo
+      </div>
+    </div>
+
+    <!-- BOM -->
+    <div style="background:var(--green2);border:1px solid rgba(62,207,142,.25);border-radius:var(--r2);padding:14px;margin-bottom:10px">
+      <div style="font-size:13px;font-weight:600;color:var(--green);margin-bottom:12px">🟢 Pontos fortes — Manter e evoluir</div>
+
+      <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:4px">Massa muscular esquelética (40.7kg — Excelente)</div>
+      <div style="font-size:13px;color:var(--text);line-height:1.7;margin-bottom:12px">
+        Resultado impressionante para 41 anos — está acima do padrão! Músculo esquelético queima gordura mesmo em repouso e protege articulações.<br>
+        • Continue os treinos de força 5x/semana com progressão de carga<br>
+        • Não corte calorias drasticamente — pode perder músculo junto com gordura<br>
+        • Creatina monohidratada (3-5g/dia) pode ajudar a manter e crescer ainda mais
+      </div>
+
+      <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:4px">Hidratação / Água corporal (52.3kg — Excelente)</div>
+      <div style="font-size:13px;color:var(--text);line-height:1.7;margin-bottom:12px">
+        Indica excelente função celular e boa recuperação muscular.<br>
+        • Manter mínimo de 3L de água por dia — mais nos dias de treino<br>
+        • Eletrólitos pós-treino intenso (água de coco ou isotônico natural)
+      </div>
+
+      <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:4px">Minerais (4.8kg — Excelente)</div>
+      <div style="font-size:13px;color:var(--text);line-height:1.7">
+        Boa densidade óssea e equilíbrio eletrolítico — fundamental para treinos pesados.<br>
+        • Manter ingestão de laticínios, castanhas e verduras escuras<br>
+        • Magnésio à noite melhora qualidade do sono e recuperação muscular
+      </div>
+    </div>
+
+    <!-- META -->
+    <div style="background:var(--blue2);border:1px solid rgba(56,189,248,.2);border-radius:var(--r2);padding:14px;margin-bottom:14px">
+      <div style="font-size:13px;font-weight:600;color:var(--blue);margin-bottom:10px">🎯 Projeção com seus treinos atuais</div>
+      <div style="font-size:13px;color:var(--text);line-height:1.8">
+        Treinando 5x/semana com déficit calórico moderado e proteína adequada:<br><br>
+        • <b>Em 2 meses</b> (até 09/07): perder ~4-6kg → peso entre 87-89kg<br>
+        • <b>Em 4 meses</b>: atingir ~84-86kg, gordura visceral deve cair para 6-7<br>
+        • <b>Em 6 meses</b>: chegar próximo ao ideal de 82kg, pontuação pode subir de 79 para <b>87-90</b><br><br>
+        A chave é <b>não perder a massa muscular excelente que já tem</b> — foco em proteína alta + déficit moderado.
+      </div>
+    </div>
+
+    <div style="font-size:11px;color:var(--muted);text-align:center;padding:8px 0 16px;line-height:1.6">
+      Baseado na avaliação Unique Health de 11/05/2026.<br>Quando realizar nova avaliação, envie os dados para atualizar as sugestões.
+    </div>
+  </div>
+</div>
+
 <nav class="nav">
   <button class="nav-btn active" id="nav-home" onclick="showNav('home')">
     <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Início
+  </button>
+  <button class="nav-btn" id="nav-saude" onclick="showNav('saude')">
+    <svg viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>Saúde
   </button>
   <button class="nav-btn" id="nav-hist" onclick="showNav('hist')">
     <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>Histórico
@@ -385,6 +531,7 @@ const TREINOS = {
       {tipo:'normal', nome:'Agachamento sumô c/ halter', link:'https://www.youtube.com/watch?v=wd7LPBlSm28', series:3,reps:12},
       {tipo:'normal', nome:'Cadeira abdutora', link:'https://www.youtube.com/watch?v=02Hw1nvierA', series:3,reps:10},
       {tipo:'normal', nome:'Cadeira adutora', link:'https://www.youtube.com/watch?v=eluVAjrSNNQ', series:3,reps:15},
+      {tipo:'normal', nome:'Panturrilha Banco', link:'https://youtu.be/pbkhHeK55zQ?si=vw5AqU79wjghoYyS', series:3,reps:12},
       {tipo:'esteira_fim'},
     ]
   },
@@ -685,10 +832,44 @@ function showPage(id){
   document.getElementById('page-'+id).classList.add('active');
   document.getElementById('app').scrollTop=0;
 }
+function buildMetricRow(nome,valor,ideal,status){
+  const cores={excelente:['var(--green2)','var(--green)','✓'],ok:['var(--amber2)','var(--amber)','~'],ruim:['var(--red2)','var(--red)','!']};
+  const [bg,cor,icone]=cores[status]||cores.ok;
+  return`<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border)">
+    <div style="flex:1">
+      <div style="font-size:12px;font-weight:500">${nome}</div>
+      <div style="font-size:10px;color:var(--muted);font-family:var(--mono)">ideal: ${ideal}</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px">
+      <span style="font-size:13px;font-family:var(--mono);font-weight:500">${valor}</span>
+      <span style="background:${bg};color:${cor};border-radius:6px;padding:2px 7px;font-size:10px;font-family:var(--mono)">${icone}</span>
+    </div>
+  </div>`;
+}
+
 function showNav(tab){
   document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
   document.getElementById('nav-'+tab).classList.add('active');
   if(tab==='home'){showPage('home');renderHome()}
+  if(tab==='saude'){
+    showPage('saude');
+    const metricas=[
+      ['Água corporal total','52.3kg','42.7~52.1','excelente'],
+      ['Massa gorda','21.7kg','9.1~18.2','ruim'],
+      ['Massa proteica','14.2kg','11.4~13.9','ok'],
+      ['Minerais','4.8kg','3.9~4.8','excelente'],
+      ['Massa muscular','66.5kg','54.9~75.5','ok'],
+      ['Massa muscular esquelética','40.7kg','32.8~40','excelente'],
+      ['Gordura visceral','9','1~9','ruim'],
+      ['Gordura subcutânea','19.2kg','6.5~12.7','ruim'],
+      ['Relação cintura-quadril','0.9','0.8~0.9','ruim'],
+      ['Massa livre de gordura','71.3kg','55.6~69.3','excelente'],
+      ['Água intracelular','32.9kg','26.5~32.4','excelente'],
+      ['Água extracelular','19.4kg','16.3~19.9','ok'],
+    ];
+    const el=document.getElementById('comp-body');
+    if(el)el.innerHTML=metricas.map(m=>buildMetricRow(...m)).join('');
+  }
   if(tab==='hist'){showPage('hist');renderHist(_histTab)}
 }
 function voltarHome(){
