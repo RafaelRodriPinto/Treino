@@ -211,7 +211,10 @@ body{display:flex;flex-direction:column}
 <!-- ══ HOME ══ -->
 <div class="page active" id="page-home">
   <div class="home-header">
-    <div style="display:flex;justify-content:flex-end;margin-bottom:8px">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+      <button onclick="abrirConfigToken()" style="background:var(--surface);border:1px solid var(--border2);border-radius:20px;padding:6px 12px;font-size:13px;cursor:pointer;color:var(--muted);font-family:var(--mono);display:flex;align-items:center;gap:5px">
+        <span id="gh-status">☁️</span><span>Backup</span>
+      </button>
       <button id="theme-btn" onclick="toggleTema()" style="background:var(--surface);border:1px solid var(--border2);border-radius:20px;padding:6px 12px;font-size:13px;cursor:pointer;color:var(--muted);font-family:var(--mono);display:flex;align-items:center;gap:5px">
         <span id="theme-icon">☀️</span><span id="theme-label">Claro</span>
       </button>
@@ -471,12 +474,22 @@ const TREINOS_ANTIGOS = {
 };
 
 /* ════ STORAGE ════ */
+const GH_USER  = 'RafaelRodriPinto';
+const GH_REPO  = 'Treino';
+const GH_FILE  = 'historico.json';
+const GH_API   = 'https://api.github.com/repos/'+GH_USER+'/'+GH_REPO+'/contents/'+GH_FILE;
+
+function getToken(){try{return localStorage.getItem('gym_gh_token')||''}catch(e){return''}}
+function setToken(t){try{localStorage.setItem('gym_gh_token',t)}catch(e){}}
+
 function save(){try{localStorage.setItem('gym_v6',JSON.stringify(E))}catch(e){}}
 function load(){
   try{const d=JSON.parse(localStorage.getItem('gym_v6')||'null');
     if(!d||d.data!==today())return null; return d}catch(e){return null}
 }
-function saveHist(entry){
+
+/* LOCAL — sempre rápido, usado em runtime */
+function saveHistLocal(entry){
   try{
     const h=JSON.parse(localStorage.getItem('gym_hist_v6')||'[]');
     h.unshift(entry); if(h.length>120)h.splice(120);
@@ -485,7 +498,135 @@ function saveHist(entry){
 }
 function loadHist(){try{return JSON.parse(localStorage.getItem('gym_hist_v6')||'[]')}catch(e){return[]}}
 
-/* Migração: importa histórico de versões anteriores (v3, v4, v5) na primeira vez */
+/* GITHUB — backup assíncrono */
+async function ghGet(){
+  const token=getToken(); if(!token)return null;
+  try{
+    const r=await fetch(GH_API,{headers:{
+      'Authorization':'token '+token,
+      'Accept':'application/vnd.github.v3+json'
+    }});
+    if(r.status===404)return {content:[],sha:null};
+    if(!r.ok)return null;
+    const d=await r.json();
+    const content=JSON.parse(atob(d.content.replace(/\n/g,'')));
+    return {content, sha:d.sha};
+  }catch(e){return null}
+}
+async function ghPut(data, sha){
+  const token=getToken(); if(!token)return false;
+  try{
+    const body={
+      message:'Histórico atualizado',
+      content:btoa(unescape(encodeURIComponent(JSON.stringify(data,null,2)))),
+    };
+    if(sha)body.sha=sha;
+    const r=await fetch(GH_API,{method:'PUT',headers:{
+      'Authorization':'token '+token,
+      'Accept':'application/vnd.github.v3+json',
+      'Content-Type':'application/json'
+    },body:JSON.stringify(body)});
+    return r.ok;
+  }catch(e){return false}
+}
+
+/* Salva local imediatamente + sincroniza GitHub em background */
+function saveHist(entry){
+  saveHistLocal(entry);
+  sincronizarGitHub();
+}
+
+let _syncTimeout=null;
+function sincronizarGitHub(){
+  // debounce — espera 3s antes de sincronizar (evita múltiplas chamadas seguidas)
+  clearTimeout(_syncTimeout);
+  _syncTimeout=setTimeout(async()=>{
+    const token=getToken(); if(!token)return;
+    const local=loadHist();
+    const remoto=await ghGet();
+    if(!remoto)return;
+    // merge: une local + remoto, remove duplicatas por inicio+tipo
+    const todos=[...local,...(remoto.content||[])];
+    const vistos=new Set();
+    const merged=todos.filter(h=>{
+      const k=(h.inicio||0)+'_'+h.tipo;
+      if(vistos.has(k))return false;
+      vistos.add(k);return true;
+    });
+    merged.sort((a,b)=>(b.inicio||0)-(a.inicio||0));
+    if(merged.length>120)merged.splice(120);
+    // salva merged localmente
+    try{localStorage.setItem('gym_hist_v6',JSON.stringify(merged))}catch(e){}
+    // salva no GitHub
+    await ghPut(merged, remoto.sha);
+  },3000);
+}
+
+/* Restaura histórico do GitHub para o localStorage (usado na tela de config) */
+async function restaurarDoGitHub(){
+  mostrarToast('Buscando histórico no GitHub...');
+  const remoto=await ghGet();
+  if(!remoto){mostrarToast('❌ Token inválido ou erro de conexão');return}
+  if(!remoto.content||!remoto.content.length){mostrarToast('Nenhum histórico encontrado no GitHub');return}
+  try{localStorage.setItem('gym_hist_v6',JSON.stringify(remoto.content))}catch(e){}
+  // recalcula sessões
+  const sess={A:0,B:0,C:0,D:0};
+  remoto.content.filter(h=>h.plano==='novo').forEach(h=>{if(sess[h.tipo]!==undefined)sess[h.tipo]++});
+  try{localStorage.setItem('gym_sess_v6',JSON.stringify(sess))}catch(e){}
+  mostrarToast('✓ '+remoto.content.length+' treinos restaurados!');
+  setTimeout(()=>{renderHome();renderHist(_histTab)},1500);
+}
+
+function mostrarToast(msg){
+  let t=document.getElementById('toast-msg');
+  if(!t){
+    t=document.createElement('div');t.id='toast-msg';
+    t.style.cssText='position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:#1c1c26;color:#f0f0f5;border:1px solid rgba(255,255,255,.15);padding:10px 18px;border-radius:20px;font-size:13px;font-family:var(--mono);z-index:99;white-space:nowrap;transition:opacity .3s';
+    document.body.appendChild(t);
+  }
+  t.textContent=msg;t.style.opacity='1';
+  clearTimeout(t._to);t._to=setTimeout(()=>t.style.opacity='0',3000);
+}
+
+/* ─── CONFIGURAÇÃO DO TOKEN ─── */
+function abrirConfigToken(){
+  const existing=document.getElementById('modal-token');
+  if(existing)existing.remove();
+  const token=getToken();
+  const div=document.createElement('div');
+  div.id='modal-token';
+  div.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:70;display:flex;flex-direction:column;justify-content:flex-end;padding:20px';
+  div.innerHTML=`
+    <div style="background:var(--surface);border-radius:24px;padding:20px;max-height:90vh;overflow-y:auto">
+      <div style="font-size:11px;font-family:var(--mono);letter-spacing:2px;color:var(--accent2);text-transform:uppercase;margin-bottom:8px">🔐 Backup no GitHub</div>
+      <div style="font-size:13px;color:var(--muted);margin-bottom:16px;line-height:1.6">
+        O histórico fica salvo no seu GitHub e nunca se perde ao limpar o cache.<br><br>
+        <b style="color:var(--text)">Como criar o token:</b><br>
+        1. github.com → foto → Settings<br>
+        2. Developer settings → Personal access tokens → Tokens (classic)<br>
+        3. Generate new token → marque <b>repo</b><br>
+        4. Copie e cole abaixo
+      </div>
+      <div style="font-size:11px;font-family:var(--mono);color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:1px">Token atual: ${token?'✓ configurado':'não configurado'}</div>
+      <input id="inp-token" type="password" placeholder="ghp_xxxxxxxxxxxx" style="width:100%;background:var(--surface2);border:1px solid var(--border2);border-radius:10px;padding:12px;font-size:14px;font-family:var(--mono);color:var(--text);outline:none;margin-bottom:12px;-webkit-appearance:none" value="${token}">
+      <button onclick="salvarToken()" style="width:100%;padding:14px;border-radius:14px;background:linear-gradient(135deg,var(--accent),#5b4fcf);color:#fff;font-size:14px;font-family:var(--sans);font-weight:500;border:none;cursor:pointer;margin-bottom:8px">Salvar token</button>
+      ${token?`<button onclick="restaurarDoGitHub();document.getElementById('modal-token').remove()" style="width:100%;padding:14px;border-radius:14px;background:linear-gradient(135deg,var(--green),#2aaa70);color:#fff;font-size:14px;font-family:var(--sans);font-weight:500;border:none;cursor:pointer;margin-bottom:8px">↓ Restaurar histórico do GitHub</button>`:''}
+      <button onclick="document.getElementById('modal-token').remove()" style="width:100%;padding:12px;border-radius:14px;background:transparent;border:1px solid var(--border2);color:var(--muted);font-size:13px;font-family:var(--sans);cursor:pointer">Fechar</button>
+    </div>`;
+  document.body.appendChild(div);
+}
+function salvarToken(){
+  const t=document.getElementById('inp-token').value.trim();
+  if(!t){mostrarToast('Cole o token antes de salvar');return}
+  setToken(t);
+  document.getElementById('modal-token').remove();
+  const el=document.getElementById('gh-status');
+  if(el)el.textContent='✅';
+  mostrarToast('✓ Token salvo! Sincronizando...');
+  sincronizarGitHub();
+}
+
+/* ─── MIGRAÇÃO ─── */
 function migrarHistoricoAntigo(){
   if(localStorage.getItem('gym_migrated_v6'))return;
   const keys=['gym_hist_v5','gym_hist_v4','gym_hist_v3'];
@@ -1376,6 +1517,18 @@ function carregarTema(){
 carregarTema();
 migrarHistoricoAntigo();
 renderHome();
+
+// atualiza ícone de status do backup
+(function(){
+  const token=getToken();
+  const el=document.getElementById('gh-status');
+  if(el)el.textContent=token?'✅':'☁️';
+})();
+
+// sincroniza histórico com GitHub ao abrir (se tiver token)
+if(getToken()){
+  sincronizarGitHub();
+}
 
 /* ════ SERVICE WORKER (offline) ════ */
 if('serviceWorker' in navigator){
