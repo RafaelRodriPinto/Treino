@@ -1,5 +1,154 @@
 [
   {
+    "tipo": "B",
+    "plano": "novo",
+    "data": "Mon Jun 08 2026",
+    "dataStr": "08/06/26",
+    "inicio": 1780916842279,
+    "fim": 1780922983131,
+    "exNames": [
+      "Esteira (aquecimento)",
+      "Puxada aberta",
+      "Facepull",
+      "Remada cavalinho",
+      "Remada máquina fechada",
+      "Rosca martelo",
+      "Rosca bíceps barra W",
+      "Abdominal remador",
+      "Esteira (finalização)"
+    ],
+    "series": [
+      [],
+      [
+        {
+          "peso": 45,
+          "reps": 10,
+          "peso2": 45,
+          "reps2": 10,
+          "tempo": 95
+        },
+        {
+          "peso": 39,
+          "reps": 10,
+          "peso2": 39,
+          "reps2": 10,
+          "tempo": 3
+        },
+        {
+          "peso": 39,
+          "reps": 10,
+          "peso2": 39,
+          "reps2": 10,
+          "tempo": 99
+        }
+      ],
+      [
+        {
+          "peso": 30,
+          "reps": 15,
+          "tempo": 49
+        },
+        {
+          "peso": 30,
+          "reps": 15,
+          "tempo": 52
+        },
+        {
+          "peso": 30,
+          "reps": 15,
+          "tempo": 52
+        }
+      ],
+      [
+        {
+          "peso": 30,
+          "reps": 12,
+          "tempo": 53
+        },
+        {
+          "peso": 30,
+          "reps": 12,
+          "tempo": 42
+        },
+        {
+          "peso": 30,
+          "reps": 12,
+          "tempo": 46
+        }
+      ],
+      [
+        {
+          "peso": 45,
+          "reps": 12,
+          "tempo": 48
+        },
+        {
+          "peso": 45,
+          "reps": 12,
+          "tempo": 53
+        },
+        {
+          "peso": 45,
+          "reps": 12,
+          "tempo": 78
+        }
+      ],
+      [
+        {
+          "peso": 9,
+          "reps": 12,
+          "tempo": 45
+        },
+        {
+          "peso": 9,
+          "reps": 12,
+          "tempo": 44
+        },
+        {
+          "peso": 9,
+          "reps": 12,
+          "tempo": 59
+        }
+      ],
+      [
+        {
+          "peso": 15,
+          "reps": 12,
+          "tempo": 49
+        },
+        {
+          "peso": 15,
+          "reps": 12,
+          "tempo": 53
+        },
+        {
+          "peso": 15,
+          "reps": 12,
+          "tempo": 61
+        }
+      ],
+      [
+        {
+          "peso": 0,
+          "reps": 12,
+          "tempo": 49
+        },
+        {
+          "peso": 0,
+          "reps": 12,
+          "tempo": 51
+        },
+        {
+          "peso": 0,
+          "reps": 12,
+          "tempo": 48
+        }
+      ],
+      []
+    ],
+    "pulados": []
+  },
+  {
     "tipo": "A",
     "plano": "novo",
     "data": "Wed Jun 03 2026",
