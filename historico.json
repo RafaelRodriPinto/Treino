@@ -1,5 +1,174 @@
 [
   {
+    "tipo": "C",
+    "plano": "novo",
+    "data": "Tue Jun 09 2026",
+    "dataStr": "09/06/26",
+    "inicio": 1781003159725,
+    "fim": 1781009246655,
+    "exNames": [
+      "Esteira (aquecimento)",
+      "Cadeira extensora",
+      "Leg press 45°",
+      "Hack articulado",
+      "Mesa flexora",
+      "Sky-flexão de joelho máquina",
+      "Agachamento sumô c/ halter",
+      "Cadeira abdutora",
+      "Cadeira adutora",
+      "Panturrilha Banco",
+      "Esteira (finalização)"
+    ],
+    "series": [
+      [],
+      [
+        {
+          "peso": 52,
+          "reps": 10,
+          "tempo": 43
+        },
+        {
+          "peso": 52,
+          "reps": 10,
+          "tempo": 34
+        },
+        {
+          "peso": 52,
+          "reps": 10,
+          "tempo": 33
+        }
+      ],
+      [
+        {
+          "peso": 50,
+          "reps": 10,
+          "tempo": 67
+        },
+        {
+          "peso": 50,
+          "reps": 10,
+          "tempo": 67
+        },
+        {
+          "peso": 50,
+          "reps": 10,
+          "tempo": 52
+        }
+      ],
+      [
+        {
+          "peso": 30,
+          "reps": 12,
+          "tempo": 66
+        },
+        {
+          "peso": 30,
+          "reps": 12,
+          "tempo": 61
+        },
+        {
+          "peso": 30,
+          "reps": 12,
+          "tempo": 82
+        }
+      ],
+      [
+        {
+          "peso": 52,
+          "reps": 12,
+          "tempo": 50
+        },
+        {
+          "peso": 59,
+          "reps": 12,
+          "tempo": 50
+        },
+        {
+          "peso": 59,
+          "reps": 12,
+          "tempo": 58
+        }
+      ],
+      [
+        {
+          "peso": 7,
+          "reps": 10,
+          "tempo": 69
+        },
+        {
+          "peso": 7,
+          "reps": 10,
+          "tempo": 65
+        },
+        {
+          "peso": 7,
+          "reps": 10,
+          "tempo": 76
+        }
+      ],
+      [
+        null,
+        null,
+        null
+      ],
+      [
+        {
+          "peso": 66,
+          "reps": 10,
+          "tempo": 27
+        },
+        {
+          "peso": 66,
+          "reps": 10,
+          "tempo": 32
+        },
+        {
+          "peso": 66,
+          "reps": 10,
+          "tempo": 40
+        }
+      ],
+      [
+        {
+          "peso": 59,
+          "reps": 15,
+          "tempo": 40
+        },
+        {
+          "peso": 59,
+          "reps": 15,
+          "tempo": 50
+        },
+        {
+          "peso": 59,
+          "reps": 15,
+          "tempo": 64
+        }
+      ],
+      [
+        {
+          "peso": 30,
+          "reps": 12,
+          "tempo": 33
+        },
+        {
+          "peso": 30,
+          "reps": 12,
+          "tempo": 49
+        },
+        {
+          "peso": 30,
+          "reps": 12,
+          "tempo": 29
+        }
+      ],
+      []
+    ],
+    "pulados": [
+      6
+    ]
+  },
+  {
     "tipo": "B",
     "plano": "novo",
     "data": "Mon Jun 08 2026",
