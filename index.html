@@ -1015,7 +1015,7 @@ function renderHome(){
     const ex=TREINOS[pend.tipo].exercicios[pend.exIdx];
     document.getElementById('home-pending').innerHTML=`<div class="pending-card">
       <div class="pending-label">● Em andamento</div>
-      <div class="pending-name">Treino ${pend.tipo} · ${exNome(ex)}<br><span style="font-size:12px;color:var(--muted)">Série ${pend.serieIdx+1}/3</span></div>
+      <div class="pending-name">Treino ${pend.tipo} · ${exNome(ex)}<br><span style="font-size:12px;color:var(--muted)">Série ${(pend.serieIdxs?pend.serieIdxs[pend.exIdx]:pend.serieIdx||0)+1}/3</span></div>
       <button class="btn btn-primary" onclick="retomar()" style="margin-bottom:6px">↩ Retomar de onde parei</button>
       <button class="btn btn-red" onclick="descartar()">Descartar</button>
     </div>`;
@@ -1069,7 +1069,9 @@ function iniciarTreino(tipo){
   if(p&&!p.finalizado){descartar()}
   const tr=TREINOS[tipo];
   E={
-    tipo, plano:'novo', data:today(), exIdx:0, serieIdx:0,
+    tipo, plano:'novo', data:today(), exIdx:0,
+    // serieIdx agora é um array por exercício em vez de global
+    serieIdxs:tr.exercicios.map(()=>0),
     series:tr.exercicios.map(ex=>(ex.tipo==='normal'||ex.tipo==='conjugado')?Array(ex.series||3).fill(null):[]),
     pulados:[], finalizado:false, inicio:Date.now(),
     serieStartTs:null, restStartTs:null, restTotal:0, restTipo:null,
@@ -1079,6 +1081,18 @@ function iniciarTreino(tipo){
 }
 function retomar(){
   E=load(); if(!E){voltarHome();return}
+  // migração: se estado antigo tem serieIdx global, converte para array
+  if(typeof E.serieIdx === 'number' && !E.serieIdxs){
+    const tr=TREINOS[E.tipo];
+    E.serieIdxs=tr.exercicios.map((_,i)=>i===E.exIdx?E.serieIdx:0);
+    delete E.serieIdx;
+    save();
+  }
+  // garante que serieIdxs tem o tamanho certo
+  if(!E.serieIdxs){
+    E.serieIdxs=TREINOS[E.tipo].exercicios.map(()=>0);
+    save();
+  }
   if(E.restStartTs&&E.restTotal){
     const rem=restRem(E.restStartTs,E.restTotal);
     if(rem>0){_restCb=E.restTipo==='serie'?()=>goExercicio():()=>avancarExercicio();mostrarDescansoRetomado();return}
@@ -1086,7 +1100,7 @@ function retomar(){
     if(E.restTipo==='serie')goExercicio(); else avancarExercicio(); return;
   }
   if(E.esteiraStartTs&&E.esteiraTipo){
-    const rem=restRem(E.esteiraStartTs,600);
+    const rem=restRem(E.esteiraStartTs,esteiraDuracao(E.esteiraTipo));
     if(rem>0){mostrarEsteiraRetomada();return}
     E.esteiraStartTs=null;terminarEsteira();return;
   }
@@ -1130,7 +1144,7 @@ function renderExCard(){
 
   let badges='';
   for(let i=0;i<(ex.series||3);i++){
-    const c=i<E.serieIdx?'done':i===E.serieIdx?'current':'';
+    const c=i<E.serieIdxs[E.exIdx]?'done':i===E.serieIdxs[E.exIdx]?'current':'';
     badges+=`<div class="s-badge ${c}">${i+1}</div>`;
   }
 
@@ -1164,7 +1178,7 @@ function renderExCard(){
 
 function renderSeriesDone(){
   const ex=TREINOS[E.tipo].exercicios[E.exIdx];
-  const done=E.series[E.exIdx].slice(0,E.serieIdx).filter(Boolean);
+  const done=E.series[E.exIdx].slice(0,E.serieIdxs[E.exIdx]).filter(Boolean);
   if(!done.length){document.getElementById('series-done-wrap').innerHTML='';return}
   const rows=done.map((s,i)=>{
     if(ex.tipo==='conjugado'){
@@ -1232,12 +1246,12 @@ function renderActionArea(){
       <div class="timer-pulse" id="stpulse">${jaRodando?'● gravando':''}</div>
     </div>
     ${inputsHtml}
-    <button class="btn btn-primary" id="btn-start-serie" style="${jaRodando?'display:none':''}" onclick="iniciarSerie()">▶ Iniciar série ${E.serieIdx+1}</button>
-    <button class="btn btn-green" id="btn-stop-serie" style="${jaRodando?'':'display:none'}" onclick="finalizarSerie()">■ Finalizar série ${E.serieIdx+1}</button>`;
+    <button class="btn btn-primary" id="btn-start-serie" style="${jaRodando?'display:none':''}" onclick="iniciarSerie()">▶ Iniciar série ${E.serieIdxs[E.exIdx]+1}</button>
+    <button class="btn btn-green" id="btn-stop-serie" style="${jaRodando?'':'display:none'}" onclick="finalizarSerie()">■ Finalizar série ${E.serieIdxs[E.exIdx]+1}</button>`;
 }
 
 function getUltimoPeso(){
-  for(let i=E.serieIdx-1;i>=0;i--){const s=E.series[E.exIdx][i];if(s&&s.peso)return s.peso}
+  for(let i=E.serieIdxs[E.exIdx]-1;i>=0;i--){const s=E.series[E.exIdx][i];if(s&&s.peso)return s.peso}
   const hist=loadHist();
   for(const h of hist){
     if(h.tipo===E.tipo&&h.plano==='novo'){
@@ -1250,7 +1264,7 @@ function getUltimoPeso(){
   return '';
 }
 function getUltimoPeso2(){
-  for(let i=E.serieIdx-1;i>=0;i--){const s=E.series[E.exIdx][i];if(s&&s.peso2)return s.peso2}
+  for(let i=E.serieIdxs[E.exIdx]-1;i>=0;i--){const s=E.series[E.exIdx][i];if(s&&s.peso2)return s.peso2}
   const hist=loadHist();
   for(const h of hist){
     if(h.tipo===E.tipo&&h.plano==='novo'){
@@ -1298,27 +1312,27 @@ function finalizarSerie(){
     let reps2=parseInt(document.getElementById('inp-reps2').value)||0;
     if(!reps){alert('Informe as repetições do 1º exercício');iniciarSerie();return}
     if(!reps2){alert('Informe as repetições do 2º exercício');iniciarSerie();return}
-    E.series[E.exIdx][E.serieIdx]={peso,reps,peso2,reps2,tempo};
+    E.series[E.exIdx][E.serieIdxs[E.exIdx]]={peso,reps,peso2,reps2,tempo};
   }else{
     if(!reps&&!ex.isTime){alert('Informe as repetições');iniciarSerie();return}
     if(!reps&&ex.isTime)reps=ex.reps;
-    E.series[E.exIdx][E.serieIdx]={peso,reps,tempo};
+    E.series[E.exIdx][E.serieIdxs[E.exIdx]]={peso,reps,tempo};
   }
 
   const totalS=ex.series||3;
-  if(E.serieIdx<totalS-1){
-    E.serieIdx++;
+  if(E.serieIdxs[E.exIdx]<totalS-1){
+    E.serieIdxs[E.exIdx]++;
     E.restStartTs=Date.now();E.restTotal=REST_SERIE;E.restTipo='serie';save();
-    const proxLabel=`${exNome(ex)} — Série ${E.serieIdx+1} de ${totalS}`;
+    const proxLabel=`${exNome(ex)} — Série ${E.serieIdxs[E.exIdx]+1} de ${totalS}`;
     iniciarDescanso(REST_SERIE,'DESCANSO ENTRE SÉRIES','gc','Respire e prepare-se',proxLabel,()=>goExercicio());
   }else{
-    E.serieIdx=0;
+    E.serieIdxs[E.exIdx]=0;
     const proxIdx=proximoExPendente(E.exIdx+1);
     E.restStartTs=Date.now();E.restTotal=REST_EX;E.restTipo='ex';save();
     let proxLabel='Finalizar treino';
     if(proxIdx!==-1){
       const pex=TREINOS[E.tipo].exercicios[proxIdx];
-      proxLabel=pex.tipo==='esteira_fim'?'Esteira finalização (10 min)':
+      proxLabel=pex.tipo==='esteira_fim'?'Esteira finalização (20 min)':
         `${exNome(pex)} — ${pex.series||3}×${pex.isTime?pex.reps+'s':pex.reps+' reps'}`;
     }
     iniciarDescanso(REST_EX,'DESCANSO ENTRE EXERCÍCIOS','ac','Troque de equipamento',proxLabel,()=>avancarExercicio());
@@ -1405,7 +1419,7 @@ function fecharListaFora(e){if(e.target.id==='modal-lista')fecharModalDireto()}
 function fecharModalDireto(){document.getElementById('modal-lista').classList.add('hidden')}
 function irParaEx(idx){
   fecharModalDireto();clearAllTicks();
-  E.exIdx=idx;E.serieIdx=0;E.serieStartTs=null;E.restStartTs=null;E.restTotal=0;save();goExercicio();
+  E.exIdx=idx;E.serieIdxs[idx]=0;E.serieStartTs=null;E.restStartTs=null;E.restTotal=0;save();goExercicio();
 }
 
 /* avançar */
@@ -1432,7 +1446,7 @@ function avancarExercicio(){
     if(exFoiConcluido(next)||exFoiPulado(next)){next++;continue}
     break;
   }
-  if(next<exs.length){E.exIdx=next;E.serieIdx=0;E.serieStartTs=null;save();goExercicio()}
+  if(next<exs.length){E.exIdx=next;E.serieIdxs[next]=0;E.serieStartTs=null;save();goExercicio()}
   else finalizarTreino();
 }
 
@@ -1462,29 +1476,36 @@ function confirmarIrEsteira(){
   // vai direto para esteira_fim
   const exs=TREINOS[E.tipo].exercicios;
   const idxEsteira=exs.findIndex(e=>e.tipo==='esteira_fim');
-  if(idxEsteira>=0){E.exIdx=idxEsteira;E.serieIdx=0;E.serieStartTs=null;save();goExercicio()}
+  if(idxEsteira>=0){E.exIdx=idxEsteira;E.serieIdxs[idxEsteira]=0;E.serieStartTs=null;save();goExercicio()}
   else finalizarTreino();
 }
 
 /* esteira */
+const ESTEIRA_INICIO_SECS = 600;  // 10 min aquecimento
+const ESTEIRA_FIM_SECS   = 1200; // 20 min finalização
+
+function esteiraDuracao(tipo){ return tipo==='esteira_fim'?ESTEIRA_FIM_SECS:ESTEIRA_INICIO_SECS; }
+
 function goEsteira(tipo){
   E.esteiraTipo=tipo;if(!E.esteiraStartTs)E.esteiraStartTs=Date.now();save();
   showPage('esteira');
-  document.getElementById('esteira-title').textContent=tipo==='esteira_inicio'?'Esteira — aquecimento':'Esteira — finalização';
-  document.getElementById('esteira-sub').textContent=tipo==='esteira_inicio'?'Aqueça bem antes de começar':'Ótimo trabalho!';
+  document.getElementById('esteira-title').textContent=tipo==='esteira_inicio'?'Esteira — aquecimento (10 min)':'Esteira — finalização (20 min)';
+  document.getElementById('esteira-sub').textContent=tipo==='esteira_inicio'?'Aqueça bem antes de começar':'Ótimo trabalho! 20 minutos de recuperação.';
   atualizarEsteira();
   clearInterval(esteiraTickInterval);
   esteiraTickInterval=setInterval(atualizarEsteira,500);
 }
 function mostrarEsteiraRetomada(){
   showPage('esteira');
-  document.getElementById('esteira-title').textContent=E.esteiraTipo==='esteira_inicio'?'Esteira — aquecimento':'Esteira — finalização';
+  const tipo=E.esteiraTipo;
+  document.getElementById('esteira-title').textContent=tipo==='esteira_inicio'?'Esteira — aquecimento (10 min)':'Esteira — finalização (20 min)';
   document.getElementById('esteira-sub').textContent='Retomando...';
   atualizarEsteira();clearInterval(esteiraTickInterval);esteiraTickInterval=setInterval(atualizarEsteira,500);
 }
 function atualizarEsteira(){
   if(!E||!E.esteiraStartTs)return;
-  const rem=restRem(E.esteiraStartTs,600);
+  const dur=esteiraDuracao(E.esteiraTipo);
+  const rem=restRem(E.esteiraStartTs,dur);
   document.getElementById('esteira-timer').textContent=fmtMS(rem);
   if(rem<=0){clearInterval(esteiraTickInterval);E.esteiraStartTs=null;save();terminarEsteira()}
 }
@@ -1686,7 +1707,7 @@ function renderHist(tab){
             <span style="font-size:11px;font-family:var(--mono);color:var(--muted);white-space:nowrap;margin-left:10px">${ex.series||3}×${ex.isTime?ex.reps+'s':ex.reps+' reps'}</span>
           </div>`).join('')}
         <div style="display:flex;align-items:center;gap:6px;margin-top:10px;padding:8px 10px;background:var(--surface2);border-radius:8px">
-          <span style="font-size:11px;color:var(--muted);font-family:var(--mono)">🏃 Esteira finalização 10min</span>
+          <span style="font-size:11px;color:var(--muted);font-family:var(--mono)">🏃 Esteira finalização 20min</span>
         </div>
       </div>`;
     });
