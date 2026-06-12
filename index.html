@@ -60,6 +60,16 @@ body{display:flex;flex-direction:column;height:100%;max-height:100vh}
 .page{display:none;padding:16px 16px 24px}
 .page.active{display:block}
 #page-saude.active{display:flex;flex-direction:column}
+#page-assist.active{display:flex!important;flex-direction:column;height:calc(100vh - 72px)}
+
+/* CHAT */
+.msg-user{align-self:flex-end;background:linear-gradient(135deg,var(--accent),#5b4fcf);color:#fff;border-radius:18px 18px 4px 18px;padding:10px 14px;max-width:80%;font-size:14px;line-height:1.5}
+.msg-claude{align-self:flex-start;background:var(--surface);border:1px solid var(--border);color:var(--text);border-radius:18px 18px 18px 4px;padding:10px 14px;max-width:85%;font-size:14px;line-height:1.6}
+.msg-claude b{color:var(--accent2)}
+.msg-typing{align-self:flex-start;background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:12px 16px}
+@keyframes dot{0%,80%,100%{opacity:0.2}40%{opacity:1}}
+.dot{width:7px;height:7px;background:var(--muted);border-radius:50%;display:inline-block;animation:dot 1.4s infinite;margin:0 2px}
+.dot:nth-child(2){animation-delay:.2s}.dot:nth-child(3){animation-delay:.4s}
 
 /* ── NAV TABS ── */
 .nav{position:fixed;bottom:0;left:0;right:0;background:var(--surface);border-top:1px solid var(--border);display:grid;grid-template-columns:repeat(4,1fr);z-index:20;padding-bottom:env(safe-area-inset-bottom)}
@@ -469,7 +479,7 @@ body{display:flex;flex-direction:column;height:100%;max-height:100vh}
         <b>12h30:</b> almoço — arroz integral + feijão + 200g frango + salada (~650 kcal)<br><br>
         <b>15h30:</b> lanche — iogurte grego + punhado de castanhas (~300 kcal)<br><br>
         <b>19h00:</b> jantar — omelete 3 ovos + legumes (~450 kcal)<br><br>
-        <b>22h30:</b> Nutrends 5 Magnésio + Treonina — 2 cápsulas antes de dormir (a caminho! 🚚)
+        <b>22h30:</b> Nutrends 5 Magnésio + Treonina — 2 cápsulas antes de dormir ✅
       </div>
     </div>
 
@@ -486,7 +496,7 @@ body{display:flex;flex-direction:column;height:100%;max-height:100vh}
         • Seu guaraná + beterraba no pré-treino potencializam a queima de gordura matinal<br><br>
         <b>Sono:</b><br>
         • Dormir menos de 6h eleva cortisol cronicamente → deposita gordura na barriga<br>
-        • Nutrends 5 Magnésio + Treonina 2 cápsulas às 22h-23h melhora qualidade do sono ✅ (a caminho!)<br><br>
+        • Nutrends 5 Magnésio + Treonina 2 cápsulas às 22h-23h melhora qualidade do sono ✅<br><br>
         <b>Cortar da alimentação:</b><br>
         • Álcool — 1 cerveja interrompe a queima de gordura por até 48h<br>
         • Açúcar simples: refrigerante, suco industrializado, biscoito recheado, pão branco<br>
@@ -544,7 +554,7 @@ body{display:flex;flex-direction:column;height:100%;max-height:100vh}
 
       <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:4px">Minerais (4.8kg — Excelente)</div>
       <div style="font-size:13px;color:var(--text);line-height:1.8">
-        <b>Magnésio — ✅ Nutrends 5 Magnésio + Treonina (a caminho!):</b><br>
+        <b>Magnésio — ✅ Nutrends 5 Magnésio + Treonina ✅:</b><br>
         • <b>2 cápsulas</b> 30-60 min antes de dormir (22h-23h)<br>
         • É o melhor dos avaliados — 5 formas + Treonina + minerais quelatos + selo TauroMag<br>
         • Efeito em 2-3 semanas: sono mais profundo + menos dor muscular no dia seguinte<br>
@@ -562,7 +572,7 @@ body{display:flex;flex-direction:column;height:100%;max-height:100vh}
         <b>O que você já faz bem ✅:</b> treino 5x/semana às 08h, creatina 5g, própolis 70, pré-treino com guaraná + beterraba + maca + tribulus, tapioca pós-treino, D3+K2 Ecomev<br><br>
         <b>O que adicionar ➕:</b><br>
         • D3/K2 Ecomev 1 cápsula junto ao pré-treino ✅ já tem!<br>
-        • Nutrends 5 Magnésio + Treonina 2 cápsulas às 22h-23h 🚚 a caminho!<br>
+        • Nutrends 5 Magnésio + Treonina 2 cápsulas às 22h-23h ✅<br>
         • <b>50g frango desfiado</b> na tapioca → fecha ~40g proteína pós-treino ✓<br>
         • ~2300-2400 kcal/dia em 5 refeições<br><br>
         <b>O que reduzir ❌:</b> álcool, açúcar simples, frituras<br><br>
@@ -580,12 +590,38 @@ body{display:flex;flex-direction:column;height:100%;max-height:100vh}
 </div>
 
 
+<!-- ══ ASSISTENTE ══ -->
+<div class="page" id="page-assist" style="display:none;flex-direction:column;height:100%;padding:0">
+  <div style="padding:14px 16px 10px;border-bottom:1px solid var(--border);flex-shrink:0;background:var(--bg)">
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <div>
+        <div style="font-size:15px;font-weight:600">Assistente Claude</div>
+        <div style="font-size:11px;color:var(--muted);font-family:var(--mono)" id="assist-status">Configure sua chave API para começar</div>
+      </div>
+      <button onclick="abrirConfigApi()" style="background:var(--surface);border:1px solid var(--border2);border-radius:20px;padding:6px 12px;font-size:11px;font-family:var(--mono);color:var(--muted);cursor:pointer" id="assist-key-btn">🔑 Chave</button>
+    </div>
+  </div>
+  <div id="assist-msgs" style="flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:14px 16px;display:flex;flex-direction:column;gap:10px"></div>
+  <div style="padding:10px 12px;border-top:1px solid var(--border);background:var(--bg);flex-shrink:0;padding-bottom:calc(10px + env(safe-area-inset-bottom))">
+    <div style="display:flex;gap:8px;align-items:flex-end">
+      <textarea id="assist-input" placeholder="Pergunte sobre treino, alimentação, suplementos..." style="flex:1;background:var(--surface);border:1px solid var(--border2);border-radius:14px;padding:10px 14px;font-size:14px;font-family:var(--sans);color:var(--text);resize:none;outline:none;min-height:42px;max-height:120px;line-height:1.4" rows="1" oninput="autoResize(this)" onkeydown="assistKeydown(event)"></textarea>
+      <button onclick="enviarMensagem()" id="assist-send" style="background:linear-gradient(135deg,var(--accent),#5b4fcf);border:none;border-radius:12px;width:42px;height:42px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+      </button>
+    </div>
+    <div style="font-size:10px;color:var(--muted);text-align:center;margin-top:6px;font-family:var(--mono)">Claude Haiku · contexto do seu treino incluído</div>
+  </div>
+</div>
+
 <nav class="nav">
   <button class="nav-btn active" id="nav-home" onclick="showNav('home')">
     <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Início
   </button>
   <button class="nav-btn" id="nav-saude" onclick="showNav('saude')">
     <svg viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>Saúde
+  </button>
+  <button class="nav-btn" id="nav-assist" onclick="showNav('assist')">
+    <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Claude
   </button>
   <button class="nav-btn" id="nav-hist" onclick="showNav('hist')">
     <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>Histórico
@@ -987,6 +1023,7 @@ function showNav(tab){
     const el=document.getElementById('comp-body');
     if(el)el.innerHTML=metricas.map(m=>buildMetricRow(...m)).join('');
   }
+  if(tab==='assist'){showPage('assist');initAssist()}
   if(tab==='hist'){showPage('hist');renderHist(_histTab)}
 }
 function voltarHome(){
@@ -1237,7 +1274,7 @@ function renderActionArea(){
         <div style="font-size:10px;font-family:var(--mono);color:var(--amber);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px">② ${ex.nome2}</div>
         <div class="input-grid">
           <div class="field"><label>Peso (kg)</label><input type="number" id="inp-peso2" min="0" step="0.5" inputmode="decimal" placeholder="0" value="${up2}"></div>
-          <div class="field"><label>${ex.isTime2===false?'Repetições':'Meta (seg)'}</label><input type="number" id="inp-reps2" min="1" step="1" inputmode="numeric" placeholder="${ex.reps2||ex.reps||'0'}"></div>
+          <div class="field"><label>${ex.isTime2?'Meta (seg)':'Repetições'}</label><input type="number" id="inp-reps2" min="1" step="1" inputmode="numeric" placeholder="${ex.reps2||ex.reps||'0'}"></div>
         </div>
       </div>`;
   }else{
@@ -1805,6 +1842,196 @@ function importarHistorico(){
   }catch(e){
     alert('Erro ao importar. Verifique se o código foi copiado corretamente.\n'+e.message);
   }
+}
+
+/* ════ ASSISTENTE CLAUDE ════ */
+const ASSIST_MODEL = 'claude-haiku-4-5-20251001';
+
+function getApiKey(){try{return localStorage.getItem('gym_api_key')||''}catch(e){return''}}
+function setApiKey(k){try{localStorage.setItem('gym_api_key',k)}catch(e){}}
+
+let assistMsgs = []; // histórico da conversa
+let assistInited = false;
+
+function initAssist(){
+  const key = getApiKey();
+  const statusEl = document.getElementById('assist-status');
+  const keyBtn = document.getElementById('assist-key-btn');
+  if(key){
+    if(statusEl) statusEl.textContent = '✅ Conectado · Claude Haiku';
+    if(keyBtn) keyBtn.textContent = '🔑 Chave ✓';
+  }else{
+    if(statusEl) statusEl.textContent = 'Configure sua chave API para começar';
+  }
+  if(!assistInited){
+    assistInited = true;
+    // mensagem de boas-vindas
+    if(!getApiKey()){
+      appendMsgClaude('Olá Rafael! 👋 Para ativar o assistente, toque em **🔑 Chave** acima e cole sua chave da API da Anthropic (console.anthropic.com). Após configurar, pode me perguntar sobre treinos, alimentação, suplementos ou qualquer dúvida de saúde!');
+    }else{
+      appendMsgClaude('Olá Rafael! 💪 Estou pronto para ajudar. Pode me perguntar sobre seus treinos, alimentação, suplementos, ou qualquer dúvida relacionada à sua saúde e performance!');
+    }
+  }
+}
+
+function appendMsgUser(text){
+  const div = document.createElement('div');
+  div.className = 'msg-user';
+  div.textContent = text;
+  document.getElementById('assist-msgs').appendChild(div);
+  scrollChat();
+}
+
+function appendMsgClaude(text){
+  const div = document.createElement('div');
+  div.className = 'msg-claude';
+  // formata markdown básico
+  div.innerHTML = text
+    .replace(/\*\*(.*?)\*\*/g,'<b>$1</b>')
+    .replace(/\*(.*?)\*/g,'<i>$1</i>')
+    .replace(/\n/g,'<br>');
+  document.getElementById('assist-msgs').appendChild(div);
+  scrollChat();
+  return div;
+}
+
+function showTyping(){
+  const div = document.createElement('div');
+  div.className = 'msg-typing';
+  div.id = 'typing-indicator';
+  div.innerHTML = '<span class="dot"></span><span class="dot"></span><span class="dot"></span>';
+  document.getElementById('assist-msgs').appendChild(div);
+  scrollChat();
+}
+function hideTyping(){
+  const t = document.getElementById('typing-indicator');
+  if(t) t.remove();
+}
+
+function scrollChat(){
+  const msgs = document.getElementById('assist-msgs');
+  if(msgs) setTimeout(()=>msgs.scrollTop=msgs.scrollHeight, 50);
+}
+
+function autoResize(el){
+  el.style.height='auto';
+  el.style.height=Math.min(el.scrollHeight,120)+'px';
+}
+
+function assistKeydown(e){
+  if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();enviarMensagem()}
+}
+
+function buildSystemPrompt(){
+  const sess = loadSessoes();
+  return `Você é um assistente pessoal de treino e saúde do Rafael Pinto, integrado ao app de treino dele.
+
+CONTEXTO DO RAFAEL:
+- Idade: 41 anos | Altura: 186cm | Peso: 93kg | Meta: 82kg
+- Treina de segunda a sexta às 08h na academia
+- Plano atual: Treinos A (Peito/Tríceps/Ombros), B (Costas/Bíceps), C (Pernas), D (Ombros/Bíceps/Tríceps/Core) — 11 sessões cada até 09/07/2026
+- Sessões concluídas: A=${sess.A||0}/11, B=${sess.B||0}/11, C=${sess.C||0}/11, D=${sess.D||0}/11
+- Pré-treino: guaraná, tribulus, uva, beterraba, picolínato de cromo, maca peruana, linhaça dourada (5g/dia) + creatina 5g + própolis 70
+- Pós-treino: tapioca + 50g frango desfiado + 1 ovo + mussarela + 2 ovos cozidos (~40g proteína)
+- Suplementos: creatina 5g (pré-treino), D3+K2 Ecomev 1 cápsula (manhã), Nutrends 5 Magnésio + Treonina 2 cápsulas (22h-23h)
+- Avaliação física (11/05/2026): pontuação 79, gordura visceral 9 (limite), massa muscular esquelética 40.7kg (excelente)
+- Meta proteína: 167-204g/dia | Meta calórica: 2300-2400 kcal/dia
+
+Responda de forma direta, prática e personalizada. Use os dados do Rafael para respostas específicas. Seja conciso mas completo. Escreva em português brasileiro.`;
+}
+
+async function enviarMensagem(){
+  const input = document.getElementById('assist-input');
+  const text = input.value.trim();
+  if(!text) return;
+  const key = getApiKey();
+  if(!key){ abrirConfigApi(); return; }
+
+  input.value=''; input.style.height='42px';
+  appendMsgUser(text);
+  assistMsgs.push({role:'user', content:text});
+  showTyping();
+
+  const btn = document.getElementById('assist-send');
+  if(btn) btn.disabled=true;
+
+  try{
+    const resp = await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{
+        'Content-Type':'application/json',
+        'x-api-key': key,
+        'anthropic-version':'2023-06-01',
+        'anthropic-dangerous-direct-browser-access':'true'
+      },
+      body: JSON.stringify({
+        model: ASSIST_MODEL,
+        max_tokens: 1024,
+        system: buildSystemPrompt(),
+        messages: assistMsgs.slice(-10) // últimas 10 mensagens de contexto
+      })
+    });
+    const data = await resp.json();
+    hideTyping();
+    if(data.error){
+      appendMsgClaude('❌ Erro: '+data.error.message+'\n\nVerifique se sua chave API está correta.');
+      assistMsgs.pop();
+    }else{
+      const reply = data.content[0].text;
+      assistMsgs.push({role:'assistant', content:reply});
+      appendMsgClaude(reply);
+    }
+  }catch(e){
+    hideTyping();
+    appendMsgClaude('❌ Erro de conexão. Verifique sua internet e tente novamente.');
+    assistMsgs.pop();
+  }finally{
+    if(btn) btn.disabled=false;
+    input.focus();
+  }
+}
+
+function abrirConfigApi(){
+  const existing=document.getElementById('modal-api');if(existing)existing.remove();
+  const key=getApiKey();
+  const div=document.createElement('div');
+  div.id='modal-api';
+  div.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:70;display:flex;flex-direction:column;justify-content:flex-end;padding:20px';
+  div.innerHTML=`
+    <div style="background:var(--surface);border-radius:24px;padding:20px">
+      <div style="font-size:11px;font-family:var(--mono);letter-spacing:2px;color:var(--accent2);text-transform:uppercase;margin-bottom:8px">🔑 Chave API Anthropic</div>
+      <div style="font-size:13px;color:var(--muted);margin-bottom:16px;line-height:1.6">
+        <b style="color:var(--text)">Como obter:</b><br>
+        1. Acesse <b>console.anthropic.com</b><br>
+        2. Crie conta → API Keys → Create Key<br>
+        3. Adicione crédito mínimo de $5 (dura meses)<br>
+        4. Cole a chave abaixo<br><br>
+        <span style="color:var(--amber)">⚠️ A chave fica salva só no seu celular</span>
+      </div>
+      <input id="inp-api-key" type="password" placeholder="sk-ant-api03-..." style="width:100%;background:var(--surface2);border:1px solid var(--border2);border-radius:10px;padding:12px;font-size:13px;font-family:var(--mono);color:var(--text);outline:none;margin-bottom:12px;-webkit-appearance:none" value="${key}">
+      <button onclick="salvarApiKey()" style="width:100%;padding:14px;border-radius:14px;background:linear-gradient(135deg,var(--accent),#5b4fcf);color:#fff;font-size:14px;font-family:var(--sans);font-weight:500;border:none;cursor:pointer;margin-bottom:8px">Salvar chave</button>
+      ${key?`<button onclick="limparApiKey()" style="width:100%;padding:12px;border-radius:14px;background:transparent;border:1px solid rgba(239,68,68,.3);color:var(--red);font-size:13px;font-family:var(--sans);cursor:pointer;margin-bottom:8px">Remover chave</button>`:''}
+      <button onclick="document.getElementById('modal-api').remove()" style="width:100%;padding:12px;border-radius:14px;background:transparent;border:1px solid var(--border2);color:var(--muted);font-size:13px;font-family:var(--sans);cursor:pointer">Fechar</button>
+    </div>`;
+  document.body.appendChild(div);
+}
+function salvarApiKey(){
+  const k=document.getElementById('inp-api-key').value.trim();
+  if(!k){mostrarToast('Cole a chave antes de salvar');return}
+  setApiKey(k);
+  document.getElementById('modal-api').remove();
+  mostrarToast('✅ Chave salva!');
+  assistInited=false;
+  initAssist();
+}
+function limparApiKey(){
+  try{localStorage.removeItem('gym_api_key')}catch(e){}
+  document.getElementById('modal-api').remove();
+  assistInited=false;
+  document.getElementById('assist-msgs').innerHTML='';
+  assistMsgs=[];
+  initAssist();
+  mostrarToast('Chave removida');
 }
 
 /* ════ TEMA ════ */
