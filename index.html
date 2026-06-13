@@ -58,9 +58,9 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
 body{display:flex;flex-direction:column;height:100%;max-height:100vh}
 .app{flex:1;overflow-y:scroll;overflow-x:hidden;-webkit-overflow-scrolling:touch;padding:0 0 90px;min-height:0}
 .page{display:none;padding:16px 16px 24px}
-.page.active{display:block}
-#page-saude.active{display:flex;flex-direction:column}
-#page-assist.active{display:flex!important;flex-direction:column;height:calc(100vh - 72px)}
+.page.active{display:block;overflow-y:auto;-webkit-overflow-scrolling:touch}
+#page-saude.active{padding-bottom:100px}
+/* page-assist é fora do .app — ver HTML */
 
 /* CHAT */
 .msg-user{align-self:flex-end;background:linear-gradient(135deg,var(--accent),#5b4fcf);color:#fff;border-radius:18px 18px 4px 18px;padding:10px 14px;max-width:80%;font-size:14px;line-height:1.5}
@@ -333,7 +333,7 @@ body{display:flex;flex-direction:column;height:100%;max-height:100vh}
 
 <!-- NAV -->
 <!-- ══ SAÚDE ══ -->
-<div class="page" id="page-saude" style="overflow-y:auto;-webkit-overflow-scrolling:touch;height:100%;padding-bottom:100px">
+<div class="page" id="page-saude">
   <div style="padding-bottom:8px">
     <!-- HEADER -->
     <div style="background:linear-gradient(135deg,rgba(62,207,142,.15),rgba(124,106,247,.1));border:1px solid rgba(62,207,142,.2);border-radius:var(--r2);padding:16px;margin-bottom:14px">
@@ -591,7 +591,7 @@ body{display:flex;flex-direction:column;height:100%;max-height:100vh}
 
 
 <!-- ══ ASSISTENTE ══ -->
-<div class="page" id="page-assist" style="display:none;flex-direction:column;height:100%;padding:0">
+<div id="page-assist" style="display:none;position:fixed;top:0;left:0;right:0;bottom:calc(56px + env(safe-area-inset-bottom));flex-direction:column;background:var(--bg);z-index:10;overflow:hidden">
   <div style="padding:14px 16px 10px;border-bottom:1px solid var(--border);flex-shrink:0;background:var(--bg)">
     <div style="display:flex;justify-content:space-between;align-items:center">
       <div>
@@ -602,7 +602,7 @@ body{display:flex;flex-direction:column;height:100%;max-height:100vh}
     </div>
   </div>
   <div id="assist-msgs" style="flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:14px 16px;display:flex;flex-direction:column;gap:10px"></div>
-  <div style="padding:10px 12px;border-top:1px solid var(--border);background:var(--bg);flex-shrink:0;padding-bottom:calc(10px + env(safe-area-inset-bottom))">
+  <div style="padding:10px 12px 14px;border-top:1px solid var(--border);background:var(--bg);flex-shrink:0">
     <div style="display:flex;gap:8px;align-items:flex-end">
       <textarea id="assist-input" placeholder="Pergunte sobre treino, alimentação, suplementos..." style="flex:1;background:var(--surface);border:1px solid var(--border2);border-radius:14px;padding:10px 14px;font-size:14px;font-family:var(--sans);color:var(--text);resize:none;outline:none;min-height:42px;max-height:120px;line-height:1.4" rows="1" oninput="autoResize(this)" onkeydown="assistKeydown(event)"></textarea>
       <button onclick="enviarMensagem()" id="assist-send" style="background:linear-gradient(135deg,var(--accent),#5b4fcf);border:none;border-radius:12px;width:42px;height:42px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0">
@@ -982,7 +982,15 @@ function sugerirTreino(){
 /* ════ NAV ════ */
 function showPage(id){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.getElementById('page-'+id).classList.add('active');
+  // esconde o assist se estava visível
+  const assist=document.getElementById('page-assist');
+  if(assist)assist.style.display='none';
+  if(id==='assist'){
+    if(assist){assist.style.display='flex';}
+  }else{
+    const el=document.getElementById('page-'+id);
+    if(el)el.classList.add('active');
+  }
   document.getElementById('app').scrollTop=0;
 }
 function buildMetricRow(nome,valor,ideal,status){
