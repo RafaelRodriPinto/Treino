@@ -1,5 +1,190 @@
 [
   {
+    "tipo": "D",
+    "plano": "novo",
+    "data": "Wed Jun 17 2026",
+    "dataStr": "17/06/26",
+    "inicio": 1781694378890,
+    "fim": 1781700166961,
+    "exNames": [
+      "Esteira (aquecimento)",
+      "Elevação lateral",
+      "Elevação frontal anilha",
+      "Desenvolvimento c/ halter",
+      "Crucifixo invertido máquina",
+      "Bíceps concentrado",
+      "Bíceps martelo",
+      "Tríceps corda",
+      "Tríceps barra W",
+      "Prancha ventral",
+      "Esteira (finalização)"
+    ],
+    "series": [
+      [],
+      [
+        {
+          "peso": 9,
+          "reps": 12,
+          "tempo": 50
+        },
+        {
+          "peso": 9,
+          "reps": 12,
+          "tempo": 41
+        },
+        {
+          "peso": 9,
+          "reps": 12,
+          "tempo": 54
+        }
+      ],
+      [
+        {
+          "peso": 15,
+          "reps": 12,
+          "tempo": 46
+        },
+        {
+          "peso": 15,
+          "reps": 12,
+          "tempo": 42
+        },
+        {
+          "peso": 15,
+          "reps": 12,
+          "tempo": 47
+        }
+      ],
+      [
+        {
+          "peso": 10,
+          "reps": 12,
+          "tempo": 47
+        },
+        {
+          "peso": 10,
+          "reps": 12,
+          "tempo": 48
+        },
+        {
+          "peso": 10,
+          "reps": 12,
+          "tempo": 43
+        }
+      ],
+      [
+        {
+          "peso": 5,
+          "reps": 15,
+          "tempo": 50
+        },
+        {
+          "peso": 5,
+          "reps": 15,
+          "tempo": 54
+        },
+        {
+          "peso": 5,
+          "reps": 15,
+          "tempo": 56
+        }
+      ],
+      [
+        {
+          "peso": 39,
+          "reps": 10,
+          "tempo": 52
+        },
+        {
+          "peso": 45,
+          "reps": 10,
+          "tempo": 49
+        },
+        {
+          "peso": 45,
+          "reps": 10,
+          "tempo": 48
+        }
+      ],
+      [
+        {
+          "peso": 10,
+          "reps": 10,
+          "tempo": 39
+        },
+        {
+          "peso": 10,
+          "reps": 10,
+          "tempo": 41
+        },
+        {
+          "peso": 10,
+          "reps": 10,
+          "tempo": 51
+        }
+      ],
+      [
+        {
+          "peso": 35,
+          "reps": 12,
+          "tempo": 40
+        },
+        {
+          "peso": 35,
+          "reps": 12,
+          "tempo": 39
+        },
+        {
+          "peso": 35,
+          "reps": 12,
+          "tempo": 35
+        }
+      ],
+      [
+        {
+          "peso": 40,
+          "reps": 10,
+          "tempo": 33
+        },
+        {
+          "peso": 40,
+          "reps": 10,
+          "tempo": 32
+        },
+        {
+          "peso": 40,
+          "reps": 10,
+          "tempo": 45
+        }
+      ],
+      [
+        {
+          "peso": 0,
+          "reps": 30,
+          "peso2": 0,
+          "reps2": 12,
+          "tempo": 86
+        },
+        {
+          "peso": 0,
+          "reps": 30,
+          "peso2": 0,
+          "reps2": 12,
+          "tempo": 88
+        },
+        {
+          "peso": 0,
+          "reps": 30,
+          "peso2": 0,
+          "reps2": 12,
+          "tempo": 114
+        }
+      ],
+      []
+    ],
+    "pulados": []
+  },
+  {
     "tipo": "C",
     "plano": "novo",
     "data": "Mon Jun 15 2026",
