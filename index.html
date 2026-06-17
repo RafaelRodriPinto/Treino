@@ -297,14 +297,6 @@ body{display:flex;flex-direction:column;height:100%;max-height:100vh}
       <button class="hist-tab" id="htab-evol" onclick="switchHistTab('evol')">Evolução</button>
       <button class="hist-tab" id="htab-treinos" onclick="switchHistTab('treinos')">Treinos</button>
     </div>
-    <!-- IMPORTAR -->
-    <div id="import-section" style="background:linear-gradient(135deg,rgba(56,189,248,.1),rgba(56,189,248,.03));border:1px solid rgba(56,189,248,.2);border-radius:16px;padding:14px;margin-bottom:12px">
-      <div style="font-size:10px;font-family:'DM Mono',monospace;letter-spacing:2px;color:#38bdf8;text-transform:uppercase;margin-bottom:5px">📥 Importar histórico antigo</div>
-      <div style="font-size:12px;color:var(--muted);margin-bottom:10px;line-height:1.5">Cole o código gerado no app antigo e toque em Importar.</div>
-      <textarea id="import-text" placeholder="Cole o código aqui..." style="width:100%;height:90px;background:var(--surface2);border:1px solid var(--border2);border-radius:10px;padding:10px;font-size:11px;font-family:'DM Mono',monospace;color:var(--text);resize:none;margin-bottom:8px;outline:none"></textarea>
-      <button onclick="importarHistorico()" style="width:100%;padding:12px;border-radius:12px;background:linear-gradient(135deg,#38bdf8,#0ea5e9);color:#fff;font-size:13px;font-family:'DM Sans',sans-serif;font-weight:500;border:none;cursor:pointer;margin-bottom:6px">Importar histórico</button>
-      <button onclick="document.getElementById('import-section').style.display='none'" style="width:100%;padding:10px;border-radius:12px;background:transparent;border:1px solid var(--border);color:var(--muted);font-size:12px;font-family:'DM Sans',sans-serif;cursor:pointer">Fechar</button>
-    </div>
     <div id="hist-content"></div>
   </div>
 </div>
@@ -1540,7 +1532,11 @@ const ESTEIRA_FIM_SECS   = 1200; // 20 min finalização
 function esteiraDuracao(tipo){ return tipo==='esteira_fim'?ESTEIRA_FIM_SECS:ESTEIRA_INICIO_SECS; }
 
 function goEsteira(tipo){
-  E.esteiraTipo=tipo;if(!E.esteiraStartTs)E.esteiraStartTs=Date.now();save();
+  E.esteiraTipo=tipo;
+  if(!E.esteiraStartTs)E.esteiraStartTs=Date.now();
+  // inicializa log de esteiras se não existir
+  if(!E.esteiraLog)E.esteiraLog=[];
+  save();
   showPage('esteira');
   document.getElementById('esteira-title').textContent=tipo==='esteira_inicio'?'Esteira — aquecimento (10 min)':'Esteira — finalização (20 min)';
   document.getElementById('esteira-sub').textContent=tipo==='esteira_inicio'?'Aqueça bem antes de começar':'Ótimo trabalho! 20 minutos de recuperação.';
@@ -1560,9 +1556,24 @@ function atualizarEsteira(){
   const dur=esteiraDuracao(E.esteiraTipo);
   const rem=restRem(E.esteiraStartTs,dur);
   document.getElementById('esteira-timer').textContent=fmtMS(rem);
-  if(rem<=0){clearInterval(esteiraTickInterval);E.esteiraStartTs=null;save();terminarEsteira()}
+  if(rem<=0){clearInterval(esteiraTickInterval);registrarEsteira('concluida');E.esteiraStartTs=null;save();terminarEsteira()}
 }
-function pularEsteira(){clearInterval(esteiraTickInterval);E.esteiraStartTs=null;save();terminarEsteira()}
+function pularEsteira(){
+  clearInterval(esteiraTickInterval);
+  registrarEsteira('pulada');
+  E.esteiraStartTs=null;save();terminarEsteira();
+}
+function registrarEsteira(status){
+  if(!E.esteiraLog)E.esteiraLog=[];
+  const dur=esteiraDuracao(E.esteiraTipo);
+  const feito=E.esteiraStartTs?Math.floor((Date.now()-E.esteiraStartTs)/1000):0;
+  E.esteiraLog.push({
+    tipo:E.esteiraTipo,
+    status, // 'concluida' ou 'pulada'
+    duracaoMeta:dur,
+    duracaoFeita:Math.min(feito,dur),
+  });
+}
 function terminarEsteira(){
   if(E.esteiraTipo==='esteira_fim'){finalizarTreino();return}
   E.esteiraTipo=null;save();avancarExercicio();
@@ -1576,10 +1587,35 @@ function finalizarTreino(){
     tipo:E.tipo,plano:'novo',data:today(),dataStr:todayStr(),
     inicio:E.inicio,fim:E.fim,
     exNames:TREINOS[E.tipo].exercicios.map(ex=>ex.nome||exNome(ex)),
-    series:E.series,pulados:E.pulados||[]
+    series:E.series,pulados:E.pulados||[],
+    esteiraLog:E.esteiraLog||[]
   });
   showPage('finished');renderFinished();
 }
+function buildEsteiraHtml(log){
+  if(!log||!log.length)return '';
+  let html='';
+  log.forEach(e=>{
+    const nome=e.tipo==='esteira_inicio'?'Esteira aquecimento':'Esteira finalização';
+    const meta=e.tipo==='esteira_inicio'?'10min':'20min';
+    const pulada=e.status==='pulada';
+    const feito=pulada?'pulada':fmtMS(e.duracaoFeita);
+    const cor=pulada?'var(--amber)':'var(--green)';
+    const icon=pulada?'⏭':'🏃';
+    html+=`<div class="card" style="padding:11px 14px">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <span style="font-size:13px;font-weight:500">${icon} ${nome}</span>
+        <div style="display:flex;gap:6px;align-items:center">
+          <span class="pill">${meta}</span>
+          <span style="font-size:12px;font-family:var(--mono);color:${cor};font-weight:500">${feito}</span>
+          ${pulada?'<span class="tag tag-amber">pulada</span>':'<span class="tag tag-green">✓</span>'}
+        </div>
+      </div>
+    </div>`;
+  });
+  return html;
+}
+
 function renderFinished(){
   const exs=TREINOS[E.tipo].exercicios;
   const dur=E.fim-E.inicio;
@@ -1593,6 +1629,8 @@ function renderFinished(){
     <div class="stat-card"><div class="stat-num">${Math.round(vol)}</div><div class="stat-label">Volume kg×rep</div></div>
     <div class="stat-card"><div class="stat-num">${sess[E.tipo]}/${META_SESSOES}</div><div class="stat-label">Sessões ${E.tipo}</div></div>`;
   let html='';
+  // esteiras primeiro
+  html+=buildEsteiraHtml(E.esteiraLog||[]);
   exs.forEach((ex,i)=>{
     if(ex.tipo==='esteira_inicio'||ex.tipo==='esteira_fim')return;
     const ss=E.series[i].filter(Boolean);
@@ -1773,6 +1811,36 @@ function buildHistCard(h){
     ||(TREINOS_ANTIGOS[h.tipo]?TREINOS_ANTIGOS[h.tipo].exercicios:null)
     ||[];
   let exHtml='';
+  // esteiras primeiro
+  if(h.esteiraLog&&h.esteiraLog.length){
+    h.esteiraLog.forEach(e=>{
+      const nome=e.tipo==='esteira_inicio'?'Esteira aquecimento':'Esteira finalização';
+      const meta=e.tipo==='esteira_inicio'?'10min':'20min';
+      const pulada=e.status==='pulada';
+      const feito=pulada?'pulada':fmtMS(e.duracaoFeita);
+      const cor=pulada?'var(--amber)':'var(--green)';
+      const icon=pulada?'⏭':'🏃';
+      exHtml+=`<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:7px;padding:6px 8px;background:var(--surface2);border-radius:8px">
+        <span style="font-size:11px;color:var(--muted)">${icon} ${nome} (${meta})</span>
+        <span style="font-size:11px;font-family:var(--mono);color:${cor}">${feito}</span>
+      </div>`;
+    });
+  }
+  // esteiras primeiro, se houver registro
+  if(h.esteiraLog&&h.esteiraLog.length){
+    h.esteiraLog.forEach(e=>{
+      const nome=e.tipo==='esteira_inicio'?'Esteira aquecimento':'Esteira finalização';
+      const meta=e.tipo==='esteira_inicio'?'10min':'20min';
+      const pulada=e.status==='pulada';
+      const feito=pulada?'pulada':fmtMS(e.duracaoFeita);
+      const cor=pulada?'var(--amber)':'var(--green)';
+      const icon=pulada?'⏭':'🏃';
+      exHtml+=`<div style="margin-bottom:7px;display:flex;justify-content:space-between;align-items:center">
+        <span style="font-size:11px;color:var(--muted)">${icon} ${nome} (${meta})</span>
+        <span style="font-size:11px;font-family:var(--mono);color:${cor}">${feito}</span>
+      </div>`;
+    });
+  }
   if(exs.length>0){
     exs.forEach((ex,i)=>{
       if(ex.tipo==='esteira_inicio'||ex.tipo==='esteira_fim')return;
@@ -1820,37 +1888,6 @@ function buildHistCard(h){
 document.addEventListener('visibilitychange',()=>{
   if(document.visibilityState==='visible'&&E&&!E.finalizado)retomar();
 });
-
-/* ════ IMPORTAR HISTÓRICO ════ */
-function importarHistorico(){
-  try{
-    const raw = document.getElementById('import-text').value.trim();
-    if(!raw){alert('Cole o código antes de importar.');return}
-    const json = decodeURIComponent(escape(atob(raw)));
-    const payload = JSON.parse(json);
-    if(!payload.v||!payload.hist){alert('Código inválido. Gere novamente no app antigo.');return}
-    let importados=0, duplicados=0;
-    const histAtual = loadHist();
-    const chaves = new Set(histAtual.map(h=>h.data+'_'+h.tipo+'_'+(h.inicio||0)));
-    payload.hist.forEach(h=>{
-      // marca como antigo
-      h.plano = 'antigo';
-      if(!h.dataStr) h.dataStr = h.data ? new Date(h.data).toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit',year:'2-digit'}) : '?';
-      const chave = h.data+'_'+h.tipo+'_'+(h.inicio||0);
-      if(chaves.has(chave)){duplicados++;return}
-      chaves.add(chave);
-      saveHist(h);
-      importados++;
-    });
-    document.getElementById('import-text').value='';
-    document.getElementById('import-section').style.display='none';
-    alert('✓ Importados '+importados+' treinos!'+(duplicados?' ('+duplicados+' já existiam)':''));
-    renderHist('antigo');
-    switchHistTab('antigo');
-  }catch(e){
-    alert('Erro ao importar. Verifique se o código foi copiado corretamente.\n'+e.message);
-  }
-}
 
 /* ════ ASSISTENTE CLAUDE ════ */
 const ASSIST_MODEL = 'claude-haiku-4-5-20251001';
