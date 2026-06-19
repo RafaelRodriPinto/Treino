@@ -269,8 +269,9 @@ body{display:flex;flex-direction:column;height:100%;max-height:100vh}
       <div style="font-size:13px;color:var(--muted)" id="esteira-sub">Prepare-se</div>
       <div class="esteira-timer" id="esteira-timer">10:00</div>
     </div>
-    <button class="btn btn-green" onclick="confirmarPararEsteira()">⏹ Parar e salvar tempo</button>
-    <button class="btn" style="background:transparent;border:1px solid var(--border2);color:var(--muted);margin-top:8px" onclick="confirmarPularEsteira()">⏭ Pular sem fazer</button>
+    <button class="btn btn-primary" id="btn-iniciar-esteira" onclick="iniciarEsteira()">▶ Iniciar esteira</button>
+    <button class="btn btn-green" id="btn-parar-esteira" style="display:none" onclick="confirmarPararEsteira()">⏹ Parar e salvar tempo</button>
+    <button class="btn" id="btn-pular-esteira" style="background:transparent;border:1px solid var(--border2);color:var(--muted);margin-top:8px" onclick="confirmarPularEsteira()">⏭ Pular sem fazer</button>
   </div>
 </div>
 
@@ -1145,10 +1146,14 @@ function retomar(){
     E.restStartTs=null;E.restTotal=0;
     if(E.restTipo==='serie')goExercicio(); else avancarExercicio(); return;
   }
-  if(E.esteiraStartTs&&E.esteiraTipo){
+  if(E.esteiraTipo&&E.esteiraStartTs){
     const rem=restRem(E.esteiraStartTs,esteiraDuracao(E.esteiraTipo));
     if(rem>0){mostrarEsteiraRetomada();return}
     E.esteiraStartTs=null;terminarEsteira();return;
+  }
+  if(E.esteiraTipo&&!E.esteiraStartTs){
+    // esteira aberta mas ainda não iniciada (não apertou "Iniciar")
+    goEsteira(E.esteiraTipo);return;
   }
   goExercicio();
 }
@@ -1534,14 +1539,24 @@ function esteiraDuracao(tipo){ return tipo==='esteira_fim'?ESTEIRA_FIM_SECS:ESTE
 
 function goEsteira(tipo){
   E.esteiraTipo=tipo;
-  if(!E.esteiraStartTs)E.esteiraStartTs=Date.now();
-  // inicializa log de esteiras se não existir
+  // NÃO inicia o timer automaticamente — só ao apertar "Iniciar esteira"
   if(!E.esteiraLog)E.esteiraLog=[];
   E.esteiraRegistrada=false; // flag de proteção contra duplo registro
   save();
   showPage('esteira');
+  const dur=esteiraDuracao(tipo);
   document.getElementById('esteira-title').textContent=tipo==='esteira_inicio'?'Esteira — aquecimento (10 min)':'Esteira — finalização (20 min)';
   document.getElementById('esteira-sub').textContent=tipo==='esteira_inicio'?'Aqueça bem antes de começar':'Ótimo trabalho! 20 minutos de recuperação.';
+  document.getElementById('esteira-timer').textContent=fmtMS(dur);
+  // mostra botão iniciar, esconde parar (ainda não começou)
+  document.getElementById('btn-iniciar-esteira').style.display='';
+  document.getElementById('btn-parar-esteira').style.display='none';
+  clearInterval(esteiraTickInterval);
+}
+function iniciarEsteira(){
+  E.esteiraStartTs=Date.now();save();
+  document.getElementById('btn-iniciar-esteira').style.display='none';
+  document.getElementById('btn-parar-esteira').style.display='';
   atualizarEsteira();
   clearInterval(esteiraTickInterval);
   esteiraTickInterval=setInterval(atualizarEsteira,500);
@@ -1551,6 +1566,9 @@ function mostrarEsteiraRetomada(){
   const tipo=E.esteiraTipo;
   document.getElementById('esteira-title').textContent=tipo==='esteira_inicio'?'Esteira — aquecimento (10 min)':'Esteira — finalização (20 min)';
   document.getElementById('esteira-sub').textContent='Retomando...';
+  // já estava rodando — mostra botão parar
+  document.getElementById('btn-iniciar-esteira').style.display='none';
+  document.getElementById('btn-parar-esteira').style.display='';
   atualizarEsteira();clearInterval(esteiraTickInterval);esteiraTickInterval=setInterval(atualizarEsteira,500);
 }
 function atualizarEsteira(){
