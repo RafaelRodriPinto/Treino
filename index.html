@@ -269,7 +269,7 @@ body{display:flex;flex-direction:column;height:100%;max-height:100vh}
       <div style="font-size:13px;color:var(--muted)" id="esteira-sub">Prepare-se</div>
       <div class="esteira-timer" id="esteira-timer">10:00</div>
     </div>
-    <button class="btn btn-green" onclick="pularEsteira()">Pular esteira</button>
+    <button class="btn btn-green" onclick="confirmarPararEsteira()">⏹ Parar e salvar tempo</button>
   </div>
 </div>
 
@@ -1536,6 +1536,7 @@ function goEsteira(tipo){
   if(!E.esteiraStartTs)E.esteiraStartTs=Date.now();
   // inicializa log de esteiras se não existir
   if(!E.esteiraLog)E.esteiraLog=[];
+  E.esteiraRegistrada=false; // flag de proteção contra duplo registro
   save();
   showPage('esteira');
   document.getElementById('esteira-title').textContent=tipo==='esteira_inicio'?'Esteira — aquecimento (10 min)':'Esteira — finalização (20 min)';
@@ -1555,13 +1556,35 @@ function atualizarEsteira(){
   if(!E||!E.esteiraStartTs)return;
   const dur=esteiraDuracao(E.esteiraTipo);
   const rem=restRem(E.esteiraStartTs,dur);
-  document.getElementById('esteira-timer').textContent=fmtMS(rem);
-  if(rem<=0){clearInterval(esteiraTickInterval);registrarEsteira('concluida');E.esteiraStartTs=null;save();terminarEsteira()}
+  const timerEl=document.getElementById('esteira-timer');
+  if(timerEl)timerEl.textContent=fmtMS(rem);
+  if(rem<=0){
+    clearInterval(esteiraTickInterval);
+    if(!E.esteiraRegistrada){
+      E.esteiraRegistrada=true;
+      registrarEsteira('concluida');
+      E.esteiraStartTs=null;save();
+      terminarEsteira();
+    }
+  }
 }
-function pularEsteira(){
+function confirmarPararEsteira(){
+  const feito=E.esteiraStartTs?Math.floor((Date.now()-E.esteiraStartTs)/1000):0;
+  const min=Math.floor(feito/60), seg=feito%60;
+  const tempoTxt=min+'min'+(seg?' '+seg+'s':'');
+  if(confirm('Parar a esteira e salvar '+tempoTxt+' feitos?')){
+    pararEsteira();
+  }
+}
+function pararEsteira(){
+  // para a esteira ANTES do tempo e salva o tempo real feito até agora
   clearInterval(esteiraTickInterval);
-  registrarEsteira('pulada');
-  E.esteiraStartTs=null;save();terminarEsteira();
+  if(!E.esteiraRegistrada){
+    E.esteiraRegistrada=true;
+    registrarEsteira('parada');
+    E.esteiraStartTs=null;save();
+    terminarEsteira();
+  }
 }
 function registrarEsteira(status){
   if(!E.esteiraLog)E.esteiraLog=[];
@@ -1569,7 +1592,7 @@ function registrarEsteira(status){
   const feito=E.esteiraStartTs?Math.floor((Date.now()-E.esteiraStartTs)/1000):0;
   E.esteiraLog.push({
     tipo:E.esteiraTipo,
-    status, // 'concluida' ou 'pulada'
+    status, // 'concluida' | 'parada' (tempo parcial salvo) | 'pulada' (compat. com versões antigas)
     duracaoMeta:dur,
     duracaoFeita:Math.min(feito,dur),
   });
@@ -1598,17 +1621,19 @@ function buildEsteiraHtml(log){
   log.forEach(e=>{
     const nome=e.tipo==='esteira_inicio'?'Esteira aquecimento':'Esteira finalização';
     const meta=e.tipo==='esteira_inicio'?'10min':'20min';
-    const pulada=e.status==='pulada';
+    const pulada=e.status==='pulada'; // pulada sem fazer nada (compat. antiga)
+    const parada=e.status==='parada'; // parou antes do tempo, mas fez algo
     const feito=pulada?'pulada':fmtMS(e.duracaoFeita);
-    const cor=pulada?'var(--amber)':'var(--green)';
-    const icon=pulada?'⏭':'🏃';
+    const cor=pulada?'var(--amber)':(parada?'var(--amber)':'var(--green)');
+    const icon=pulada?'⏭':(parada?'⏹':'🏃');
+    const tag=pulada?'<span class="tag tag-amber">pulada</span>':(parada?'<span class="tag tag-amber">parcial</span>':'<span class="tag tag-green">✓</span>');
     html+=`<div class="card" style="padding:11px 14px">
       <div style="display:flex;justify-content:space-between;align-items:center">
         <span style="font-size:13px;font-weight:500">${icon} ${nome}</span>
         <div style="display:flex;gap:6px;align-items:center">
           <span class="pill">${meta}</span>
           <span style="font-size:12px;font-family:var(--mono);color:${cor};font-weight:500">${feito}</span>
-          ${pulada?'<span class="tag tag-amber">pulada</span>':'<span class="tag tag-green">✓</span>'}
+          ${tag}
         </div>
       </div>
     </div>`;
@@ -1811,33 +1836,22 @@ function buildHistCard(h){
     ||(TREINOS_ANTIGOS[h.tipo]?TREINOS_ANTIGOS[h.tipo].exercicios:null)
     ||[];
   let exHtml='';
-  // esteiras primeiro
-  if(h.esteiraLog&&h.esteiraLog.length){
-    h.esteiraLog.forEach(e=>{
-      const nome=e.tipo==='esteira_inicio'?'Esteira aquecimento':'Esteira finalização';
-      const meta=e.tipo==='esteira_inicio'?'10min':'20min';
-      const pulada=e.status==='pulada';
-      const feito=pulada?'pulada':fmtMS(e.duracaoFeita);
-      const cor=pulada?'var(--amber)':'var(--green)';
-      const icon=pulada?'⏭':'🏃';
-      exHtml+=`<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:7px;padding:6px 8px;background:var(--surface2);border-radius:8px">
-        <span style="font-size:11px;color:var(--muted)">${icon} ${nome} (${meta})</span>
-        <span style="font-size:11px;font-family:var(--mono);color:${cor}">${feito}</span>
-      </div>`;
-    });
-  }
   // esteiras primeiro, se houver registro
   if(h.esteiraLog&&h.esteiraLog.length){
     h.esteiraLog.forEach(e=>{
       const nome=e.tipo==='esteira_inicio'?'Esteira aquecimento':'Esteira finalização';
       const meta=e.tipo==='esteira_inicio'?'10min':'20min';
       const pulada=e.status==='pulada';
+      const parada=e.status==='parada';
       const feito=pulada?'pulada':fmtMS(e.duracaoFeita);
-      const cor=pulada?'var(--amber)':'var(--green)';
-      const icon=pulada?'⏭':'🏃';
+      const cor=(pulada||parada)?'var(--amber)':'var(--green)';
+      const icon=pulada?'⏭':(parada?'⏹':'🏃');
+      const tag=pulada?'<span class="tag tag-amber" style="font-size:9px">pulada</span>':(parada?'<span class="tag tag-amber" style="font-size:9px">parcial</span>':'');
       exHtml+=`<div style="margin-bottom:7px;display:flex;justify-content:space-between;align-items:center">
         <span style="font-size:11px;color:var(--muted)">${icon} ${nome} (${meta})</span>
-        <span style="font-size:11px;font-family:var(--mono);color:${cor}">${feito}</span>
+        <div style="display:flex;gap:6px;align-items:center">
+          <span style="font-size:11px;font-family:var(--mono);color:${cor}">${feito}</span>${tag}
+        </div>
       </div>`;
     });
   }
