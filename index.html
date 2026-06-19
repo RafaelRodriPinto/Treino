@@ -270,6 +270,7 @@ body{display:flex;flex-direction:column;height:100%;max-height:100vh}
       <div class="esteira-timer" id="esteira-timer">10:00</div>
     </div>
     <button class="btn btn-green" onclick="confirmarPararEsteira()">⏹ Parar e salvar tempo</button>
+    <button class="btn" style="background:transparent;border:1px solid var(--border2);color:var(--muted);margin-top:8px" onclick="confirmarPularEsteira()">⏭ Pular sem fazer</button>
   </div>
 </div>
 
@@ -1574,6 +1575,28 @@ function confirmarPararEsteira(){
   const tempoTxt=min+'min'+(seg?' '+seg+'s':'');
   if(confirm('Parar a esteira e salvar '+tempoTxt+' feitos?')){
     pararEsteira();
+  }
+}
+function confirmarPularEsteira(){
+  if(confirm('Pular esta esteira sem fazer nada? Será registrada como pulada (0min).')){
+    pularEsteira();
+  }
+}
+function pularEsteira(){
+  // pula completamente, sem ter feito nada — registra 0
+  clearInterval(esteiraTickInterval);
+  if(!E.esteiraRegistrada){
+    E.esteiraRegistrada=true;
+    if(!E.esteiraLog)E.esteiraLog=[];
+    const dur=esteiraDuracao(E.esteiraTipo);
+    E.esteiraLog.push({
+      tipo:E.esteiraTipo,
+      status:'pulada',
+      duracaoMeta:dur,
+      duracaoFeita:0,
+    });
+    E.esteiraStartTs=null;save();
+    terminarEsteira();
   }
 }
 function pararEsteira(){
