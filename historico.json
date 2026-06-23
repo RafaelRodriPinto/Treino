@@ -1,5 +1,204 @@
 [
   {
+    "tipo": "D",
+    "plano": "novo",
+    "data": "Tue Jun 23 2026",
+    "dataStr": "23/06/26",
+    "inicio": 1782212677086,
+    "fim": 1782218820266,
+    "exNames": [
+      "Esteira (aquecimento)",
+      "Elevação lateral",
+      "Elevação frontal anilha",
+      "Desenvolvimento c/ halter",
+      "Crucifixo invertido máquina",
+      "Bíceps concentrado",
+      "Bíceps martelo",
+      "Tríceps corda",
+      "Tríceps barra W",
+      "Prancha ventral",
+      "Esteira (finalização)"
+    ],
+    "series": [
+      [],
+      [
+        {
+          "peso": 9,
+          "reps": 12,
+          "tempo": 44
+        },
+        {
+          "peso": 9,
+          "reps": 12,
+          "tempo": 44
+        },
+        {
+          "peso": 9,
+          "reps": 12,
+          "tempo": 80
+        }
+      ],
+      [
+        {
+          "peso": 15,
+          "reps": 12,
+          "tempo": 36
+        },
+        {
+          "peso": 15,
+          "reps": 12,
+          "tempo": 36
+        },
+        {
+          "peso": 15,
+          "reps": 12,
+          "tempo": 46
+        }
+      ],
+      [
+        {
+          "peso": 10,
+          "reps": 12,
+          "tempo": 46
+        },
+        {
+          "peso": 10,
+          "reps": 12,
+          "tempo": 49
+        },
+        {
+          "peso": 10,
+          "reps": 12,
+          "tempo": 47
+        }
+      ],
+      [
+        {
+          "peso": 5,
+          "reps": 15,
+          "tempo": 54
+        },
+        {
+          "peso": 5,
+          "reps": 15,
+          "tempo": 51
+        },
+        {
+          "peso": 5,
+          "reps": 15,
+          "tempo": 56
+        }
+      ],
+      [
+        {
+          "peso": 39,
+          "reps": 10,
+          "tempo": 45
+        },
+        {
+          "peso": 39,
+          "reps": 10,
+          "tempo": 44
+        },
+        {
+          "peso": 39,
+          "reps": 10,
+          "tempo": 51
+        }
+      ],
+      [
+        {
+          "peso": 10,
+          "reps": 10,
+          "tempo": 41
+        },
+        {
+          "peso": 10,
+          "reps": 10,
+          "tempo": 41
+        },
+        {
+          "peso": 10,
+          "reps": 10,
+          "tempo": 53
+        }
+      ],
+      [
+        {
+          "peso": 35,
+          "reps": 12,
+          "tempo": 34
+        },
+        {
+          "peso": 35,
+          "reps": 12,
+          "tempo": 40
+        },
+        {
+          "peso": 35,
+          "reps": 12,
+          "tempo": 44
+        }
+      ],
+      [
+        {
+          "peso": 40,
+          "reps": 10,
+          "tempo": 34
+        },
+        {
+          "peso": 40,
+          "reps": 10,
+          "tempo": 30
+        },
+        {
+          "peso": 40,
+          "reps": 10,
+          "tempo": 35
+        }
+      ],
+      [
+        {
+          "peso": 0,
+          "reps": 30,
+          "peso2": 0,
+          "reps2": 12,
+          "tempo": 84
+        },
+        {
+          "peso": 0,
+          "reps": 30,
+          "peso2": 0,
+          "reps2": 12,
+          "tempo": 84
+        },
+        {
+          "peso": 0,
+          "reps": 30,
+          "peso2": 0,
+          "reps2": 12,
+          "tempo": 161
+        }
+      ],
+      []
+    ],
+    "pulados": [],
+    "esteiraLog": [
+      {
+        "tipo": "esteira_inicio",
+        "status": "concluida",
+        "duracaoMeta": 600,
+        "duracaoFeita": 600
+      },
+      {
+        "tipo": "esteira_fim",
+        "status": "concluida",
+        "duracaoMeta": 1200,
+        "duracaoFeita": 1200
+      }
+    ]
+  },
+  {
     "tipo": "C",
     "plano": "novo",
     "data": "Mon Jun 22 2026",
