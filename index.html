@@ -218,6 +218,19 @@ body{display:flex;flex-direction:column;height:100%;max-height:100vh}
 </style>
 </head>
 <body>
+<!-- SPLASH SCREEN -->
+<div id="splash" style="position:fixed;inset:0;background:var(--bg);z-index:999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;transition:opacity .4s">
+  <div style="font-size:42px">💪</div>
+  <div style="font-size:18px;font-weight:600;font-family:var(--sans);background:linear-gradient(135deg,var(--accent),var(--green));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">Treino Academia</div>
+  <div style="width:32px;height:32px;border:3px solid var(--border2);border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite"></div>
+</div>
+<style>@keyframes spin{to{transform:rotate(360deg)}}</style>
+
+<!-- INDICADOR OFFLINE -->
+<div id="offline-bar" style="display:none;position:fixed;top:0;left:0;right:0;background:var(--amber);color:#1a1a1a;text-align:center;font-size:12px;font-family:var(--mono);padding:6px;z-index:60;font-weight:500">
+  📡 Sem conexão — dados salvos localmente, sincroniza ao reconectar
+</div>
+
 <div class="app" id="app">
 
 <!-- ══ HOME ══ -->
@@ -225,7 +238,7 @@ body{display:flex;flex-direction:column;height:100%;max-height:100vh}
   <div class="home-header">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
       <button onclick="abrirConfigToken()" style="background:var(--surface);border:1px solid var(--border2);border-radius:20px;padding:6px 12px;font-size:13px;cursor:pointer;color:var(--muted);font-family:var(--mono);display:flex;align-items:center;gap:5px">
-        <span id="gh-status">☁️</span><span>Backup</span>
+        <span id="gh-status">☁️</span><span id="gh-status-label">Backup</span>
       </button>
       <button id="theme-btn" onclick="toggleTema()" style="background:var(--surface);border:1px solid var(--border2);border-radius:20px;padding:6px 12px;font-size:13px;cursor:pointer;color:var(--muted);font-family:var(--mono);display:flex;align-items:center;gap:5px">
         <span id="theme-icon">☀️</span><span id="theme-label">Claro</span>
@@ -365,6 +378,37 @@ body{display:flex;flex-direction:column;height:100%;max-height:100vh}
       </div>
     </div>
 
+    <!-- 1. TRACKER DE PESO SEMANAL -->
+    <div style="font-size:10px;font-family:var(--mono);letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:10px">📈 Peso Semanal</div>
+    <div class="card" style="padding:14px;margin-bottom:14px">
+      <div style="display:flex;gap:8px;margin-bottom:12px">
+        <input type="number" id="peso-input" placeholder="Peso atual (kg)" step="0.1" style="flex:1;background:var(--surface2);border:1px solid var(--border2);border-radius:10px;padding:10px 12px;font-size:14px;font-family:var(--mono);color:var(--text);outline:none">
+        <button onclick="registrarPeso()" style="background:linear-gradient(135deg,var(--accent),#5b4fcf);color:#fff;border:none;border-radius:10px;padding:10px 16px;font-size:13px;font-weight:500;cursor:pointer">Salvar</button>
+      </div>
+      <div id="peso-chart-wrap"></div>
+      <div id="peso-lista" style="margin-top:8px"></div>
+    </div>
+
+    <!-- 2. HIDRATAÇÃO -->
+    <div style="font-size:10px;font-family:var(--mono);letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:10px">💧 Hidratação de Hoje</div>
+    <div class="card" style="padding:14px;margin-bottom:14px">
+      <div id="hidrat-checklist"></div>
+      <div style="font-size:11px;color:var(--muted);text-align:center;margin-top:10px;font-family:var(--mono)" id="hidrat-total">0 / 5 etapas</div>
+    </div>
+
+    <!-- 4. SUPLEMENTOS DO DIA -->
+    <div style="font-size:10px;font-family:var(--mono);letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:10px">💊 Suplementos de Hoje</div>
+    <div class="card" style="padding:14px;margin-bottom:14px">
+      <div id="suple-checklist"></div>
+    </div>
+
+    <!-- 3. HISTÓRICO DE AVALIAÇÕES -->
+    <div style="font-size:10px;font-family:var(--mono);letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:10px">📋 Histórico de Avaliações</div>
+    <div class="card" style="padding:14px;margin-bottom:14px">
+      <div id="avaliacoes-lista"></div>
+      <div style="font-size:12px;color:var(--muted);margin-top:10px;line-height:1.6">Quando fizer uma nova avaliação física, envie os dados na aba <b style="color:var(--accent2)">Claude</b> para registrar aqui e comparar a evolução.</div>
+    </div>
+
     <!-- COMPOSIÇÃO -->
     <div style="font-size:10px;font-family:var(--mono);letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:10px">Composição Corporal</div>
     <div class="card" style="padding:14px;margin-bottom:14px" id="comp-body"></div>
@@ -404,7 +448,12 @@ body{display:flex;flex-direction:column;height:100%;max-height:100vh}
         • Tomar com a refeição leve das 07h — vitamina D é lipossolúvel, absorve melhor com gordura (seus ovos e linhaça ajudam)<br>
         • Não tomar à noite — D3 pode atrapalhar o sono em algumas pessoas<br><br>
         <b>Por que D3 + K2 juntas:</b><br>
-        D3 aumenta absorção de cálcio no intestino. A K2 MK-7 direciona esse cálcio para os ossos e dentes, impedindo que se deposite nas artérias. Essenciais para densidade óssea, testosterona e imunidade.
+        D3 aumenta absorção de cálcio no intestino. A K2 MK-7 direciona esse cálcio para os ossos e dentes, impedindo que se deposite nas artérias. Essenciais para densidade óssea, testosterona e imunidade.<br><br>
+        <div style="background:var(--amber2);border-radius:10px;padding:10px;margin-top:4px">
+          <b style="color:var(--amber)">⏱️ Por quanto tempo tomar:</b><br>
+          D3 é lipossolúvel — acumula no corpo, diferente do magnésio que é eliminado facilmente pelos rins. Sua dose de 2.000 UI é considerada moderada/segura para uso contínuo, mas o ideal é não tomar "no escuro" por tempo indefinido.<br><br>
+          <b>Recomendação:</b> após terminar este frasco (~4 meses, por volta de <b>outubro/2026</b>), faça um exame de sangue simples de <b>25-OH-vitamina D</b> em qualquer laboratório. O resultado mostra se sua dose está certa, baixa ou alta — e define se continua, ajusta ou pausa por um tempo. Não precisa de jejum nem preparo especial.
+        </div>
       </div>
     </div>
 
@@ -554,6 +603,9 @@ body{display:flex;flex-direction:column;height:100%;max-height:100vh}
         • Efeito em 2-3 semanas: sono mais profundo + menos dor muscular no dia seguinte<br>
         • Como você treina às 08h, magnésio às 22h fecha o ciclo perfeitamente<br>
         • Alimentos ricos para reforçar: castanha-do-pará (1 unidade = 25% da dose!), amêndoas, banana, abacate, chocolate amargo 70%+<br><br>
+        <div style="background:var(--green2);border-radius:10px;padding:10px;margin-bottom:10px">
+          <b style="color:var(--green)">⏱️ Por quanto tempo tomar:</b> diferente da vitamina D, o magnésio <b>pode ser usado continuamente, sem pausa</b> — o excesso é raro porque os rins eliminam naturalmente o que não é necessário. Sua dose (158mg de magnésio elementar por dose) está dentro da faixa segura para uso contínuo (200-350mg/dia é o limite seguro geral). Não precisa de exame nem de ciclos — só vale reduzir se sentir diarreia ou desconforto intestinal.
+        </div>
         <b>Cálcio:</b> leite, iogurte, queijo mussarela (já come ✓), brócolis, sardinha.<br>
         <b>Vitamina D3+K2:</b> Ecomev 1 cápsula junto ao pré-treino de manhã ✅
       </div>
@@ -831,6 +883,28 @@ function saveHist(entry){
 }
 
 let _syncTimeout=null;
+function getUltimaSinc(){try{return parseInt(localStorage.getItem('gym_ultima_sinc')||'0')||null}catch(e){return null}}
+function setUltimaSinc(ts){try{localStorage.setItem('gym_ultima_sinc',String(ts))}catch(e){}}
+function formatarUltimaSinc(ts){
+  const diffMin=Math.floor((Date.now()-ts)/60000);
+  if(diffMin<1)return'Sincronizado agora';
+  if(diffMin<60)return'Sincronizado há '+diffMin+'min';
+  const diffH=Math.floor(diffMin/60);
+  if(diffH<24)return'Sincronizado há '+diffH+'h';
+  return'Sincronizado há '+Math.floor(diffH/24)+'d';
+}
+function atualizarStatusBackup(){
+  const token=getToken();
+  const el=document.getElementById('gh-status');
+  const lbl=document.getElementById('gh-status-label');
+  if(el)el.textContent=token?'✅':'☁️';
+  if(lbl){
+    if(!token){lbl.textContent='Backup';return}
+    const ultimo=getUltimaSinc();
+    lbl.textContent=ultimo?formatarUltimaSinc(ultimo):'Backup';
+  }
+}
+
 function sincronizarGitHub(){
   // debounce — espera 3s antes de sincronizar (evita múltiplas chamadas seguidas)
   clearTimeout(_syncTimeout);
@@ -852,7 +926,11 @@ function sincronizarGitHub(){
     // salva merged localmente
     try{localStorage.setItem('gym_hist_v6',JSON.stringify(merged))}catch(e){}
     // salva no GitHub
-    await ghPut(merged, remoto.sha);
+    const ok=await ghPut(merged, remoto.sha);
+    if(ok){
+      setUltimaSinc(Date.now());
+      atualizarStatusBackup();
+    }
   },3000);
 }
 
@@ -987,6 +1065,182 @@ function showPage(id){
   }
   document.getElementById('app').scrollTop=0;
 }
+/* ════ 1. TRACKER DE PESO SEMANAL ════ */
+function loadPesoLog(){try{return JSON.parse(localStorage.getItem('gym_peso_log')||'[]')}catch(e){return[]}}
+function savePesoLog(log){try{localStorage.setItem('gym_peso_log',JSON.stringify(log))}catch(e){}}
+function registrarPeso(){
+  const input=document.getElementById('peso-input');
+  const valor=parseFloat(input.value);
+  if(!valor||valor<30||valor>250){mostrarToast('Informe um peso válido');return}
+  const log=loadPesoLog();
+  const hoje=today();
+  // se já registrou hoje, atualiza em vez de duplicar
+  const idx=log.findIndex(p=>p.data===hoje);
+  if(idx>=0)log[idx].peso=valor;
+  else log.push({data:hoje,dataStr:todayStr(),peso:valor,ts:Date.now()});
+  log.sort((a,b)=>a.ts-b.ts);
+  savePesoLog(log);
+  input.value='';
+  mostrarToast('✓ Peso registrado: '+valor+'kg');
+  renderPesoTracker();
+}
+function excluirPeso(ts){
+  let log=loadPesoLog();
+  log=log.filter(p=>p.ts!==ts);
+  savePesoLog(log);
+  renderPesoTracker();
+}
+function renderPesoTracker(){
+  const log=loadPesoLog();
+  const chartWrap=document.getElementById('peso-chart-wrap');
+  const lista=document.getElementById('peso-lista');
+  if(!chartWrap||!lista)return;
+  if(!log.length){
+    chartWrap.innerHTML='<p style="color:var(--muted);font-size:12px;text-align:center;padding:12px 0">Registre seu peso semanalmente para ver o gráfico de evolução.</p>';
+    lista.innerHTML='';
+    return;
+  }
+  // gráfico SVG simples de linha
+  const pesos=log.map(p=>p.peso);
+  const min=Math.min(...pesos,82)-1, max=Math.max(...pesos,93)+1;
+  const w=280,h=90,pad=10;
+  const pts=log.map((p,i)=>{
+    const x=log.length>1?pad+(i/(log.length-1))*(w-pad*2):w/2;
+    const y=pad+(1-(p.peso-min)/(max-min))*(h-pad*2);
+    return [x,y];
+  });
+  const pathD=pts.map((p,i)=>(i===0?'M':'L')+p[0]+','+p[1]).join(' ');
+  const dots=pts.map((p,i)=>`<circle cx="${p[0]}" cy="${p[1]}" r="3" fill="var(--accent2)"/>`).join('');
+  const metaY=pad+(1-(82-min)/(max-min))*(h-pad*2);
+  chartWrap.innerHTML=`<svg viewBox="0 0 ${w} ${h}" style="width:100%;height:90px">
+    <line x1="0" y1="${metaY}" x2="${w}" y2="${metaY}" stroke="var(--green)" stroke-width="1" stroke-dasharray="3,3" opacity="0.5"/>
+    <path d="${pathD}" fill="none" stroke="var(--accent)" stroke-width="2"/>
+    ${dots}
+  </svg>
+  <div style="font-size:9px;color:var(--muted);text-align:right;font-family:var(--mono)">--- meta 82kg</div>`;
+  // lista das últimas 5 entradas
+  const recentes=log.slice(-5).reverse();
+  lista.innerHTML=recentes.map(p=>`
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--border)">
+      <span style="font-size:12px;color:var(--muted)">${p.dataStr}</span>
+      <div style="display:flex;align-items:center;gap:8px">
+        <span style="font-size:13px;font-family:var(--mono);font-weight:500">${p.peso}kg</span>
+        <button onclick="excluirPeso(${p.ts})" style="background:none;border:none;color:var(--red);font-size:11px;cursor:pointer;padding:2px 6px">✕</button>
+      </div>
+    </div>`).join('');
+}
+
+/* ════ 2. HIDRATAÇÃO ════ */
+const HIDRAT_ETAPAS=[
+  {id:'acordar',label:'500ml ao acordar (06h30)',icon:'🌅'},
+  {id:'pretreino',label:'300ml com pré-treino (07h30)',icon:'💊'},
+  {id:'treino',label:'500ml durante o treino',icon:'🏋️'},
+  {id:'postreino',label:'300ml pós-treino',icon:'🍳'},
+  {id:'dia',label:'1.5L ao longo do dia',icon:'☀️'},
+];
+function loadHidratHoje(){
+  try{
+    const d=JSON.parse(localStorage.getItem('gym_hidrat')||'null');
+    if(!d||d.data!==today())return{data:today(),feitos:[]};
+    return d;
+  }catch(e){return{data:today(),feitos:[]}}
+}
+function saveHidratHoje(d){try{localStorage.setItem('gym_hidrat',JSON.stringify(d))}catch(e){}}
+function toggleHidrat(id){
+  const d=loadHidratHoje();
+  const i=d.feitos.indexOf(id);
+  if(i>=0)d.feitos.splice(i,1);else d.feitos.push(id);
+  saveHidratHoje(d);
+  renderHidratChecklist();
+}
+function renderHidratChecklist(){
+  const el=document.getElementById('hidrat-checklist');
+  const totalEl=document.getElementById('hidrat-total');
+  if(!el)return;
+  const d=loadHidratHoje();
+  el.innerHTML=HIDRAT_ETAPAS.map(e=>{
+    const feito=d.feitos.includes(e.id);
+    return`<div onclick="toggleHidrat('${e.id}')" style="display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border);cursor:pointer">
+      <div style="width:22px;height:22px;border-radius:7px;border:1.5px solid ${feito?'var(--green)':'var(--border2)'};background:${feito?'var(--green)':'transparent'};display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:13px;color:#fff">${feito?'✓':''}</div>
+      <span style="font-size:13px;color:${feito?'var(--muted)':'var(--text)'};text-decoration:${feito?'line-through':'none'}">${e.icon} ${e.label}</span>
+    </div>`;
+  }).join('');
+  if(totalEl)totalEl.textContent=d.feitos.length+' / '+HIDRAT_ETAPAS.length+' etapas';
+}
+
+/* ════ 4. SUPLEMENTOS DO DIA ════ */
+const SUPLE_ETAPAS=[
+  {id:'pretreino_mix',label:'Mix pré-treino + creatina 5g + própolis 70 (07h30)',icon:'💪'},
+  {id:'d3k2',label:'Vitamina D3+K2 — 1 cápsula (07h30)',icon:'☀️'},
+  {id:'magnesio',label:'Nutrends 5 Magnésio + Treonina — 2 cápsulas (22h-23h)',icon:'🌙'},
+];
+function loadSupleHoje(){
+  try{
+    const d=JSON.parse(localStorage.getItem('gym_suple')||'null');
+    if(!d||d.data!==today())return{data:today(),feitos:[]};
+    return d;
+  }catch(e){return{data:today(),feitos:[]}}
+}
+function saveSupleHoje(d){try{localStorage.setItem('gym_suple',JSON.stringify(d))}catch(e){}}
+function toggleSuple(id){
+  const d=loadSupleHoje();
+  const i=d.feitos.indexOf(id);
+  if(i>=0)d.feitos.splice(i,1);else d.feitos.push(id);
+  saveSupleHoje(d);
+  renderSupleChecklist();
+}
+function renderSupleChecklist(){
+  const el=document.getElementById('suple-checklist');
+  if(!el)return;
+  const d=loadSupleHoje();
+  el.innerHTML=SUPLE_ETAPAS.map(e=>{
+    const feito=d.feitos.includes(e.id);
+    return`<div onclick="toggleSuple('${e.id}')" style="display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border);cursor:pointer">
+      <div style="width:22px;height:22px;border-radius:7px;border:1.5px solid ${feito?'var(--accent)':'var(--border2)'};background:${feito?'var(--accent)':'transparent'};display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:13px;color:#fff">${feito?'✓':''}</div>
+      <span style="font-size:13px;color:${feito?'var(--muted)':'var(--text)'};text-decoration:${feito?'line-through':'none'}">${e.icon} ${e.label}</span>
+    </div>`;
+  }).join('');
+}
+
+/* ════ 3. HISTÓRICO DE AVALIAÇÕES FÍSICAS ════ */
+function loadAvaliacoes(){
+  try{
+    const a=JSON.parse(localStorage.getItem('gym_avaliacoes')||'null');
+    if(a&&a.length)return a;
+  }catch(e){}
+  // primeira avaliação (seed inicial) — Unique Health 11/05/2026
+  return[{
+    data:'2026-05-11',dataStr:'11/05/2026',pontuacao:79,peso:93,imc:26.8,
+    aguaCorporal:52.3,massaGorda:21.7,massaProteica:14.2,minerais:4.8,
+    massaMuscular:66.5,massaMuscularEsq:40.7,gorduraVisceral:9,
+    gorduraSubcutanea:19.2,cinturaQuadril:0.9,massaLivreGordura:71.3,
+    aguaIntracelular:32.9,aguaExtracelular:19.4,
+  }];
+}
+function renderAvaliacoesLista(){
+  const el=document.getElementById('avaliacoes-lista');
+  if(!el)return;
+  const avals=loadAvaliacoes();
+  el.innerHTML=avals.map((a,i)=>{
+    const anterior=avals[i-1];
+    let diffPeso='';
+    if(anterior){
+      const d=+(a.peso-anterior.peso).toFixed(1);
+      diffPeso=d<0?`<span style="color:var(--green)">▼ ${Math.abs(d)}kg</span>`:d>0?`<span style="color:var(--red)">▲ ${d}kg</span>`:'<span style="color:var(--muted)">→</span>';
+    }
+    return`<div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;${i<avals.length-1?'border-bottom:1px solid var(--border)':''}">
+      <div>
+        <div style="font-size:13px;font-weight:500">${a.dataStr}</div>
+        <div style="font-size:11px;color:var(--muted)">Pontuação: ${a.pontuacao} · IMC ${a.imc}</div>
+      </div>
+      <div style="text-align:right">
+        <div style="font-size:15px;font-family:var(--mono);font-weight:600">${a.peso}kg</div>
+        <div style="font-size:11px">${diffPeso}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
 function buildMetricRow(nome,valor,ideal,status){
   const cores={excelente:['var(--green2)','var(--green)','✓'],ok:['var(--amber2)','var(--amber)','~'],ruim:['var(--red2)','var(--red)','!']};
   const [bg,cor,icone]=cores[status]||cores.ok;
@@ -1024,6 +1278,10 @@ function showNav(tab){
     ];
     const el=document.getElementById('comp-body');
     if(el)el.innerHTML=metricas.map(m=>buildMetricRow(...m)).join('');
+    renderPesoTracker();
+    renderHidratChecklist();
+    renderSupleChecklist();
+    renderAvaliacoesLista();
   }
   if(tab==='assist'){showPage('assist');initAssist()}
   if(tab==='hist'){showPage('hist');renderHist(_histTab)}
@@ -2164,17 +2422,43 @@ carregarTema();
 migrarHistoricoAntigo();
 renderHome();
 
-// atualiza ícone de status do backup
-(function(){
-  const token=getToken();
-  const el=document.getElementById('gh-status');
-  if(el)el.textContent=token?'✅':'☁️';
-})();
+atualizarStatusBackup();
+setInterval(atualizarStatusBackup,60000); // atualiza o texto a cada minuto
 
 // sincroniza histórico com GitHub ao abrir (se tiver token)
 if(getToken()){
   sincronizarGitHub();
 }
+
+/* ════ INDICADOR ONLINE/OFFLINE ════ */
+function atualizarStatusConexao(){
+  const bar=document.getElementById('offline-bar');
+  if(!bar)return;
+  bar.style.display=navigator.onLine?'none':'block';
+}
+window.addEventListener('online',()=>{
+  atualizarStatusConexao();
+  mostrarToast('✅ Conexão restaurada — sincronizando...');
+  if(getToken())sincronizarGitHub();
+});
+window.addEventListener('offline',atualizarStatusConexao);
+atualizarStatusConexao();
+
+/* ════ SPLASH SCREEN ════ */
+window.addEventListener('load',()=>{
+  setTimeout(()=>{
+    const splash=document.getElementById('splash');
+    if(splash){
+      splash.style.opacity='0';
+      setTimeout(()=>splash.remove(),400);
+    }
+  },400);
+});
+// fallback: garante que o splash some mesmo se 'load' já tiver disparado
+setTimeout(()=>{
+  const splash=document.getElementById('splash');
+  if(splash){splash.style.opacity='0';setTimeout(()=>splash&&splash.remove(),400)}
+},1200);
 
 /* ════ SERVICE WORKER (offline) ════ */
 if('serviceWorker' in navigator){
