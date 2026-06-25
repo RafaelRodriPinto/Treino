@@ -1,5 +1,168 @@
 [
   {
+    "tipo": "B",
+    "plano": "novo",
+    "data": "Thu Jun 25 2026",
+    "dataStr": "25/06/26",
+    "inicio": 1782385710180,
+    "fim": 1782391388911,
+    "exNames": [
+      "Esteira (aquecimento)",
+      "Puxada aberta",
+      "Facepull",
+      "Remada cavalinho",
+      "Remada máquina fechada",
+      "Rosca martelo",
+      "Rosca bíceps barra W",
+      "Abdominal remador",
+      "Esteira (finalização)"
+    ],
+    "series": [
+      [],
+      [
+        {
+          "peso": 39,
+          "reps": 10,
+          "peso2": 39,
+          "reps2": 10,
+          "tempo": 88
+        },
+        {
+          "peso": 39,
+          "reps": 10,
+          "peso2": 39,
+          "reps2": 10,
+          "tempo": 91
+        },
+        {
+          "peso": 39,
+          "reps": 10,
+          "peso2": 39,
+          "reps2": 10,
+          "tempo": 89
+        }
+      ],
+      [
+        {
+          "peso": 30,
+          "reps": 15,
+          "tempo": 50
+        },
+        {
+          "peso": 30,
+          "reps": 15,
+          "tempo": 47
+        },
+        {
+          "peso": 30,
+          "reps": 15,
+          "tempo": 73
+        }
+      ],
+      [
+        {
+          "peso": 25,
+          "reps": 12,
+          "tempo": 41
+        },
+        {
+          "peso": 25,
+          "reps": 12,
+          "tempo": 43
+        },
+        {
+          "peso": 25,
+          "reps": 12,
+          "tempo": 101
+        }
+      ],
+      [
+        {
+          "peso": 45,
+          "reps": 12,
+          "tempo": 50
+        },
+        {
+          "peso": 45,
+          "reps": 12,
+          "tempo": 48
+        },
+        {
+          "peso": 45,
+          "reps": 12,
+          "tempo": 53
+        }
+      ],
+      [
+        {
+          "peso": 9,
+          "reps": 12,
+          "tempo": 49
+        },
+        {
+          "peso": 9,
+          "reps": 12,
+          "tempo": 49
+        },
+        {
+          "peso": 9,
+          "reps": 12,
+          "tempo": 57
+        }
+      ],
+      [
+        {
+          "peso": 15,
+          "reps": 12,
+          "tempo": 54
+        },
+        {
+          "peso": 15,
+          "reps": 12,
+          "tempo": 53
+        },
+        {
+          "peso": 15,
+          "reps": 12,
+          "tempo": 61
+        }
+      ],
+      [
+        {
+          "peso": 0,
+          "reps": 12,
+          "tempo": 42
+        },
+        {
+          "peso": 0,
+          "reps": 12,
+          "tempo": 51
+        },
+        {
+          "peso": 0,
+          "reps": 12,
+          "tempo": 43
+        }
+      ],
+      []
+    ],
+    "pulados": [],
+    "esteiraLog": [
+      {
+        "tipo": "esteira_inicio",
+        "status": "concluida",
+        "duracaoMeta": 600,
+        "duracaoFeita": 600
+      },
+      {
+        "tipo": "esteira_fim",
+        "status": "concluida",
+        "duracaoMeta": 1200,
+        "duracaoFeita": 1200
+      }
+    ]
+  },
+  {
     "tipo": "A",
     "plano": "novo",
     "data": "Wed Jun 24 2026",
