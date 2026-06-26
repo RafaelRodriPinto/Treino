@@ -905,28 +905,82 @@ function atualizarStatusBackup(){
   }
 }
 
+/* Monta o payload completo a ser salvo no GitHub: treinos + dados de saúde */
+function montarPayloadCompleto(treinos){
+  return {
+    treinos: treinos,
+    peso: loadPesoLog(),
+    hidratacao: loadHidratHoje(),
+    suplementos: loadSupleHoje(),
+    avaliacoes: loadAvaliacoes(),
+  };
+}
+
+/* Lê o conteúdo remoto seja no formato antigo (array puro de treinos) ou novo (objeto completo) */
+function normalizarRemoto(remotoContent){
+  if(Array.isArray(remotoContent)){
+    // formato antigo — só treinos
+    return {treinos:remotoContent, peso:[], hidratacao:null, suplementos:null, avaliacoes:null};
+  }
+  return {
+    treinos: remotoContent.treinos||[],
+    peso: remotoContent.peso||[],
+    hidratacao: remotoContent.hidratacao||null,
+    suplementos: remotoContent.suplementos||null,
+    avaliacoes: remotoContent.avaliacoes||null,
+  };
+}
+
 function sincronizarGitHub(){
   // debounce — espera 3s antes de sincronizar (evita múltiplas chamadas seguidas)
   clearTimeout(_syncTimeout);
   _syncTimeout=setTimeout(async()=>{
     const token=getToken(); if(!token)return;
-    const local=loadHist();
+    const localTreinos=loadHist();
     const remoto=await ghGet();
     if(!remoto)return;
-    // merge: une local + remoto, remove duplicatas por inicio+tipo
-    const todos=[...local,...(remoto.content||[])];
+    const r=normalizarRemoto(remoto.content);
+
+    // merge treinos: une local + remoto, remove duplicatas por inicio+tipo
+    const todos=[...localTreinos,...r.treinos];
     const vistos=new Set();
-    const merged=todos.filter(h=>{
+    const mergedTreinos=todos.filter(h=>{
       const k=(h.inicio||0)+'_'+h.tipo;
       if(vistos.has(k))return false;
       vistos.add(k);return true;
     });
-    merged.sort((a,b)=>(b.inicio||0)-(a.inicio||0));
-    if(merged.length>120)merged.splice(120);
-    // salva merged localmente
-    try{localStorage.setItem('gym_hist_v6',JSON.stringify(merged))}catch(e){}
-    // salva no GitHub
-    const ok=await ghPut(merged, remoto.sha);
+    mergedTreinos.sort((a,b)=>(b.inicio||0)-(a.inicio||0));
+    if(mergedTreinos.length>120)mergedTreinos.splice(120);
+    try{localStorage.setItem('gym_hist_v6',JSON.stringify(mergedTreinos))}catch(e){}
+
+    // merge peso: une por data (local tem prioridade se houver conflito no mesmo dia)
+    const localPeso=loadPesoLog();
+    const pesoPorData={};
+    r.peso.forEach(p=>pesoPorData[p.data]=p);
+    localPeso.forEach(p=>pesoPorData[p.data]=p); // local sobrescreve
+    const mergedPeso=Object.values(pesoPorData).sort((a,b)=>a.ts-b.ts);
+    savePesoLog(mergedPeso);
+
+    // hidratação e suplementos: só do dia atual — local sempre ganha se for hoje, senão usa remoto se mais recente
+    const localHidrat=loadHidratHoje();
+    const mergedHidrat=(r.hidratacao&&r.hidratacao.data===today()&&!localHidrat.feitos.length)?r.hidratacao:localHidrat;
+    saveHidratHoje(mergedHidrat);
+
+    const localSuple=loadSupleHoje();
+    const mergedSuple=(r.suplementos&&r.suplementos.data===today()&&!localSuple.feitos.length)?r.suplementos:localSuple;
+    saveSupleHoje(mergedSuple);
+
+    // avaliações: une por data, local tem prioridade
+    const localAvals=loadAvaliacoes();
+    const avalsPorData={};
+    (r.avaliacoes||[]).forEach(a=>avalsPorData[a.data]=a);
+    localAvals.forEach(a=>avalsPorData[a.data]=a);
+    const mergedAvals=Object.values(avalsPorData).sort((a,b)=>new Date(a.data)-new Date(b.data));
+    try{localStorage.setItem('gym_avaliacoes',JSON.stringify(mergedAvals))}catch(e){}
+
+    // salva tudo no GitHub
+    const payload=montarPayloadCompleto(mergedTreinos);
+    const ok=await ghPut(payload, remoto.sha);
     if(ok){
       setUltimaSinc(Date.now());
       atualizarStatusBackup();
@@ -939,14 +993,22 @@ async function restaurarDoGitHub(){
   mostrarToast('Buscando histórico no GitHub...');
   const remoto=await ghGet();
   if(!remoto){mostrarToast('❌ Token inválido ou erro de conexão');return}
-  if(!remoto.content||!remoto.content.length){mostrarToast('Nenhum histórico encontrado no GitHub');return}
-  try{localStorage.setItem('gym_hist_v6',JSON.stringify(remoto.content))}catch(e){}
+  const r=normalizarRemoto(remoto.content);
+  if(!r.treinos.length&&!r.peso.length){mostrarToast('Nenhum dado encontrado no GitHub');return}
+
+  try{localStorage.setItem('gym_hist_v6',JSON.stringify(r.treinos))}catch(e){}
   // recalcula sessões
   const sess={A:0,B:0,C:0,D:0};
-  remoto.content.filter(h=>h.plano==='novo').forEach(h=>{if(sess[h.tipo]!==undefined)sess[h.tipo]++});
+  r.treinos.filter(h=>h.plano==='novo').forEach(h=>{if(sess[h.tipo]!==undefined)sess[h.tipo]++});
   try{localStorage.setItem('gym_sess_v6',JSON.stringify(sess))}catch(e){}
-  mostrarToast('✓ '+remoto.content.length+' treinos restaurados!');
-  setTimeout(()=>{renderHome();renderHist(_histTab)},1500);
+
+  if(r.peso.length)savePesoLog(r.peso);
+  if(r.hidratacao)saveHidratHoje(r.hidratacao);
+  if(r.suplementos)saveSupleHoje(r.suplementos);
+  if(r.avaliacoes&&r.avaliacoes.length){try{localStorage.setItem('gym_avaliacoes',JSON.stringify(r.avaliacoes))}catch(e){}}
+
+  mostrarToast('✓ '+r.treinos.length+' treinos e dados de saúde restaurados!');
+  setTimeout(()=>{renderHome();renderHist(_histTab);if(document.getElementById('page-saude').classList.contains('active'))showNav('saude')},1500);
 }
 
 function mostrarToast(msg){
@@ -1083,12 +1145,14 @@ function registrarPeso(){
   input.value='';
   mostrarToast('✓ Peso registrado: '+valor+'kg');
   renderPesoTracker();
+  if(getToken())sincronizarGitHub();
 }
 function excluirPeso(ts){
   let log=loadPesoLog();
   log=log.filter(p=>p.ts!==ts);
   savePesoLog(log);
   renderPesoTracker();
+  if(getToken())sincronizarGitHub();
 }
 function renderPesoTracker(){
   const log=loadPesoLog();
@@ -1152,6 +1216,7 @@ function toggleHidrat(id){
   if(i>=0)d.feitos.splice(i,1);else d.feitos.push(id);
   saveHidratHoje(d);
   renderHidratChecklist();
+  if(getToken())sincronizarGitHub();
 }
 function renderHidratChecklist(){
   const el=document.getElementById('hidrat-checklist');
@@ -1188,6 +1253,7 @@ function toggleSuple(id){
   if(i>=0)d.feitos.splice(i,1);else d.feitos.push(id);
   saveSupleHoje(d);
   renderSupleChecklist();
+  if(getToken())sincronizarGitHub();
 }
 function renderSupleChecklist(){
   const el=document.getElementById('suple-checklist');
