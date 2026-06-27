@@ -6826,5 +6826,32 @@
       "aguaIntracelular": 32.9,
       "aguaExtracelular": 19.4
     }
+  ],
+  "diasCompletos": {
+    "hidrat": [],
+    "suple": []
+  },
+  "estoque": [
+    {
+      "id": "d3k2",
+      "nome": "Vitamina D3+K2 Ecomev",
+      "inicio": "2026-06-01",
+      "duracaoDias": 120,
+      "dosesPorDia": 1
+    },
+    {
+      "id": "magnesio",
+      "nome": "Nutrends 5 Magnésio + Treonina",
+      "inicio": "2026-06-17",
+      "duracaoDias": 30,
+      "dosesPorDia": 2
+    },
+    {
+      "id": "creatina",
+      "nome": "Creatina monohidratada",
+      "inicio": null,
+      "duracaoDias": null,
+      "dosesPorDia": 1
+    }
   ]
 }
