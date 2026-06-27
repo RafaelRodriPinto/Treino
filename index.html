@@ -383,10 +383,16 @@ body{display:flex;flex-direction:column;height:100%;max-height:100vh}
     <div style="font-size:10px;font-family:var(--mono);letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:10px">📈 Peso & Cintura</div>
     <div class="card" style="padding:14px;margin-bottom:14px">
       <div style="display:flex;gap:8px;margin-bottom:12px">
-        <input type="number" id="peso-input" placeholder="Peso (kg)" step="0.1" style="flex:1;background:var(--surface2);border:1px solid var(--border2);border-radius:10px;padding:10px 12px;font-size:14px;font-family:var(--mono);color:var(--text);outline:none">
-        <input type="number" id="cintura-input" placeholder="Cintura (cm)" step="0.5" style="flex:1;background:var(--surface2);border:1px solid var(--border2);border-radius:10px;padding:10px 12px;font-size:14px;font-family:var(--mono);color:var(--text);outline:none">
+        <div style="flex:1;min-width:0">
+          <label style="font-size:10px;color:var(--muted);font-family:var(--mono);display:block;margin-bottom:4px">Peso (kg)</label>
+          <input type="number" id="peso-input" placeholder="0.0" step="0.1" style="width:100%;box-sizing:border-box;background:var(--surface2);border:1px solid var(--border2);border-radius:10px;padding:10px 10px;font-size:14px;font-family:var(--mono);color:var(--text);outline:none">
+        </div>
+        <div style="flex:1;min-width:0">
+          <label style="font-size:10px;color:var(--muted);font-family:var(--mono);display:block;margin-bottom:4px">Cintura (cm)</label>
+          <input type="number" id="cintura-input" placeholder="0.0" step="0.5" style="width:100%;box-sizing:border-box;background:var(--surface2);border:1px solid var(--border2);border-radius:10px;padding:10px 10px;font-size:14px;font-family:var(--mono);color:var(--text);outline:none">
+        </div>
       </div>
-      <button onclick="registrarPeso()" style="width:100%;background:linear-gradient(135deg,var(--accent),#5b4fcf);color:#fff;border:none;border-radius:10px;padding:10px 16px;font-size:13px;font-weight:500;cursor:pointer;margin-bottom:12px">Salvar medidas de hoje</button>
+      <button onclick="registrarPeso()" style="width:100%;box-sizing:border-box;background:linear-gradient(135deg,var(--accent),#5b4fcf);color:#fff;border:none;border-radius:10px;padding:10px 16px;font-size:13px;font-weight:500;cursor:pointer;margin-bottom:12px">Salvar medidas de hoje</button>
       <div id="peso-chart-wrap"></div>
       <div id="peso-lista" style="margin-top:8px"></div>
     </div>
@@ -403,6 +409,9 @@ body{display:flex;flex-direction:column;height:100%;max-height:100vh}
     <div class="card" style="padding:14px;margin-bottom:14px">
       <div id="suple-checklist"></div>
       <div style="font-size:11px;text-align:center;margin-top:10px;font-family:var(--mono)" id="suple-streak"></div>
+      <button onclick="toggleNotificacao()" id="notif-btn" style="width:100%;margin-top:12px;background:var(--surface2);border:1px solid var(--border2);border-radius:10px;padding:10px;font-size:12px;font-family:var(--mono);color:var(--muted);cursor:pointer">
+        <span id="notif-btn-label">🔕 Ativar lembrete às 22h</span>
+      </button>
     </div>
 
     <!-- ESTOQUE DE SUPLEMENTOS -->
@@ -1422,6 +1431,7 @@ function showNav(tab){
     renderSupleChecklist();
     renderAvaliacoesLista();
     renderEstoqueLista();
+    renderNotifBtn();
   }
   if(tab==='assist'){showPage('assist');initAssist()}
   if(tab==='hist'){showPage('hist');renderHist(_histTab)}
@@ -2723,6 +2733,75 @@ function renderEstoqueLista(){
   }).join('');
 }
 
+/* ════ NOTIFICAÇÕES LOCAIS — lembrete magnésio 22h ════ */
+function getNotifPref(){try{return localStorage.getItem('gym_notif_ativa')==='1'}catch(e){return false}}
+function setNotifPref(v){try{localStorage.setItem('gym_notif_ativa',v?'1':'0')}catch(e){}}
+
+async function pedirPermissaoNotificacao(){
+  if(!('Notification' in window)){
+    mostrarToast('Seu navegador não suporta notificações');
+    return false;
+  }
+  if(Notification.permission==='granted'){setNotifPref(true);agendarNotificacaoMagnesio();return true}
+  if(Notification.permission==='denied'){
+    mostrarToast('Notificações bloqueadas — ative nas configurações do Safari');
+    return false;
+  }
+  const perm=await Notification.requestPermission();
+  if(perm==='granted'){
+    setNotifPref(true);
+    agendarNotificacaoMagnesio();
+    mostrarToast('✅ Lembrete às 22h ativado!');
+    return true;
+  }
+  mostrarToast('Permissão não concedida');
+  return false;
+}
+
+function desativarNotificacao(){
+  setNotifPref(false);
+  if(_notifTimeout)clearTimeout(_notifTimeout);
+  mostrarToast('Lembrete desativado');
+}
+
+let _notifTimeout=null;
+function agendarNotificacaoMagnesio(){
+  if(!getNotifPref())return;
+  if(Notification.permission!=='granted')return;
+  clearTimeout(_notifTimeout);
+  const agora=new Date();
+  const alvo=new Date();
+  alvo.setHours(22,0,0,0);
+  if(alvo<=agora)alvo.setDate(alvo.getDate()+1); // se já passou das 22h hoje, agenda pra amanhã
+  const ms=alvo-agora;
+  _notifTimeout=setTimeout(()=>{
+    // só notifica se ainda não marcou o magnésio hoje
+    const d=loadSupleHoje();
+    if(!d.feitos.includes('magnesio')){
+      try{
+        new Notification('💊 Hora do Magnésio',{
+          body:'Não esqueça: Nutrends 5 Magnésio + Treonina, 2 cápsulas antes de dormir.',
+          icon:'',
+          tag:'magnesio-lembrete'
+        });
+      }catch(e){}
+    }
+    agendarNotificacaoMagnesio(); // reagenda pro dia seguinte
+  },ms);
+}
+
+function toggleNotificacao(){
+  if(getNotifPref()){desativarNotificacao()}
+  else{pedirPermissaoNotificacao()}
+  renderNotifBtn();
+}
+function renderNotifBtn(){
+  const el=document.getElementById('notif-btn-label');
+  if(!el)return;
+  const ativa=getNotifPref()&&'Notification' in window&&Notification.permission==='granted';
+  el.textContent=ativa?'🔔 Lembrete 22h ativado':'🔕 Ativar lembrete às 22h';
+}
+
 /* ════ TEMA ════ */
 function aplicarTema(tema){
   if(tema==='light'){
@@ -2755,6 +2834,11 @@ renderHome();
 
 atualizarStatusBackup();
 setInterval(atualizarStatusBackup,60000); // atualiza o texto a cada minuto
+
+// reagenda notificação do magnésio se já estava ativada
+if(getNotifPref()&&'Notification' in window&&Notification.permission==='granted'){
+  agendarNotificacaoMagnesio();
+}
 
 // sincroniza histórico com GitHub ao abrir (se tiver token)
 if(getToken()){
