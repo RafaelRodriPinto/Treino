@@ -248,6 +248,7 @@ body{display:flex;flex-direction:column;height:100%;max-height:100vh}
     <h1>Rafael Pinto</h1>
   </div>
   <div id="home-alerts"></div>
+  <div id="home-weekly-summary"></div>
   <div id="home-pending"></div>
   <div id="home-suggest"></div>
   <div class="section-title">Sessões concluídas</div>
@@ -379,12 +380,13 @@ body{display:flex;flex-direction:column;height:100%;max-height:100vh}
     </div>
 
     <!-- 1. TRACKER DE PESO SEMANAL -->
-    <div style="font-size:10px;font-family:var(--mono);letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:10px">📈 Peso Semanal</div>
+    <div style="font-size:10px;font-family:var(--mono);letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:10px">📈 Peso & Cintura</div>
     <div class="card" style="padding:14px;margin-bottom:14px">
       <div style="display:flex;gap:8px;margin-bottom:12px">
-        <input type="number" id="peso-input" placeholder="Peso atual (kg)" step="0.1" style="flex:1;background:var(--surface2);border:1px solid var(--border2);border-radius:10px;padding:10px 12px;font-size:14px;font-family:var(--mono);color:var(--text);outline:none">
-        <button onclick="registrarPeso()" style="background:linear-gradient(135deg,var(--accent),#5b4fcf);color:#fff;border:none;border-radius:10px;padding:10px 16px;font-size:13px;font-weight:500;cursor:pointer">Salvar</button>
+        <input type="number" id="peso-input" placeholder="Peso (kg)" step="0.1" style="flex:1;background:var(--surface2);border:1px solid var(--border2);border-radius:10px;padding:10px 12px;font-size:14px;font-family:var(--mono);color:var(--text);outline:none">
+        <input type="number" id="cintura-input" placeholder="Cintura (cm)" step="0.5" style="flex:1;background:var(--surface2);border:1px solid var(--border2);border-radius:10px;padding:10px 12px;font-size:14px;font-family:var(--mono);color:var(--text);outline:none">
       </div>
+      <button onclick="registrarPeso()" style="width:100%;background:linear-gradient(135deg,var(--accent),#5b4fcf);color:#fff;border:none;border-radius:10px;padding:10px 16px;font-size:13px;font-weight:500;cursor:pointer;margin-bottom:12px">Salvar medidas de hoje</button>
       <div id="peso-chart-wrap"></div>
       <div id="peso-lista" style="margin-top:8px"></div>
     </div>
@@ -400,6 +402,13 @@ body{display:flex;flex-direction:column;height:100%;max-height:100vh}
     <div style="font-size:10px;font-family:var(--mono);letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:10px">💊 Suplementos de Hoje</div>
     <div class="card" style="padding:14px;margin-bottom:14px">
       <div id="suple-checklist"></div>
+      <div style="font-size:11px;text-align:center;margin-top:10px;font-family:var(--mono)" id="suple-streak"></div>
+    </div>
+
+    <!-- ESTOQUE DE SUPLEMENTOS -->
+    <div style="font-size:10px;font-family:var(--mono);letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:10px">📦 Estoque de Suplementos</div>
+    <div class="card" style="padding:14px;margin-bottom:14px">
+      <div id="estoque-lista"></div>
     </div>
 
     <!-- 3. HISTÓRICO DE AVALIAÇÕES -->
@@ -913,6 +922,8 @@ function montarPayloadCompleto(treinos){
     hidratacao: loadHidratHoje(),
     suplementos: loadSupleHoje(),
     avaliacoes: loadAvaliacoes(),
+    diasCompletos: loadDiasCompletos(),
+    estoque: loadEstoque(),
   };
 }
 
@@ -920,7 +931,7 @@ function montarPayloadCompleto(treinos){
 function normalizarRemoto(remotoContent){
   if(Array.isArray(remotoContent)){
     // formato antigo — só treinos
-    return {treinos:remotoContent, peso:[], hidratacao:null, suplementos:null, avaliacoes:null};
+    return {treinos:remotoContent, peso:[], hidratacao:null, suplementos:null, avaliacoes:null, diasCompletos:null, estoque:null};
   }
   return {
     treinos: remotoContent.treinos||[],
@@ -928,6 +939,8 @@ function normalizarRemoto(remotoContent){
     hidratacao: remotoContent.hidratacao||null,
     suplementos: remotoContent.suplementos||null,
     avaliacoes: remotoContent.avaliacoes||null,
+    diasCompletos: remotoContent.diasCompletos||null,
+    estoque: remotoContent.estoque||null,
   };
 }
 
@@ -978,6 +991,21 @@ function sincronizarGitHub(){
     const mergedAvals=Object.values(avalsPorData).sort((a,b)=>new Date(a.data)-new Date(b.data));
     try{localStorage.setItem('gym_avaliacoes',JSON.stringify(mergedAvals))}catch(e){}
 
+    // dias completos (streaks): une os arrays de cada tipo (hidrat/suple)
+    const localDC=loadDiasCompletos();
+    const remotoDC=r.diasCompletos||{};
+    const mergedDC={};
+    ['hidrat','suple'].forEach(tipo=>{
+      const setDias=new Set([...(localDC[tipo]||[]),...(remotoDC[tipo]||[])]);
+      mergedDC[tipo]=Array.from(setDias).sort();
+    });
+    saveDiasCompletos(mergedDC);
+
+    // estoque: local tem prioridade (datas de início não mudam, mas se editar localmente prevalece)
+    const localEstoque=loadEstoque();
+    const mergedEstoque=(r.estoque&&r.estoque.length&&!localStorage.getItem('gym_estoque'))?r.estoque:localEstoque;
+    saveEstoque(mergedEstoque);
+
     // salva tudo no GitHub
     const payload=montarPayloadCompleto(mergedTreinos);
     const ok=await ghPut(payload, remoto.sha);
@@ -1006,6 +1034,8 @@ async function restaurarDoGitHub(){
   if(r.hidratacao)saveHidratHoje(r.hidratacao);
   if(r.suplementos)saveSupleHoje(r.suplementos);
   if(r.avaliacoes&&r.avaliacoes.length){try{localStorage.setItem('gym_avaliacoes',JSON.stringify(r.avaliacoes))}catch(e){}}
+  if(r.diasCompletos)saveDiasCompletos(r.diasCompletos);
+  if(r.estoque&&r.estoque.length)saveEstoque(r.estoque);
 
   mostrarToast('✓ '+r.treinos.length+' treinos e dados de saúde restaurados!');
   setTimeout(()=>{renderHome();renderHist(_histTab);if(document.getElementById('page-saude').classList.contains('active'))showNav('saude')},1500);
@@ -1132,18 +1162,20 @@ function loadPesoLog(){try{return JSON.parse(localStorage.getItem('gym_peso_log'
 function savePesoLog(log){try{localStorage.setItem('gym_peso_log',JSON.stringify(log))}catch(e){}}
 function registrarPeso(){
   const input=document.getElementById('peso-input');
+  const cinturaInput=document.getElementById('cintura-input');
   const valor=parseFloat(input.value);
+  const cintura=parseFloat(cinturaInput.value)||null;
   if(!valor||valor<30||valor>250){mostrarToast('Informe um peso válido');return}
   const log=loadPesoLog();
   const hoje=today();
   // se já registrou hoje, atualiza em vez de duplicar
   const idx=log.findIndex(p=>p.data===hoje);
-  if(idx>=0)log[idx].peso=valor;
-  else log.push({data:hoje,dataStr:todayStr(),peso:valor,ts:Date.now()});
+  if(idx>=0){log[idx].peso=valor;if(cintura)log[idx].cintura=cintura;}
+  else log.push({data:hoje,dataStr:todayStr(),peso:valor,cintura:cintura,ts:Date.now()});
   log.sort((a,b)=>a.ts-b.ts);
   savePesoLog(log);
-  input.value='';
-  mostrarToast('✓ Peso registrado: '+valor+'kg');
+  input.value='';cinturaInput.value='';
+  mostrarToast('✓ Registrado: '+valor+'kg'+(cintura?' · '+cintura+'cm':''));
   renderPesoTracker();
   if(getToken())sincronizarGitHub();
 }
@@ -1189,6 +1221,7 @@ function renderPesoTracker(){
       <span style="font-size:12px;color:var(--muted)">${p.dataStr}</span>
       <div style="display:flex;align-items:center;gap:8px">
         <span style="font-size:13px;font-family:var(--mono);font-weight:500">${p.peso}kg</span>
+        ${p.cintura?`<span style="font-size:11px;font-family:var(--mono);color:var(--amber)">${p.cintura}cm</span>`:''}
         <button onclick="excluirPeso(${p.ts})" style="background:none;border:none;color:var(--red);font-size:11px;cursor:pointer;padding:2px 6px">✕</button>
       </div>
     </div>`).join('');
@@ -1215,6 +1248,7 @@ function toggleHidrat(id){
   const i=d.feitos.indexOf(id);
   if(i>=0)d.feitos.splice(i,1);else d.feitos.push(id);
   saveHidratHoje(d);
+  if(d.feitos.length===HIDRAT_ETAPAS.length)registrarDiaCompleto('hidrat');
   renderHidratChecklist();
   if(getToken())sincronizarGitHub();
 }
@@ -1230,7 +1264,8 @@ function renderHidratChecklist(){
       <span style="font-size:13px;color:${feito?'var(--muted)':'var(--text)'};text-decoration:${feito?'line-through':'none'}">${e.icon} ${e.label}</span>
     </div>`;
   }).join('');
-  if(totalEl)totalEl.textContent=d.feitos.length+' / '+HIDRAT_ETAPAS.length+' etapas';
+  const streak=calcularStreak('hidrat');
+  if(totalEl)totalEl.innerHTML=d.feitos.length+' / '+HIDRAT_ETAPAS.length+' etapas'+(streak>0?` · <span style="color:var(--amber)">🔥 ${streak} dia${streak>1?'s':''}</span>`:'');
 }
 
 /* ════ 4. SUPLEMENTOS DO DIA ════ */
@@ -1252,11 +1287,13 @@ function toggleSuple(id){
   const i=d.feitos.indexOf(id);
   if(i>=0)d.feitos.splice(i,1);else d.feitos.push(id);
   saveSupleHoje(d);
+  if(d.feitos.length===SUPLE_ETAPAS.length)registrarDiaCompleto('suple');
   renderSupleChecklist();
   if(getToken())sincronizarGitHub();
 }
 function renderSupleChecklist(){
   const el=document.getElementById('suple-checklist');
+  const streakEl=document.getElementById('suple-streak');
   if(!el)return;
   const d=loadSupleHoje();
   el.innerHTML=SUPLE_ETAPAS.map(e=>{
@@ -1266,6 +1303,42 @@ function renderSupleChecklist(){
       <span style="font-size:13px;color:${feito?'var(--muted)':'var(--text)'};text-decoration:${feito?'line-through':'none'}">${e.icon} ${e.label}</span>
     </div>`;
   }).join('');
+  const streak=calcularStreak('suple');
+  if(streakEl)streakEl.innerHTML=streak>0?`<span style="color:var(--amber)">🔥 ${streak} dia${streak>1?'s':''} seguidos completando 100%</span>`:'';
+}
+
+/* ════ STREAKS — dias consecutivos com checklist 100% completo ════ */
+function loadDiasCompletos(){try{return JSON.parse(localStorage.getItem('gym_dias_completos')||'{}')}catch(e){return{}}}
+function saveDiasCompletos(d){try{localStorage.setItem('gym_dias_completos',JSON.stringify(d))}catch(e){}}
+function registrarDiaCompleto(tipo){
+  // tipo: 'hidrat' ou 'suple'
+  const dc=loadDiasCompletos();
+  if(!dc[tipo])dc[tipo]=[];
+  const hoje=today();
+  if(!dc[tipo].includes(hoje))dc[tipo].push(hoje);
+  saveDiasCompletos(dc);
+}
+function calcularStreak(tipo){
+  const dc=loadDiasCompletos();
+  const dias=(dc[tipo]||[]).slice().sort().reverse(); // mais recente primeiro
+  if(!dias.length)return 0;
+  let streak=0;
+  let cursor=new Date();
+  cursor.setHours(0,0,0,0);
+  for(let i=0;i<dias.length;i++){
+    const cursorStr=cursor.toISOString().slice(0,10);
+    if(dias[i]===cursorStr){
+      streak++;
+      cursor.setDate(cursor.getDate()-1);
+    }else if(streak===0&&i===0){
+      // hoje ainda não completou, mas verifica se ontem foi consecutivo
+      const ontem=new Date();ontem.setDate(ontem.getDate()-1);ontem.setHours(0,0,0,0);
+      const ontemStr=ontem.toISOString().slice(0,10);
+      if(dias[i]===ontemStr){streak++;cursor=ontem;cursor.setDate(cursor.getDate()-1)}
+      else break;
+    }else break;
+  }
+  return streak;
 }
 
 /* ════ 3. HISTÓRICO DE AVALIAÇÕES FÍSICAS ════ */
@@ -1348,6 +1421,7 @@ function showNav(tab){
     renderHidratChecklist();
     renderSupleChecklist();
     renderAvaliacoesLista();
+    renderEstoqueLista();
   }
   if(tab==='assist'){showPage('assist');initAssist()}
   if(tab==='hist'){showPage('hist');renderHist(_histTab)}
@@ -1360,6 +1434,70 @@ function clearAllTicks(){
 }
 
 /* ════ HOME ════ */
+function getSemanaAtualId(){
+  // identifica a semana atual no formato ano-numerosemana, baseado em segunda-feira
+  const d=new Date();
+  const onejan=new Date(d.getFullYear(),0,1);
+  const diasPassados=Math.floor((d-onejan)/86400000);
+  const semana=Math.ceil((diasPassados+onejan.getDay()+1)/7);
+  return d.getFullYear()+'-S'+semana;
+}
+function renderResumoSemanal(){
+  const el=document.getElementById('home-weekly-summary');
+  if(!el)return;
+  const semanaAtual=getSemanaAtualId();
+  let vistoSemana=null;
+  try{vistoSemana=localStorage.getItem('gym_resumo_visto')}catch(e){}
+  // só mostra se ainda não viu o resumo desta semana E hoje é segunda-feira
+  const hoje=new Date();
+  const ehSegunda=hoje.getDay()===1;
+  if(!ehSegunda||vistoSemana===semanaAtual){el.innerHTML='';return}
+
+  // calcula dados da semana passada (últimos 7 dias antes de hoje)
+  const hist=loadHist();
+  const seteDiasAtras=Date.now()-7*86400000;
+  const treinosSemana=hist.filter(h=>h.plano==='novo'&&h.inicio>=seteDiasAtras);
+  if(!treinosSemana.length){el.innerHTML='';return}
+
+  const totalTreinos=treinosSemana.length;
+  const totalKcal=treinosSemana.reduce((a,h)=>{
+    const vol=(h.series||[]).flat().filter(Boolean).reduce((s,x)=>s+(x.peso*(x.reps||0))+(x.peso2||0)*(x.reps2||0),0);
+    return a+estimarCaloriasTreino((h.fim||0)-(h.inicio||0),vol);
+  },0);
+
+  const pesoLog=loadPesoLog().filter(p=>new Date(p.data).getTime()>=seteDiasAtras-86400000);
+  let diffPesoHtml='';
+  if(pesoLog.length>=2){
+    const diff=+(pesoLog[pesoLog.length-1].peso-pesoLog[0].peso).toFixed(1);
+    diffPesoHtml=diff<0?`<span style="color:var(--green)">▼ ${Math.abs(diff)}kg</span>`:diff>0?`<span style="color:var(--red)">▲ ${diff}kg</span>`:'<span style="color:var(--muted)">estável</span>';
+  }
+
+  el.innerHTML=`<div class="card" style="background:linear-gradient(135deg,rgba(124,106,247,.1),rgba(62,207,142,.08));border:1px solid rgba(124,106,247,.2);padding:14px;margin-bottom:12px">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+      <span style="font-size:12px;font-family:var(--mono);letter-spacing:1px;color:var(--accent2);text-transform:uppercase">📊 Resumo da semana passada</span>
+      <button onclick="fecharResumoSemanal()" style="background:none;border:none;color:var(--muted);font-size:14px;cursor:pointer">✕</button>
+    </div>
+    <div style="display:flex;gap:8px">
+      <div style="flex:1;text-align:center;background:var(--surface);border-radius:10px;padding:10px">
+        <div style="font-size:18px;font-weight:600">${totalTreinos}</div>
+        <div style="font-size:10px;color:var(--muted)">treinos</div>
+      </div>
+      <div style="flex:1;text-align:center;background:var(--surface);border-radius:10px;padding:10px">
+        <div style="font-size:18px;font-weight:600">~${totalKcal}</div>
+        <div style="font-size:10px;color:var(--muted)">kcal total</div>
+      </div>
+      ${diffPesoHtml?`<div style="flex:1;text-align:center;background:var(--surface);border-radius:10px;padding:10px">
+        <div style="font-size:14px;font-weight:600">${diffPesoHtml}</div>
+        <div style="font-size:10px;color:var(--muted)">peso</div>
+      </div>`:''}
+    </div>
+  </div>`;
+}
+function fecharResumoSemanal(){
+  try{localStorage.setItem('gym_resumo_visto',getSemanaAtualId())}catch(e){}
+  document.getElementById('home-weekly-summary').innerHTML='';
+}
+
 function renderHome(){
   // Alertas de prazo — avisa a partir de 09/05
   const dias=diasAtePrazo();
@@ -1379,6 +1517,7 @@ function renderHome(){
     }
   }
   document.getElementById('home-alerts').innerHTML=alertHtml;
+  renderResumoSemanal();
 
   // Treino pendente (não concluído hoje)
   const pend=load();
@@ -1557,8 +1696,11 @@ function renderSeriesDone(){
   if(!done.length){document.getElementById('series-done-wrap').innerHTML='';return}
   const rows=done.map((s,i)=>{
     if(ex.tipo==='conjugado'){
-      return`<div class="serie-row" style="flex-direction:column;align-items:flex-start;gap:4px">
-        <span class="s-label">S${i+1}</span>
+      return`<div class="serie-row" style="flex-direction:column;align-items:flex-start;gap:4px;cursor:pointer" onclick="editarSerie(${i})">
+        <div style="display:flex;justify-content:space-between;width:100%;align-items:center">
+          <span class="s-label">S${i+1}</span>
+          <span style="font-size:10px;color:var(--muted)">✎ editar</span>
+        </div>
         <div style="display:flex;gap:4px;flex-wrap:wrap">
           <span style="font-size:10px;color:var(--accent2);font-family:var(--mono)">${ex.nome.split(' ')[0]}:</span>
           <span class="pill">${s.peso}kg</span><span class="pill">${s.reps} reps</span><span class="pill g">${s.tempo}s</span>
@@ -1569,22 +1711,81 @@ function renderSeriesDone(){
         </div>
       </div>`;
     }
-    return`<div class="serie-row">
+    return`<div class="serie-row" style="cursor:pointer" onclick="editarSerie(${i})">
       <span class="s-label">S${i+1}</span>
       <div class="s-data">
         <span class="pill">${s.peso}kg</span>
         <span class="pill">${ex.isTime?s.tempo+'s':s.reps+' reps'}</span>
         <span class="pill g">${s.tempo}s</span>
+        <span style="font-size:10px;color:var(--muted);margin-left:4px">✎</span>
       </div>
     </div>`;
   }).join('');
   document.getElementById('series-done-wrap').innerHTML=`<div class="series-done">${rows}</div>`;
 }
 
+/* Edição de série já concluída — abre modal simples para corrigir peso/reps */
+function editarSerie(idx){
+  const ex=TREINOS[E.tipo].exercicios[E.exIdx];
+  const s=E.series[E.exIdx][idx];
+  if(!s)return;
+  const existing=document.getElementById('modal-edit-serie');if(existing)existing.remove();
+  const div=document.createElement('div');
+  div.id='modal-edit-serie';
+  div.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:75;display:flex;flex-direction:column;justify-content:flex-end;padding:20px';
+
+  let camposHtml='';
+  if(ex.tipo==='conjugado'){
+    camposHtml=`
+      <div style="font-size:10px;font-family:var(--mono);color:var(--accent2);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px">① ${ex.nome}</div>
+      <div class="input-grid" style="margin-bottom:10px">
+        <div class="field"><label>Peso (kg)</label><input type="number" id="edit-peso" step="0.5" value="${s.peso}"></div>
+        <div class="field"><label>Repetições</label><input type="number" id="edit-reps" step="1" value="${s.reps}"></div>
+      </div>
+      <div style="font-size:10px;font-family:var(--mono);color:var(--amber);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px">② ${ex.nome2}</div>
+      <div class="input-grid" style="margin-bottom:10px">
+        <div class="field"><label>Peso (kg)</label><input type="number" id="edit-peso2" step="0.5" value="${s.peso2||0}"></div>
+        <div class="field"><label>${ex.isTime2?'Meta (seg)':'Repetições'}</label><input type="number" id="edit-reps2" step="1" value="${s.reps2||0}"></div>
+      </div>`;
+  }else{
+    camposHtml=`<div class="input-grid" style="margin-bottom:10px">
+      <div class="field"><label>Peso (kg)</label><input type="number" id="edit-peso" step="0.5" value="${s.peso}"></div>
+      <div class="field"><label>${ex.isTime?'Meta (seg)':'Repetições'}</label><input type="number" id="edit-reps" step="1" value="${s.reps}"></div>
+    </div>`;
+  }
+
+  div.innerHTML=`
+    <div style="background:var(--surface);border-radius:24px;padding:20px">
+      <div style="font-size:11px;font-family:var(--mono);letter-spacing:2px;color:var(--accent2);text-transform:uppercase;margin-bottom:12px">✎ Corrigir Série ${idx+1}</div>
+      ${camposHtml}
+      <button onclick="salvarEdicaoSerie(${idx})" style="width:100%;padding:14px;border-radius:14px;background:linear-gradient(135deg,var(--accent),#5b4fcf);color:#fff;font-size:14px;font-weight:500;border:none;cursor:pointer;margin-bottom:8px">Salvar correção</button>
+      <button onclick="document.getElementById('modal-edit-serie').remove()" style="width:100%;padding:12px;border-radius:14px;background:transparent;border:1px solid var(--border2);color:var(--muted);font-size:13px;cursor:pointer">Cancelar</button>
+    </div>`;
+  document.body.appendChild(div);
+}
+function salvarEdicaoSerie(idx){
+  const ex=TREINOS[E.tipo].exercicios[E.exIdx];
+  const s=E.series[E.exIdx][idx];
+  const peso=parseFloat(document.getElementById('edit-peso').value)||0;
+  const reps=parseInt(document.getElementById('edit-reps').value)||0;
+  s.peso=peso;s.reps=reps;
+  if(ex.tipo==='conjugado'){
+    s.peso2=parseFloat(document.getElementById('edit-peso2').value)||0;
+    s.reps2=parseInt(document.getElementById('edit-reps2').value)||0;
+  }
+  save();
+  document.getElementById('modal-edit-serie').remove();
+  renderSeriesDone();
+  mostrarToast('✓ Série corrigida');
+  if(getToken())sincronizarGitHub();
+}
+
 function renderActionArea(){
   const ex=TREINOS[E.tipo].exercicios[E.exIdx];
   const up=getUltimoPeso();
   const up2=getUltimoPeso2();
+  const ur=getUltimaReps();
+  const ur2=getUltimaReps2();
   const jaRodando=!!E.serieStartTs;
   const repsLabel=ex.isTime?'Meta (seg)':'Repetições';
   const repsPlaceholder=ex.isTime?ex.reps:'0';
@@ -1597,20 +1798,20 @@ function renderActionArea(){
         <div style="font-size:10px;font-family:var(--mono);color:var(--accent2);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px">① ${ex.nome}</div>
         <div class="input-grid">
           <div class="field"><label>Peso (kg)</label><input type="number" id="inp-peso" min="0" step="0.5" inputmode="decimal" placeholder="0" value="${up}"></div>
-          <div class="field"><label>Repetições</label><input type="number" id="inp-reps" min="1" step="1" inputmode="numeric" placeholder="${ex.reps||'0'}"></div>
+          <div class="field"><label>Repetições</label><input type="number" id="inp-reps" min="1" step="1" inputmode="numeric" placeholder="${ex.reps||'0'}" value="${ur}"></div>
         </div>
       </div>
       <div style="background:var(--surface2);border-radius:12px;padding:10px;margin-bottom:8px">
         <div style="font-size:10px;font-family:var(--mono);color:var(--amber);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px">② ${ex.nome2}</div>
         <div class="input-grid">
           <div class="field"><label>Peso (kg)</label><input type="number" id="inp-peso2" min="0" step="0.5" inputmode="decimal" placeholder="0" value="${up2}"></div>
-          <div class="field"><label>${ex.isTime2?'Meta (seg)':'Repetições'}</label><input type="number" id="inp-reps2" min="1" step="1" inputmode="numeric" placeholder="${ex.reps2||ex.reps||'0'}"></div>
+          <div class="field"><label>${ex.isTime2?'Meta (seg)':'Repetições'}</label><input type="number" id="inp-reps2" min="1" step="1" inputmode="numeric" placeholder="${ex.reps2||ex.reps||'0'}" value="${ur2}"></div>
         </div>
       </div>`;
   }else{
     inputsHtml=`<div class="input-grid">
       <div class="field"><label>Peso (kg)</label><input type="number" id="inp-peso" min="0" step="0.5" inputmode="decimal" placeholder="0" value="${up}"></div>
-      <div class="field"><label>${repsLabel}</label><input type="number" id="inp-reps" min="1" step="1" inputmode="numeric" placeholder="${repsPlaceholder}"></div>
+      <div class="field"><label>${repsLabel}</label><input type="number" id="inp-reps" min="1" step="1" inputmode="numeric" placeholder="${repsPlaceholder}" value="${ur}"></div>
     </div>`;
   }
 
@@ -1649,6 +1850,15 @@ function getUltimoPeso2(){
       break;
     }
   }
+  return '';
+}
+/* Auto-preenche reps com base na série anterior DESTE treino (não busca histórico — só dentro da sessão atual) */
+function getUltimaReps(){
+  for(let i=E.serieIdxs[E.exIdx]-1;i>=0;i--){const s=E.series[E.exIdx][i];if(s&&s.reps)return s.reps}
+  return '';
+}
+function getUltimaReps2(){
+  for(let i=E.serieIdxs[E.exIdx]-1;i>=0;i--){const s=E.series[E.exIdx][i];if(s&&s.reps2)return s.reps2}
   return '';
 }
 
@@ -2006,18 +2216,28 @@ function buildEsteiraHtml(log){
   return html;
 }
 
+function estimarCaloriasTreino(durMs,vol){
+  // estimativa simples: ~6 kcal/min de treino de força moderado-intenso + ajuste pelo volume
+  const durMin=durMs/60000;
+  const base=durMin*6; // ~6kcal/min é uma média para treino de força com pouco descanso
+  const ajusteVolume=vol/100; // cada 100kg×rep de volume adiciona ~1kcal extra (ajuste fino)
+  return Math.round(base+ajusteVolume);
+}
+
 function renderFinished(){
   const exs=TREINOS[E.tipo].exercicios;
   const dur=E.fim-E.inicio;
   const totalS=E.series.flat().filter(Boolean).length;
   const vol=E.series.flat().filter(Boolean).reduce((a,s)=>a+(s.peso*(s.reps||0))+(s.peso2||0)*(s.reps2||0),0);
   const sess=loadSessoes();
+  const kcal=estimarCaloriasTreino(dur,vol);
   document.getElementById('fin-sub').textContent='Treino '+E.tipo+' · '+todayStr();
   document.getElementById('fin-stats').innerHTML=`
     <div class="stat-card"><div class="stat-num" style="font-size:19px">${fmtHMS(dur)}</div><div class="stat-label">Duração</div></div>
     <div class="stat-card"><div class="stat-num">${totalS}</div><div class="stat-label">Séries</div></div>
     <div class="stat-card"><div class="stat-num">${Math.round(vol)}</div><div class="stat-label">Volume kg×rep</div></div>
-    <div class="stat-card"><div class="stat-num">${sess[E.tipo]}/${META_SESSOES}</div><div class="stat-label">Sessões ${E.tipo}</div></div>`;
+    <div class="stat-card"><div class="stat-num">${sess[E.tipo]}/${META_SESSOES}</div><div class="stat-label">Sessões ${E.tipo}</div></div>
+    <div class="stat-card"><div class="stat-num">~${kcal}</div><div class="stat-label">Kcal estimadas</div></div>`;
   let html='';
   // esteiras primeiro
   html+=buildEsteiraHtml(E.esteiraLog||[]);
@@ -2456,6 +2676,51 @@ function limparApiKey(){
   assistMsgs=[];
   initAssist();
   mostrarToast('Chave removida');
+}
+
+/* ════ ESTOQUE DE SUPLEMENTOS — aviso de quando vai acabar ════ */
+function loadEstoque(){
+  try{
+    const e=JSON.parse(localStorage.getItem('gym_estoque')||'null');
+    if(e)return e;
+  }catch(err){}
+  // seed inicial baseado no que você já tem
+  return[
+    {id:'d3k2',nome:'Vitamina D3+K2 Ecomev',inicio:'2026-06-01',duracaoDias:120,dosesPorDia:1},
+    {id:'magnesio',nome:'Nutrends 5 Magnésio + Treonina',inicio:'2026-06-17',duracaoDias:30,dosesPorDia:2},
+    {id:'creatina',nome:'Creatina monohidratada',inicio:null,duracaoDias:null,dosesPorDia:1},
+  ];
+}
+function saveEstoque(e){try{localStorage.setItem('gym_estoque',JSON.stringify(e))}catch(err){}}
+function diasRestantesEstoque(item){
+  if(!item.inicio||!item.duracaoDias)return null;
+  const inicio=new Date(item.inicio);
+  const fim=new Date(inicio);fim.setDate(fim.getDate()+item.duracaoDias);
+  const hoje=new Date();hoje.setHours(0,0,0,0);
+  const diff=Math.ceil((fim-hoje)/86400000);
+  return diff;
+}
+function renderEstoqueLista(){
+  const el=document.getElementById('estoque-lista');
+  if(!el)return;
+  const estoque=loadEstoque();
+  el.innerHTML=estoque.map(item=>{
+    const dias=diasRestantesEstoque(item);
+    let statusHtml='';
+    if(dias===null){
+      statusHtml='<span style="font-size:11px;color:var(--muted)">sem data definida</span>';
+    }else if(dias<=0){
+      statusHtml='<span class="tag tag-red">acabou! repor</span>';
+    }else if(dias<=10){
+      statusHtml=`<span class="tag" style="background:var(--amber2);color:var(--amber)">⚠️ ${dias} dias restantes</span>`;
+    }else{
+      statusHtml=`<span style="font-size:11px;color:var(--green)">${dias} dias restantes</span>`;
+    }
+    return`<div style="display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid var(--border)">
+      <span style="font-size:13px">${item.nome}</span>
+      ${statusHtml}
+    </div>`;
+  }).join('');
 }
 
 /* ════ TEMA ════ */
