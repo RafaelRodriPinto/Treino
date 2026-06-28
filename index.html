@@ -1463,10 +1463,16 @@ function renderResumoSemanal(){
   const ehSegunda=hoje.getDay()===1;
   if(!ehSegunda||vistoSemana===semanaAtual){el.innerHTML='';return}
 
-  // calcula dados da semana passada (últimos 7 dias antes de hoje)
+  // calcula o intervalo da semana passada: segunda a sexta (ignora sábado e domingo)
+  // hoje é segunda — a "semana passada" começou há 7 dias (segunda anterior) e terminou há 3 dias (sexta anterior)
+  const segundaPassada=new Date(hoje);segundaPassada.setDate(hoje.getDate()-7);segundaPassada.setHours(0,0,0,0);
+  const sextaPassada=new Date(hoje);sextaPassada.setDate(hoje.getDate()-3);sextaPassada.setHours(23,59,59,999);
+  const inicioMs=segundaPassada.getTime();
+  const fimMs=sextaPassada.getTime();
+
+  // calcula dados da semana passada (somente segunda a sexta — dias de treino)
   const hist=loadHist();
-  const seteDiasAtras=Date.now()-7*86400000;
-  const treinosSemana=hist.filter(h=>h.plano==='novo'&&h.inicio>=seteDiasAtras);
+  const treinosSemana=hist.filter(h=>h.plano==='novo'&&h.inicio>=inicioMs&&h.inicio<=fimMs);
   if(!treinosSemana.length){el.innerHTML='';return}
 
   const totalTreinos=treinosSemana.length;
@@ -1475,21 +1481,25 @@ function renderResumoSemanal(){
     return a+estimarCaloriasTreino((h.fim||0)-(h.inicio||0),vol);
   },0);
 
-  const pesoLog=loadPesoLog().filter(p=>new Date(p.data).getTime()>=seteDiasAtras-86400000);
+  // peso: compara o registro mais próximo do início da semana (seg) com o mais próximo do fim (sex)
+  const pesoLogSemana=loadPesoLog().filter(p=>{
+    const t=new Date(p.data).getTime();
+    return t>=inicioMs&&t<=fimMs;
+  });
   let diffPesoHtml='';
-  if(pesoLog.length>=2){
-    const diff=+(pesoLog[pesoLog.length-1].peso-pesoLog[0].peso).toFixed(1);
+  if(pesoLogSemana.length>=2){
+    const diff=+(pesoLogSemana[pesoLogSemana.length-1].peso-pesoLogSemana[0].peso).toFixed(1);
     diffPesoHtml=diff<0?`<span style="color:var(--green)">▼ ${Math.abs(diff)}kg</span>`:diff>0?`<span style="color:var(--red)">▲ ${diff}kg</span>`:'<span style="color:var(--muted)">estável</span>';
   }
 
   el.innerHTML=`<div class="card" style="background:linear-gradient(135deg,rgba(124,106,247,.1),rgba(62,207,142,.08));border:1px solid rgba(124,106,247,.2);padding:14px;margin-bottom:12px">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
-      <span style="font-size:12px;font-family:var(--mono);letter-spacing:1px;color:var(--accent2);text-transform:uppercase">📊 Resumo da semana passada</span>
+      <span style="font-size:12px;font-family:var(--mono);letter-spacing:1px;color:var(--accent2);text-transform:uppercase">📊 Resumo da semana passada (seg-sex)</span>
       <button onclick="fecharResumoSemanal()" style="background:none;border:none;color:var(--muted);font-size:14px;cursor:pointer">✕</button>
     </div>
     <div style="display:flex;gap:8px">
       <div style="flex:1;text-align:center;background:var(--surface);border-radius:10px;padding:10px">
-        <div style="font-size:18px;font-weight:600">${totalTreinos}</div>
+        <div style="font-size:18px;font-weight:600">${totalTreinos}/5</div>
         <div style="font-size:10px;color:var(--muted)">treinos</div>
       </div>
       <div style="flex:1;text-align:center;background:var(--surface);border-radius:10px;padding:10px">
