@@ -6793,12 +6793,16 @@
   "hidratacao": {
     "data": "Mon Jun 29 2026",
     "feitos": [
-      "acordar"
+      "acordar",
+      "pretreino"
     ]
   },
   "suplementos": {
     "data": "Mon Jun 29 2026",
-    "feitos": []
+    "feitos": [
+      "pretreino_mix",
+      "d3k2"
+    ]
   },
   "avaliacoes": [
     {
