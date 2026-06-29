@@ -6791,17 +6791,12 @@
     }
   ],
   "hidratacao": {
-    "data": "Sun Jun 28 2026",
-    "feitos": [
-      "pretreino"
-    ]
+    "data": "Mon Jun 29 2026",
+    "feitos": []
   },
   "suplementos": {
-    "data": "Sun Jun 28 2026",
-    "feitos": [
-      "pretreino_mix",
-      "d3k2"
-    ]
+    "data": "Mon Jun 29 2026",
+    "feitos": []
   },
   "avaliacoes": [
     {
@@ -6828,7 +6823,8 @@
     "hidrat": [],
     "suple": [
       "Fri Jun 26 2026",
-      "Sat Jun 27 2026"
+      "Sat Jun 27 2026",
+      "Sun Jun 28 2026"
     ]
   },
   "estoque": [
