@@ -6801,7 +6801,8 @@
     "data": "Mon Jun 29 2026",
     "feitos": [
       "pretreino_mix",
-      "d3k2"
+      "d3k2",
+      "magnesio"
     ]
   },
   "avaliacoes": [
@@ -6829,6 +6830,7 @@
     "hidrat": [],
     "suple": [
       "Fri Jun 26 2026",
+      "Mon Jun 29 2026",
       "Sat Jun 27 2026",
       "Sun Jun 28 2026"
     ]
