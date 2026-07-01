@@ -6990,21 +6990,12 @@
     }
   ],
   "hidratacao": {
-    "data": "Tue Jun 30 2026",
-    "feitos": [
-      "acordar",
-      "pretreino",
-      "treino",
-      "postreino"
-    ]
+    "data": "Wed Jul 01 2026",
+    "feitos": []
   },
   "suplementos": {
-    "data": "Tue Jun 30 2026",
-    "feitos": [
-      "pretreino_mix",
-      "d3k2",
-      "magnesio"
-    ]
+    "data": "Wed Jul 01 2026",
+    "feitos": []
   },
   "avaliacoes": [
     {
