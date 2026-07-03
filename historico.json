@@ -1,6 +1,189 @@
 {
   "treinos": [
     {
+      "tipo": "C",
+      "plano": "novo",
+      "data": "Fri Jul 03 2026",
+      "dataStr": "03/07/26",
+      "inicio": 1783076458142,
+      "fim": 1783082504293,
+      "exNames": [
+        "Esteira (aquecimento)",
+        "Cadeira extensora",
+        "Leg press 45°",
+        "Hack articulado",
+        "Mesa flexora",
+        "Sky-flexão de joelho máquina",
+        "Agachamento sumô c/ halter",
+        "Cadeira abdutora",
+        "Cadeira adutora",
+        "Panturrilha Banco",
+        "Esteira (finalização)"
+      ],
+      "series": [
+        [],
+        [
+          {
+            "peso": 59,
+            "reps": 12,
+            "tempo": 53
+          },
+          {
+            "peso": 59,
+            "reps": 10,
+            "tempo": 22
+          },
+          {
+            "peso": 59,
+            "reps": 10,
+            "tempo": 36
+          }
+        ],
+        [
+          {
+            "peso": 50,
+            "reps": 10,
+            "tempo": 37
+          },
+          {
+            "peso": 50,
+            "reps": 10,
+            "tempo": 36
+          },
+          {
+            "peso": 50,
+            "reps": 10,
+            "tempo": 42
+          }
+        ],
+        [
+          {
+            "peso": 40,
+            "reps": 12,
+            "tempo": 55
+          },
+          {
+            "peso": 40,
+            "reps": 12,
+            "tempo": 47
+          },
+          {
+            "peso": 40,
+            "reps": 12,
+            "tempo": 60
+          }
+        ],
+        [
+          {
+            "peso": 59,
+            "reps": 12,
+            "tempo": 44
+          },
+          {
+            "peso": 59,
+            "reps": 12,
+            "tempo": 53
+          },
+          {
+            "peso": 59,
+            "reps": 12,
+            "tempo": 43
+          }
+        ],
+        [
+          {
+            "peso": 7,
+            "reps": 10,
+            "tempo": 60
+          },
+          {
+            "peso": 7,
+            "reps": 10,
+            "tempo": 54
+          },
+          {
+            "peso": 7,
+            "reps": 10,
+            "tempo": 56
+          }
+        ],
+        [
+          null,
+          null,
+          null
+        ],
+        [
+          {
+            "peso": 66,
+            "reps": 10,
+            "tempo": 24
+          },
+          {
+            "peso": 66,
+            "reps": 10,
+            "tempo": 29
+          },
+          {
+            "peso": 66,
+            "reps": 10,
+            "tempo": 28
+          }
+        ],
+        [
+          {
+            "peso": 59,
+            "reps": 15,
+            "tempo": 44
+          },
+          {
+            "peso": 59,
+            "reps": 15,
+            "tempo": 44
+          },
+          {
+            "peso": 59,
+            "reps": 15,
+            "tempo": 39
+          }
+        ],
+        [
+          {
+            "peso": 40,
+            "reps": 12,
+            "tempo": 25
+          },
+          {
+            "peso": 40,
+            "reps": 12,
+            "tempo": 25
+          },
+          {
+            "peso": 40,
+            "reps": 12,
+            "tempo": 33
+          }
+        ],
+        []
+      ],
+      "pulados": [
+        6
+      ],
+      "esteiraLog": [
+        {
+          "tipo": "esteira_inicio",
+          "status": "concluida",
+          "duracaoMeta": 600,
+          "duracaoFeita": 600
+        },
+        {
+          "tipo": "esteira_fim",
+          "status": "concluida",
+          "duracaoMeta": 1200,
+          "duracaoFeita": 1200
+        }
+      ]
+    },
+    {
       "tipo": "B",
       "plano": "novo",
       "data": "Thu Jul 02 2026",
@@ -7334,22 +7517,12 @@
     }
   ],
   "hidratacao": {
-    "data": "Thu Jul 02 2026",
-    "feitos": [
-      "acordar",
-      "pretreino",
-      "treino",
-      "postreino",
-      "dia"
-    ]
+    "data": "Fri Jul 03 2026",
+    "feitos": []
   },
   "suplementos": {
-    "data": "Thu Jul 02 2026",
-    "feitos": [
-      "pretreino_mix",
-      "d3k2",
-      "magnesio"
-    ]
+    "data": "Fri Jul 03 2026",
+    "feitos": []
   },
   "avaliacoes": [
     {
