@@ -2246,12 +2246,16 @@ function terminarEsteira(){
 function finalizarTreino(){
   clearAllTicks();E.finalizado=true;E.fim=Date.now();save();
   addSessao(E.tipo);
+  const dur=E.fim-E.inicio;
+  const vol=E.series.flat().filter(Boolean).reduce((a,s)=>a+(s.peso*(s.reps||0))+(s.peso2||0)*(s.reps2||0),0);
+  const kcal=estimarCaloriasTreino(dur,vol);
   saveHist({
     tipo:E.tipo,plano:'novo',data:today(),dataStr:todayStr(),
     inicio:E.inicio,fim:E.fim,
     exNames:TREINOS[E.tipo].exercicios.map(ex=>ex.nome||exNome(ex)),
     series:E.series,pulados:E.pulados||[],
-    esteiraLog:E.esteiraLog||[]
+    esteiraLog:E.esteiraLog||[],
+    kcal:kcal
   });
   showPage('finished');renderFinished();
 }
@@ -2540,11 +2544,22 @@ function buildHistCard(h){
   const planoTag=h.plano==='novo'
     ?`<span class="tag tag-blue" style="margin-left:6px">atual</span>`
     :`<span class="tag tag-muted" style="margin-left:6px">anterior</span>`;
+  // calorias: usa o valor salvo se existir, ou recalcula para treinos antigos
+  let kcalHtml='';
+  if(h.kcal){
+    kcalHtml=`<span style="font-size:11px;font-family:var(--mono);color:var(--amber)">~${h.kcal} kcal</span>`;
+  }else if(h.series&&h.fim&&h.inicio){
+    const vol=(h.series||[]).flat().filter(Boolean).reduce((a,s)=>a+(s.peso*(s.reps||0))+(s.peso2||0)*(s.reps2||0),0);
+    const kcalCalc=estimarCaloriasTreino(h.fim-h.inicio,vol);
+    kcalHtml=`<span style="font-size:11px;font-family:var(--mono);color:var(--amber)">~${kcalCalc} kcal</span>`;
+  }
   return`<div class="card">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
       <span style="font-size:15px;font-weight:500">Treino ${h.tipo}${planoTag}</span>
       <span style="font-size:11px;font-family:var(--mono);color:var(--muted)">${h.dataStr||'?'} · ${dur}</span>
-    </div>${exHtml}
+    </div>
+    ${kcalHtml?`<div style="margin-bottom:8px">${kcalHtml}</div>`:''}
+    ${exHtml}
   </div>`;
 }
 
