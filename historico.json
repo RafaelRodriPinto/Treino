@@ -7517,22 +7517,14 @@
     }
   ],
   "hidratacao": {
-    "data": "Fri Jul 03 2026",
+    "data": "Sat Jul 04 2026",
     "feitos": [
-      "acordar",
-      "pretreino",
-      "treino",
-      "postreino",
-      "dia"
+      "acordar"
     ]
   },
   "suplementos": {
-    "data": "Fri Jul 03 2026",
-    "feitos": [
-      "pretreino_mix",
-      "d3k2",
-      "magnesio"
-    ]
+    "data": "Sat Jul 04 2026",
+    "feitos": []
   },
   "avaliacoes": [
     {
