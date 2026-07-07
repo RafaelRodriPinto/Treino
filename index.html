@@ -312,6 +312,7 @@ body{display:flex;flex-direction:column;height:100%;max-height:100vh}
       <button class="hist-tab active" id="htab-atual" onclick="switchHistTab('atual')">Atual</button>
       <button class="hist-tab" id="htab-antigo" onclick="switchHistTab('antigo')">Anteriores</button>
       <button class="hist-tab" id="htab-evol" onclick="switchHistTab('evol')">Evolução</button>
+      <button class="hist-tab" id="htab-semanas" onclick="switchHistTab('semanas')">Semanas</button>
       <button class="hist-tab" id="htab-treinos" onclick="switchHistTab('treinos')">Treinos</button>
     </div>
     <div id="hist-content"></div>
@@ -697,8 +698,8 @@ body{display:flex;flex-direction:column;height:100%;max-height:100vh}
 /* ════════════════════════════════════════════
    DADOS DOS TREINOS
 ════════════════════════════════════════════ */
-const PRAZO = new Date('2026-07-09T23:59:59');
-const META_SESSOES = 11;
+const PRAZO = new Date('2026-08-11T23:59:59');
+const META_SESSOES = 16;
 const INICIO_PLANO = new Date('2026-05-09T00:00:00');
 
 // tipo: 'esteira_inicio'|'esteira_fim'|'normal'|'conjugado'
@@ -934,14 +935,13 @@ function montarPayloadCompleto(treinos){
     avaliacoes: loadAvaliacoes(),
     diasCompletos: loadDiasCompletos(),
     estoque: loadEstoque(),
+    resumosSemanais: loadResumosSemana(),
   };
 }
 
-/* Lê o conteúdo remoto seja no formato antigo (array puro de treinos) ou novo (objeto completo) */
 function normalizarRemoto(remotoContent){
   if(Array.isArray(remotoContent)){
-    // formato antigo — só treinos
-    return {treinos:remotoContent, peso:[], hidratacao:null, suplementos:null, avaliacoes:null, diasCompletos:null, estoque:null};
+    return {treinos:remotoContent,peso:[],hidratacao:null,suplementos:null,avaliacoes:null,diasCompletos:null,estoque:null,resumosSemanais:[]};
   }
   return {
     treinos: remotoContent.treinos||[],
@@ -951,6 +951,7 @@ function normalizarRemoto(remotoContent){
     avaliacoes: remotoContent.avaliacoes||null,
     diasCompletos: remotoContent.diasCompletos||null,
     estoque: remotoContent.estoque||null,
+    resumosSemanais: remotoContent.resumosSemanais||[],
   };
 }
 
@@ -1011,10 +1012,17 @@ function sincronizarGitHub(){
     });
     saveDiasCompletos(mergedDC);
 
-    // estoque: local tem prioridade (datas de início não mudam, mas se editar localmente prevalece)
+    // estoque: local tem prioridade
     const localEstoque=loadEstoque();
     const mergedEstoque=(r.estoque&&r.estoque.length&&!localStorage.getItem('gym_estoque'))?r.estoque:localEstoque;
     saveEstoque(mergedEstoque);
+
+    // resumos semanais: une por semId (identificador único da semana)
+    const localResumosMap={};
+    loadResumosSemana().forEach(x=>localResumosMap[x.semId]=x);
+    (r.resumosSemanais||[]).forEach(x=>{if(!localResumosMap[x.semId])localResumosMap[x.semId]=x;});
+    const mergedResumos=Object.values(localResumosMap).sort((a,b)=>b.ts-a.ts).slice(0,52);
+    saveResumosSemana(mergedResumos);
 
     // salva tudo no GitHub
     const payload=montarPayloadCompleto(mergedTreinos);
@@ -1046,6 +1054,7 @@ async function restaurarDoGitHub(){
   if(r.avaliacoes&&r.avaliacoes.length){try{localStorage.setItem('gym_avaliacoes',JSON.stringify(r.avaliacoes))}catch(e){}}
   if(r.diasCompletos)saveDiasCompletos(r.diasCompletos);
   if(r.estoque&&r.estoque.length)saveEstoque(r.estoque);
+  if(r.resumosSemanais&&r.resumosSemanais.length)saveResumosSemana(r.resumosSemanais);
 
   mostrarToast('✓ '+r.treinos.length+' treinos e dados de saúde restaurados!');
   setTimeout(()=>{renderHome();renderHist(_histTab);if(document.getElementById('page-saude').classList.contains('active'))showNav('saude')},1500);
@@ -1453,44 +1462,50 @@ function getSemanaAtualId(){
   const semana=Math.ceil((diasPassados+onejan.getDay()+1)/7);
   return d.getFullYear()+'-S'+semana;
 }
+function calcularDadosSemanais(segundaMs, sextaMs){
+  const hist=loadHist();
+  const treinosSemana=hist.filter(h=>h.plano==='novo'&&h.inicio>=segundaMs&&h.inicio<=sextaMs);
+  const totalTreinos=treinosSemana.length;
+  const totalKcal=treinosSemana.reduce((a,h)=>{
+    const kcalSalvo=h.kcal||0;
+    if(kcalSalvo)return a+kcalSalvo;
+    const vol=(h.series||[]).flat().filter(Boolean).reduce((s,x)=>s+(x.peso*(x.reps||0))+(x.peso2||0)*(x.reps2||0),0);
+    return a+estimarCaloriasTreino((h.fim||0)-(h.inicio||0),vol);
+  },0);
+  const pesoLogSemana=loadPesoLog().filter(p=>{
+    const t=new Date(p.data).getTime();
+    return t>=segundaMs&&t<=sextaMs;
+  });
+  let diffPeso=null;
+  if(pesoLogSemana.length>=2){
+    diffPeso=+(pesoLogSemana[pesoLogSemana.length-1].peso-pesoLogSemana[0].peso).toFixed(1);
+  }
+  const pesoFinal=pesoLogSemana.length?pesoLogSemana[pesoLogSemana.length-1].peso:null;
+  return {totalTreinos,totalKcal,diffPeso,pesoFinal};
+}
+
+function loadResumosSemana(){try{return JSON.parse(localStorage.getItem('gym_resumos_semanais')||'[]')}catch(e){return[]}}
+function saveResumosSemana(r){try{localStorage.setItem('gym_resumos_semanais',JSON.stringify(r))}catch(e){}}
+
 function renderResumoSemanal(){
   const el=document.getElementById('home-weekly-summary');
   if(!el)return;
   const semanaAtual=getSemanaAtualId();
   let vistoSemana=null;
   try{vistoSemana=localStorage.getItem('gym_resumo_visto')}catch(e){}
-  // só mostra se ainda não viu o resumo desta semana E hoje é segunda-feira
   const hoje=new Date();
   const ehSegunda=hoje.getDay()===1;
   if(!ehSegunda||vistoSemana===semanaAtual){el.innerHTML='';return}
 
-  // calcula o intervalo da semana passada: segunda a sexta (ignora sábado e domingo)
-  // hoje é segunda — a "semana passada" começou há 7 dias (segunda anterior) e terminou há 3 dias (sexta anterior)
   const segundaPassada=new Date(hoje);segundaPassada.setDate(hoje.getDate()-7);segundaPassada.setHours(0,0,0,0);
   const sextaPassada=new Date(hoje);sextaPassada.setDate(hoje.getDate()-3);sextaPassada.setHours(23,59,59,999);
-  const inicioMs=segundaPassada.getTime();
-  const fimMs=sextaPassada.getTime();
 
-  // calcula dados da semana passada (somente segunda a sexta — dias de treino)
-  const hist=loadHist();
-  const treinosSemana=hist.filter(h=>h.plano==='novo'&&h.inicio>=inicioMs&&h.inicio<=fimMs);
-  if(!treinosSemana.length){el.innerHTML='';return}
+  const dados=calcularDadosSemanais(segundaPassada.getTime(),sextaPassada.getTime());
+  if(!dados.totalTreinos){el.innerHTML='';return}
 
-  const totalTreinos=treinosSemana.length;
-  const totalKcal=treinosSemana.reduce((a,h)=>{
-    const vol=(h.series||[]).flat().filter(Boolean).reduce((s,x)=>s+(x.peso*(x.reps||0))+(x.peso2||0)*(x.reps2||0),0);
-    return a+estimarCaloriasTreino((h.fim||0)-(h.inicio||0),vol);
-  },0);
-
-  // peso: compara o registro mais próximo do início da semana (seg) com o mais próximo do fim (sex)
-  const pesoLogSemana=loadPesoLog().filter(p=>{
-    const t=new Date(p.data).getTime();
-    return t>=inicioMs&&t<=fimMs;
-  });
   let diffPesoHtml='';
-  if(pesoLogSemana.length>=2){
-    const diff=+(pesoLogSemana[pesoLogSemana.length-1].peso-pesoLogSemana[0].peso).toFixed(1);
-    diffPesoHtml=diff<0?`<span style="color:var(--green)">▼ ${Math.abs(diff)}kg</span>`:diff>0?`<span style="color:var(--red)">▲ ${diff}kg</span>`:'<span style="color:var(--muted)">estável</span>';
+  if(dados.diffPeso!==null){
+    diffPesoHtml=dados.diffPeso<0?`<span style="color:var(--green)">▼ ${Math.abs(dados.diffPeso)}kg</span>`:dados.diffPeso>0?`<span style="color:var(--red)">▲ ${dados.diffPeso}kg</span>`:'<span style="color:var(--muted)">estável</span>';
   }
 
   el.innerHTML=`<div class="card" style="background:linear-gradient(135deg,rgba(124,106,247,.1),rgba(62,207,142,.08));border:1px solid rgba(124,106,247,.2);padding:14px;margin-bottom:12px">
@@ -1500,11 +1515,11 @@ function renderResumoSemanal(){
     </div>
     <div style="display:flex;gap:8px">
       <div style="flex:1;text-align:center;background:var(--surface);border-radius:10px;padding:10px">
-        <div style="font-size:18px;font-weight:600">${totalTreinos}/5</div>
+        <div style="font-size:18px;font-weight:600">${dados.totalTreinos}/5</div>
         <div style="font-size:10px;color:var(--muted)">treinos</div>
       </div>
       <div style="flex:1;text-align:center;background:var(--surface);border-radius:10px;padding:10px">
-        <div style="font-size:18px;font-weight:600">~${totalKcal}</div>
+        <div style="font-size:18px;font-weight:600">~${dados.totalKcal}</div>
         <div style="font-size:10px;color:var(--muted)">kcal total</div>
       </div>
       ${diffPesoHtml?`<div style="flex:1;text-align:center;background:var(--surface);border-radius:10px;padding:10px">
@@ -1513,10 +1528,30 @@ function renderResumoSemanal(){
       </div>`:''}
     </div>
   </div>`;
+  // salva automaticamente quando exibe (não precisa esperar fechar)
+  salvarResumoSemanalNoHistorico(segundaPassada,sextaPassada,dados);
 }
 function fecharResumoSemanal(){
   try{localStorage.setItem('gym_resumo_visto',getSemanaAtualId())}catch(e){}
   document.getElementById('home-weekly-summary').innerHTML='';
+}
+function salvarResumoSemanalNoHistorico(segunda,sexta,dados){
+  const semId=getSemanaAtualId();
+  const resumos=loadResumosSemana();
+  // evita duplicata
+  if(resumos.find(r=>r.semId===semId))return;
+  resumos.unshift({
+    semId,
+    dataStr: segunda.toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit'}) + ' – ' + sexta.toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit',year:'2-digit'}),
+    totalTreinos: dados.totalTreinos,
+    totalKcal: dados.totalKcal,
+    diffPeso: dados.diffPeso,
+    pesoFinal: dados.pesoFinal,
+    ts: Date.now()
+  });
+  if(resumos.length>52)resumos.splice(52); // guarda até 1 ano
+  saveResumosSemana(resumos);
+  if(getToken())sincronizarGitHub();
 }
 
 function renderHome(){
@@ -1932,7 +1967,7 @@ function finalizarSerie(){
     const proxLabel=`${exNome(ex)} — Série ${E.serieIdxs[E.exIdx]+1} de ${totalS}`;
     iniciarDescanso(REST_SERIE,'DESCANSO ENTRE SÉRIES','gc','Respire e prepare-se',proxLabel,()=>goExercicio());
   }else{
-    E.serieIdxs[E.exIdx]=0;
+    E.serieIdxs[E.exIdx]=totalS; // marca como completo (não volta para 0)
     const proxIdx=proximoExPendente(E.exIdx+1);
     E.restStartTs=Date.now();E.restTotal=REST_EX;E.restTipo='ex';save();
     let proxLabel='Finalizar treino';
@@ -2029,13 +2064,22 @@ function fecharListaFora(e){if(e.target.id==='modal-lista')fecharModalDireto()}
 function fecharModalDireto(){document.getElementById('modal-lista').classList.add('hidden')}
 function irParaEx(idx){
   fecharModalDireto();clearAllTicks();
-  E.exIdx=idx;E.serieIdxs[idx]=0;E.serieStartTs=null;E.restStartTs=null;E.restTotal=0;save();goExercicio();
+  E.exIdx=idx;
+  // só reseta serieIdx se o exercício ainda não tem nenhuma série feita
+  const seriesFeitas=(E.series[idx]||[]).filter(Boolean).length;
+  if(seriesFeitas===0)E.serieIdxs[idx]=0;
+  // se tem séries feitas, serieIdxs[idx] já aponta para a próxima série correta — não mexe
+  E.serieStartTs=null;E.restStartTs=null;E.restTotal=0;save();goExercicio();
 }
 function retornarPulado(idx){
   fecharModalDireto();clearAllTicks();
   // remove da lista de pulados para poder fazer normalmente
   E.pulados=E.pulados.filter(p=>p!==idx);
-  E.exIdx=idx;E.serieIdxs[idx]=0;E.serieStartTs=null;E.restStartTs=null;E.restTotal=0;save();goExercicio();
+  E.exIdx=idx;
+  // mesma lógica: só reseta se não tem séries feitas
+  const seriesFeitas=(E.series[idx]||[]).filter(Boolean).length;
+  if(seriesFeitas===0)E.serieIdxs[idx]=0;
+  E.serieStartTs=null;E.restStartTs=null;E.restTotal=0;save();goExercicio();
   mostrarToast('↩ Retomando "'+exNome(TREINOS[E.tipo].exercicios[idx])+'"');
 }
 
@@ -2069,7 +2113,12 @@ function avancarExercicio(){
     if(exFoiConcluido(next)||exFoiPulado(next)){next++;continue}
     break;
   }
-  if(next<exs.length){E.exIdx=next;E.serieIdxs[next]=0;E.serieStartTs=null;save();goExercicio()}
+  if(next<exs.length){
+    E.exIdx=next;
+    const seriesFeitas=(E.series[next]||[]).filter(Boolean).length;
+    if(seriesFeitas===0)E.serieIdxs[next]=0;
+    E.serieStartTs=null;save();goExercicio();
+  }
   else finalizarTreino();
 }
 
@@ -2113,11 +2162,11 @@ function voltarAosExercicios(){
     ((e.tipo==='normal'||e.tipo==='conjugado')&&exFoiPulado(i))
   );
   if(primeiro>=0){
-    // se for pulado, remove da lista de pulados primeiro
-    if(exFoiPulado(primeiro)){
-      E.pulados=E.pulados.filter(p=>p!==primeiro);
-    }
-    E.exIdx=primeiro;E.serieIdxs[primeiro]=0;E.serieStartTs=null;save();goExercicio();
+    if(exFoiPulado(primeiro)){E.pulados=E.pulados.filter(p=>p!==primeiro);}
+    E.exIdx=primeiro;
+    const seriesFeitas=(E.series[primeiro]||[]).filter(Boolean).length;
+    if(seriesFeitas===0)E.serieIdxs[primeiro]=0;
+    E.serieStartTs=null;save();goExercicio();
   }
 }
 
@@ -2451,6 +2500,41 @@ function renderHist(tab){
       }
     });
     div.innerHTML=html||'<p style="color:var(--muted);font-size:13px;text-align:center;padding:24px 0">Dados insuficientes para evolução.</p>';
+  }else if(tab==='semanas'){
+    const resumos=loadResumosSemana();
+    if(!resumos.length){
+      div.innerHTML='<p style="color:var(--muted);font-size:13px;text-align:center;padding:24px 0">Os resumos semanais aparecerão aqui toda segunda-feira.<br>Os dados são salvos automaticamente.</p>';
+      return;
+    }
+    let html='';
+    resumos.forEach(r=>{
+      let pesoHtml='';
+      if(r.diffPeso!==null&&r.diffPeso!==undefined){
+        pesoHtml=r.diffPeso<0?`<span style="color:var(--green)">▼ ${Math.abs(r.diffPeso)}kg</span>`:r.diffPeso>0?`<span style="color:var(--red)">▲ ${r.diffPeso}kg</span>`:'<span style="color:var(--muted)">estável</span>';
+      }
+      const estrelas='⭐'.repeat(r.totalTreinos>4?5:r.totalTreinos>3?4:r.totalTreinos>2?3:r.totalTreinos>1?2:1);
+      html+=`<div class="card" style="padding:12px 14px;margin-bottom:8px">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+          <span style="font-size:12px;font-family:var(--mono);color:var(--muted)">${r.dataStr}</span>
+          <span style="font-size:12px">${estrelas}</span>
+        </div>
+        <div style="display:flex;gap:8px">
+          <div style="flex:1;text-align:center;background:var(--surface2);border-radius:8px;padding:8px">
+            <div style="font-size:16px;font-weight:600;${r.totalTreinos>=5?'color:var(--green)':r.totalTreinos>=3?'color:var(--amber)':'color:var(--red)'}">${r.totalTreinos}/5</div>
+            <div style="font-size:9px;color:var(--muted);font-family:var(--mono)">TREINOS</div>
+          </div>
+          <div style="flex:1;text-align:center;background:var(--surface2);border-radius:8px;padding:8px">
+            <div style="font-size:16px;font-weight:600;color:var(--amber)">~${r.totalKcal}</div>
+            <div style="font-size:9px;color:var(--muted);font-family:var(--mono)">KCAL</div>
+          </div>
+          ${pesoHtml?`<div style="flex:1;text-align:center;background:var(--surface2);border-radius:8px;padding:8px">
+            <div style="font-size:14px;font-weight:600">${pesoHtml}</div>
+            <div style="font-size:9px;color:var(--muted);font-family:var(--mono)">PESO</div>
+          </div>`:''}
+        </div>
+      </div>`;
+    });
+    div.innerHTML=html;
   }else if(tab==='treinos'){
     // Lista dos treinos antigos A, B, C para referência
     let html='<div class="card" style="margin-bottom:14px;background:rgba(245,158,11,.07);border-color:rgba(245,158,11,.2)"><div style="font-size:12px;color:var(--amber);line-height:1.6">📋 Lista dos treinos anteriores para consulta. Estes treinos não estão disponíveis para execução — são apenas referência.</div></div>';
@@ -2653,7 +2737,7 @@ function buildSystemPrompt(){
 CONTEXTO DO RAFAEL:
 - Idade: 41 anos | Altura: 186cm | Peso: 93kg | Meta: 82kg
 - Treina de segunda a sexta às 08h na academia
-- Plano atual: Treinos A (Peito/Tríceps/Ombros), B (Costas/Bíceps), C (Pernas), D (Ombros/Bíceps/Tríceps/Core) — 11 sessões cada até 09/07/2026
+- Plano atual: Treinos A (Peito/Tríceps/Ombros), B (Costas/Bíceps), C (Pernas), D (Ombros/Bíceps/Tríceps/Core) — 16 sessões cada até 11/08/2026
 - Sessões concluídas: A=${sess.A||0}/11, B=${sess.B||0}/11, C=${sess.C||0}/11, D=${sess.D||0}/11
 - Pré-treino: guaraná, tribulus, uva, beterraba, picolínato de cromo, maca peruana, linhaça dourada (5g/dia) + creatina 5g + própolis 70
 - Pós-treino: tapioca + 50g frango desfiado + 1 ovo + mussarela + 2 ovos cozidos (~40g proteína)
