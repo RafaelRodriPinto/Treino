@@ -1,6 +1,188 @@
 {
   "treinos": [
     {
+      "tipo": "A",
+      "plano": "novo",
+      "data": "Tue Jul 07 2026",
+      "dataStr": "07/07/26",
+      "inicio": 1783422879715,
+      "fim": 1783429465410,
+      "exNames": [
+        "Esteira (aquecimento)",
+        "Supino inclinado c/ halter",
+        "Supino reto c/ halter",
+        "Crucifixo máquina",
+        "Tríceps barra cross",
+        "Tríceps testa c/ barra",
+        "Tríceps banco",
+        "Elevação lateral sentado",
+        "Elevação lateral no cross",
+        "Esteira (finalização)"
+      ],
+      "series": [
+        [],
+        [
+          {
+            "peso": 14,
+            "reps": 10,
+            "peso2": 14,
+            "reps2": 10,
+            "tempo": 81
+          },
+          {
+            "peso": 14,
+            "reps": 10,
+            "peso2": 14,
+            "reps2": 10,
+            "tempo": 70
+          },
+          {
+            "peso": 14,
+            "reps": 10,
+            "peso2": 14,
+            "reps2": 10,
+            "tempo": 69
+          }
+        ],
+        [
+          {
+            "peso": 14,
+            "reps": 12,
+            "tempo": 70
+          },
+          {
+            "peso": 14,
+            "reps": 12,
+            "tempo": 59
+          },
+          {
+            "peso": 14,
+            "reps": 12,
+            "tempo": 58
+          }
+        ],
+        [
+          {
+            "peso": 10,
+            "reps": 12,
+            "tempo": 44
+          },
+          {
+            "peso": 10,
+            "reps": 12,
+            "tempo": 44
+          },
+          {
+            "peso": 10,
+            "reps": 12,
+            "tempo": 41
+          }
+        ],
+        [
+          {
+            "peso": 45,
+            "reps": 12,
+            "tempo": 42
+          },
+          {
+            "peso": 45,
+            "reps": 12,
+            "tempo": 42
+          },
+          {
+            "peso": 45,
+            "reps": 12,
+            "tempo": 38
+          }
+        ],
+        [
+          {
+            "peso": 10,
+            "reps": 12,
+            "tempo": 60
+          },
+          {
+            "peso": 10,
+            "reps": 12,
+            "tempo": 51
+          },
+          {
+            "peso": 10,
+            "reps": 12,
+            "tempo": 49
+          }
+        ],
+        [
+          {
+            "peso": 0,
+            "reps": 12,
+            "tempo": 1
+          },
+          {
+            "peso": 0,
+            "reps": 12,
+            "tempo": 1
+          },
+          {
+            "peso": 0,
+            "reps": 12,
+            "tempo": 39
+          }
+        ],
+        [
+          {
+            "peso": 8,
+            "reps": 10,
+            "tempo": 45
+          },
+          {
+            "peso": 8,
+            "reps": 10,
+            "tempo": 38
+          },
+          {
+            "peso": 8,
+            "reps": 10,
+            "tempo": 36
+          }
+        ],
+        [
+          {
+            "peso": 5,
+            "reps": 10,
+            "tempo": 77
+          },
+          {
+            "peso": 5,
+            "reps": 10,
+            "tempo": 87
+          },
+          {
+            "peso": 5,
+            "reps": 10,
+            "tempo": 90
+          }
+        ],
+        []
+      ],
+      "pulados": [],
+      "esteiraLog": [
+        {
+          "tipo": "esteira_inicio",
+          "status": "concluida",
+          "duracaoMeta": 600,
+          "duracaoFeita": 600
+        },
+        {
+          "tipo": "esteira_fim",
+          "status": "concluida",
+          "duracaoMeta": 1200,
+          "duracaoFeita": 1200
+        }
+      ],
+      "kcal": 699
+    },
+    {
       "tipo": "D",
       "plano": "novo",
       "data": "Mon Jul 06 2026",
@@ -7717,19 +7899,12 @@
     }
   ],
   "hidratacao": {
-    "data": "Mon Jul 06 2026",
-    "feitos": [
-      "acordar",
-      "pretreino",
-      "treino"
-    ]
+    "data": "Tue Jul 07 2026",
+    "feitos": []
   },
   "suplementos": {
-    "data": "Mon Jul 06 2026",
-    "feitos": [
-      "pretreino_mix",
-      "d3k2"
-    ]
+    "data": "Tue Jul 07 2026",
+    "feitos": []
   },
   "avaliacoes": [
     {
