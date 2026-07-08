@@ -7899,21 +7899,12 @@
     }
   ],
   "hidratacao": {
-    "data": "Tue Jul 07 2026",
-    "feitos": [
-      "acordar",
-      "pretreino",
-      "treino",
-      "postreino"
-    ]
+    "data": "Wed Jul 08 2026",
+    "feitos": []
   },
   "suplementos": {
-    "data": "Tue Jul 07 2026",
-    "feitos": [
-      "pretreino_mix",
-      "d3k2",
-      "magnesio"
-    ]
+    "data": "Wed Jul 08 2026",
+    "feitos": []
   },
   "avaliacoes": [
     {
@@ -7974,5 +7965,6 @@
       "duracaoDias": null,
       "dosesPorDia": 1
     }
-  ]
+  ],
+  "resumosSemanais": []
 }
