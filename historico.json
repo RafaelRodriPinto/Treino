@@ -8254,7 +8254,10 @@
   },
   "suplementos": {
     "data": "Sat Jul 11 2026",
-    "feitos": []
+    "feitos": [
+      "pretreino_mix",
+      "d3k2"
+    ]
   },
   "avaliacoes": [
     {
