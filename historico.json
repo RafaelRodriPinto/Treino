@@ -8247,17 +8247,12 @@
     }
   ],
   "hidratacao": {
-    "data": "Sat Jul 11 2026",
-    "feitos": [
-      "pretreino"
-    ]
+    "data": "Mon Jul 13 2026",
+    "feitos": []
   },
   "suplementos": {
-    "data": "Sat Jul 11 2026",
-    "feitos": [
-      "pretreino_mix",
-      "d3k2"
-    ]
+    "data": "Mon Jul 13 2026",
+    "feitos": []
   },
   "avaliacoes": [
     {
@@ -8290,6 +8285,7 @@
       "Fri Jul 10 2026",
       "Fri Jun 26 2026",
       "Mon Jun 29 2026",
+      "Sat Jul 11 2026",
       "Sat Jun 27 2026",
       "Sun Jun 28 2026",
       "Thu Jul 02 2026",
@@ -8321,5 +8317,15 @@
       "dosesPorDia": 1
     }
   ],
-  "resumosSemanais": []
+  "resumosSemanais": [
+    {
+      "semId": "2026-S29",
+      "dataStr": "06/07 – 10/07/26",
+      "totalTreinos": 4,
+      "totalKcal": 3460,
+      "diffPeso": null,
+      "pesoFinal": null,
+      "ts": 1783942109491
+    }
+  ]
 }
