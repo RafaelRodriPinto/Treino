@@ -8795,13 +8795,16 @@
   "hidratacao": {
     "data": "Thu Jul 16 2026",
     "feitos": [
-      "acordar",
-      "pretreino"
+      "pretreino",
+      "acordar"
     ]
   },
   "suplementos": {
     "data": "Thu Jul 16 2026",
-    "feitos": []
+    "feitos": [
+      "pretreino_mix",
+      "d3k2"
+    ]
   },
   "avaliacoes": [
     {
