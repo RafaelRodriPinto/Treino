@@ -8978,11 +8978,17 @@
   ],
   "hidratacao": {
     "data": "Mon Jul 20 2026",
-    "feitos": []
+    "feitos": [
+      "pretreino"
+    ]
   },
   "suplementos": {
     "data": "Mon Jul 20 2026",
-    "feitos": []
+    "feitos": [
+      "pretreino_mix",
+      "d3k2",
+      "magnesio"
+    ]
   },
   "avaliacoes": [
     {
@@ -9016,6 +9022,7 @@
       "Fri Jul 10 2026",
       "Fri Jun 26 2026",
       "Mon Jul 13 2026",
+      "Mon Jul 20 2026",
       "Mon Jun 29 2026",
       "Sat Jul 11 2026",
       "Sat Jun 27 2026",
