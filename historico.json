@@ -8977,11 +8977,11 @@
     }
   ],
   "hidratacao": {
-    "data": "Fri Jul 17 2026",
+    "data": "Mon Jul 20 2026",
     "feitos": []
   },
   "suplementos": {
-    "data": "Fri Jul 17 2026",
+    "data": "Mon Jul 20 2026",
     "feitos": []
   },
   "avaliacoes": [
@@ -9052,6 +9052,15 @@
     }
   ],
   "resumosSemanais": [
+    {
+      "semId": "2026-S30",
+      "dataStr": "13/07 – 17/07/26",
+      "totalTreinos": 4,
+      "totalKcal": 2637,
+      "diffPeso": null,
+      "pesoFinal": null,
+      "ts": 1784602287200
+    },
     {
       "semId": "2026-S29",
       "dataStr": "06/07 – 10/07/26",
