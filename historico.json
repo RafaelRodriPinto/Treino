@@ -9360,11 +9360,19 @@
   ],
   "hidratacao": {
     "data": "Wed Jul 22 2026",
-    "feitos": []
+    "feitos": [
+      "acordar",
+      "pretreino",
+      "treino",
+      "postreino"
+    ]
   },
   "suplementos": {
     "data": "Wed Jul 22 2026",
-    "feitos": []
+    "feitos": [
+      "pretreino_mix",
+      "d3k2"
+    ]
   },
   "avaliacoes": [
     {
