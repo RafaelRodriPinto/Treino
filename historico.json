@@ -1,6 +1,188 @@
 {
   "treinos": [
     {
+      "tipo": "A",
+      "plano": "novo",
+      "data": "Tue Jul 28 2026",
+      "dataStr": "28/07/26",
+      "inicio": 1785238875593,
+      "fim": 1785245075148,
+      "exNames": [
+        "Esteira (aquecimento)",
+        "Supino inclinado c/ halter",
+        "Supino reto c/ halter",
+        "Crucifixo máquina",
+        "Tríceps barra cross",
+        "Tríceps testa c/ barra",
+        "Tríceps banco",
+        "Elevação lateral sentado",
+        "Elevação lateral no cross",
+        "Esteira (finalização)"
+      ],
+      "series": [
+        [],
+        [
+          {
+            "peso": 14,
+            "reps": 10,
+            "peso2": 14,
+            "reps2": 10,
+            "tempo": 79
+          },
+          {
+            "peso": 14,
+            "reps": 10,
+            "peso2": 14,
+            "reps2": 10,
+            "tempo": 72
+          },
+          {
+            "peso": 14,
+            "reps": 10,
+            "peso2": 14,
+            "reps2": 10,
+            "tempo": 71
+          }
+        ],
+        [
+          {
+            "peso": 14,
+            "reps": 10,
+            "tempo": 45
+          },
+          {
+            "peso": 14,
+            "reps": 12,
+            "tempo": 50
+          },
+          {
+            "peso": 14,
+            "reps": 12,
+            "tempo": 51
+          }
+        ],
+        [
+          {
+            "peso": 10,
+            "reps": 12,
+            "tempo": 57
+          },
+          {
+            "peso": 10,
+            "reps": 12,
+            "tempo": 48
+          },
+          {
+            "peso": 10,
+            "reps": 12,
+            "tempo": 48
+          }
+        ],
+        [
+          {
+            "peso": 45,
+            "reps": 12,
+            "tempo": 36
+          },
+          {
+            "peso": 45,
+            "reps": 12,
+            "tempo": 41
+          },
+          {
+            "peso": 45,
+            "reps": 12,
+            "tempo": 38
+          }
+        ],
+        [
+          {
+            "peso": 15,
+            "reps": 12,
+            "tempo": 54
+          },
+          {
+            "peso": 15,
+            "reps": 12,
+            "tempo": 49
+          },
+          {
+            "peso": 15,
+            "reps": 12,
+            "tempo": 47
+          }
+        ],
+        [
+          {
+            "peso": 0,
+            "reps": 12,
+            "tempo": 54
+          },
+          {
+            "peso": 0,
+            "reps": 12,
+            "tempo": 42
+          },
+          {
+            "peso": 0,
+            "reps": 12,
+            "tempo": 46
+          }
+        ],
+        [
+          {
+            "peso": 8,
+            "reps": 10,
+            "tempo": 35
+          },
+          {
+            "peso": 8,
+            "reps": 10,
+            "tempo": 36
+          },
+          {
+            "peso": 8,
+            "reps": 10,
+            "tempo": 34
+          }
+        ],
+        [
+          {
+            "peso": 5,
+            "reps": 10,
+            "tempo": 75
+          },
+          {
+            "peso": 5,
+            "reps": 10,
+            "tempo": 99
+          },
+          {
+            "peso": 5,
+            "reps": 10,
+            "tempo": 80
+          }
+        ],
+        []
+      ],
+      "pulados": [],
+      "esteiraLog": [
+        {
+          "tipo": "esteira_inicio",
+          "status": "concluida",
+          "duracaoMeta": 600,
+          "duracaoFeita": 600
+        },
+        {
+          "tipo": "esteira_fim",
+          "status": "concluida",
+          "duracaoMeta": 1200,
+          "duracaoFeita": 1200
+        }
+      ],
+      "kcal": 662
+    },
+    {
       "tipo": "D",
       "plano": "novo",
       "data": "Mon Jul 27 2026",
@@ -9905,11 +10087,11 @@
     }
   ],
   "hidratacao": {
-    "data": "Mon Jul 27 2026",
+    "data": "Tue Jul 28 2026",
     "feitos": []
   },
   "suplementos": {
-    "data": "Mon Jul 27 2026",
+    "data": "Tue Jul 28 2026",
     "feitos": []
   },
   "avaliacoes": [
