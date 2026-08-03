@@ -1,6 +1,206 @@
 {
   "treinos": [
     {
+      "tipo": "D",
+      "plano": "novo",
+      "data": "Mon Aug 03 2026",
+      "dataStr": "03/08/26",
+      "inicio": 1785754646463,
+      "fim": 1785760349273,
+      "exNames": [
+        "Esteira (aquecimento)",
+        "Elevação lateral",
+        "Elevação frontal anilha",
+        "Desenvolvimento c/ halter",
+        "Crucifixo invertido máquina",
+        "Bíceps concentrado",
+        "Bíceps martelo",
+        "Tríceps corda",
+        "Tríceps barra W",
+        "Prancha ventral",
+        "Esteira (finalização)"
+      ],
+      "series": [
+        [],
+        [
+          {
+            "peso": 9,
+            "reps": 12,
+            "tempo": 46
+          },
+          {
+            "peso": 9,
+            "reps": 12,
+            "tempo": 44
+          },
+          {
+            "peso": 9,
+            "reps": 12,
+            "tempo": 61
+          }
+        ],
+        [
+          {
+            "peso": 15,
+            "reps": 12,
+            "tempo": 42
+          },
+          {
+            "peso": 15,
+            "reps": 12,
+            "tempo": 43
+          },
+          {
+            "peso": 15,
+            "reps": 12,
+            "tempo": 44
+          }
+        ],
+        [
+          {
+            "peso": 12,
+            "reps": 12,
+            "tempo": 45
+          },
+          {
+            "peso": 12,
+            "reps": 12,
+            "tempo": 48
+          },
+          {
+            "peso": 12,
+            "reps": 12,
+            "tempo": 42
+          }
+        ],
+        [
+          {
+            "peso": 5,
+            "reps": 15,
+            "tempo": 51
+          },
+          {
+            "peso": 5,
+            "reps": 15,
+            "tempo": 51
+          },
+          {
+            "peso": 5,
+            "reps": 15,
+            "tempo": 54
+          }
+        ],
+        [
+          {
+            "peso": 39,
+            "reps": 10,
+            "tempo": 62
+          },
+          {
+            "peso": 39,
+            "reps": 10,
+            "tempo": 43
+          },
+          {
+            "peso": 39,
+            "reps": 10,
+            "tempo": 43
+          }
+        ],
+        [
+          {
+            "peso": 12,
+            "reps": 10,
+            "tempo": 43
+          },
+          {
+            "peso": 12,
+            "reps": 10,
+            "tempo": 48
+          },
+          {
+            "peso": 12,
+            "reps": 10,
+            "tempo": 39
+          }
+        ],
+        [
+          {
+            "peso": 35,
+            "reps": 12,
+            "tempo": 3
+          },
+          {
+            "peso": 35,
+            "reps": 12,
+            "tempo": 40
+          },
+          {
+            "peso": 35,
+            "reps": 12,
+            "tempo": 40
+          }
+        ],
+        [
+          {
+            "peso": 40,
+            "reps": 10,
+            "tempo": 31
+          },
+          {
+            "peso": 40,
+            "reps": 10,
+            "tempo": 33
+          },
+          {
+            "peso": 40,
+            "reps": 10,
+            "tempo": 39
+          }
+        ],
+        [
+          {
+            "peso": 0,
+            "reps": 30,
+            "peso2": 0,
+            "reps2": 12,
+            "tempo": 82
+          },
+          {
+            "peso": 0,
+            "reps": 30,
+            "peso2": 0,
+            "reps2": 12,
+            "tempo": 84
+          },
+          {
+            "peso": 0,
+            "reps": 30,
+            "peso2": 0,
+            "reps2": 12,
+            "tempo": 160
+          }
+        ],
+        []
+      ],
+      "pulados": [],
+      "esteiraLog": [
+        {
+          "tipo": "esteira_inicio",
+          "status": "concluida",
+          "duracaoMeta": 600,
+          "duracaoFeita": 600
+        },
+        {
+          "tipo": "esteira_fim",
+          "status": "concluida",
+          "duracaoMeta": 1200,
+          "duracaoFeita": 1200
+        }
+      ],
+      "kcal": 625
+    },
+    {
       "tipo": "C",
       "plano": "novo",
       "data": "Fri Jul 31 2026",
@@ -10433,20 +10633,12 @@
     }
   ],
   "hidratacao": {
-    "data": "Fri Jul 31 2026",
-    "feitos": [
-      "acordar",
-      "pretreino",
-      "treino",
-      "postreino"
-    ]
+    "data": "Mon Aug 03 2026",
+    "feitos": []
   },
   "suplementos": {
-    "data": "Fri Jul 31 2026",
-    "feitos": [
-      "pretreino_mix",
-      "d3k2"
-    ]
+    "data": "Mon Aug 03 2026",
+    "feitos": []
   },
   "avaliacoes": [
     {
@@ -10520,6 +10712,15 @@
     }
   ],
   "resumosSemanais": [
+    {
+      "semId": "2026-S32",
+      "dataStr": "27/07 – 31/07/26",
+      "totalTreinos": 4,
+      "totalKcal": 2765,
+      "diffPeso": null,
+      "pesoFinal": null,
+      "ts": 1785754641183
+    },
     {
       "semId": "2026-S31",
       "dataStr": "20/07 – 24/07/26",
