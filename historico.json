@@ -2,7 +2,7 @@
   "treinos": [
     {
       "tipo": "D",
-      "plano": "novo",
+      "plano": "antigo",
       "data": "Fri Aug 14 2026",
       "dataStr": "14/08/26",
       "inicio": 1786712623654,
@@ -202,7 +202,7 @@
     },
     {
       "tipo": "C",
-      "plano": "novo",
+      "plano": "antigo",
       "data": "Thu Aug 13 2026",
       "dataStr": "13/08/26",
       "inicio": 1786618784394,
@@ -386,7 +386,7 @@
     },
     {
       "tipo": "B",
-      "plano": "novo",
+      "plano": "antigo",
       "data": "Wed Aug 12 2026",
       "dataStr": "12/08/26",
       "inicio": 1786540270717,
@@ -550,7 +550,7 @@
     },
     {
       "tipo": "A",
-      "plano": "novo",
+      "plano": "antigo",
       "data": "Tue Aug 11 2026",
       "dataStr": "11/08/26",
       "inicio": 1786445964785,
@@ -732,7 +732,7 @@
     },
     {
       "tipo": "D",
-      "plano": "novo",
+      "plano": "antigo",
       "data": "Mon Aug 10 2026",
       "dataStr": "10/08/26",
       "inicio": 1786359568865,
@@ -905,7 +905,7 @@
     },
     {
       "tipo": "C",
-      "plano": "novo",
+      "plano": "antigo",
       "data": "Thu Aug 06 2026",
       "dataStr": "06/08/26",
       "inicio": 1786021956293,
@@ -1087,7 +1087,7 @@
     },
     {
       "tipo": "B",
-      "plano": "novo",
+      "plano": "antigo",
       "data": "Wed Aug 05 2026",
       "dataStr": "05/08/26",
       "inicio": 1785927526446,
@@ -1251,7 +1251,7 @@
     },
     {
       "tipo": "A",
-      "plano": "novo",
+      "plano": "antigo",
       "data": "Tue Aug 04 2026",
       "dataStr": "04/08/26",
       "inicio": 1785841040613,
@@ -1433,7 +1433,7 @@
     },
     {
       "tipo": "D",
-      "plano": "novo",
+      "plano": "antigo",
       "data": "Mon Aug 03 2026",
       "dataStr": "03/08/26",
       "inicio": 1785754646463,
@@ -1633,7 +1633,7 @@
     },
     {
       "tipo": "C",
-      "plano": "novo",
+      "plano": "antigo",
       "data": "Fri Jul 31 2026",
       "dataStr": "31/07/26",
       "inicio": 1785496260961,
@@ -1815,7 +1815,7 @@
     },
     {
       "tipo": "B",
-      "plano": "novo",
+      "plano": "antigo",
       "data": "Wed Jul 29 2026",
       "dataStr": "29/07/26",
       "inicio": 1785323119166,
@@ -1979,7 +1979,7 @@
     },
     {
       "tipo": "A",
-      "plano": "novo",
+      "plano": "antigo",
       "data": "Tue Jul 28 2026",
       "dataStr": "28/07/26",
       "inicio": 1785238875593,
@@ -2161,7 +2161,7 @@
     },
     {
       "tipo": "D",
-      "plano": "novo",
+      "plano": "antigo",
       "data": "Mon Jul 27 2026",
       "dataStr": "27/07/26",
       "inicio": 1785152759195,
@@ -2361,7 +2361,7 @@
     },
     {
       "tipo": "C",
-      "plano": "novo",
+      "plano": "antigo",
       "data": "Fri Jul 24 2026",
       "dataStr": "24/07/26",
       "inicio": 1784894062605,
@@ -2543,7 +2543,7 @@
     },
     {
       "tipo": "B",
-      "plano": "novo",
+      "plano": "antigo",
       "data": "Thu Jul 23 2026",
       "dataStr": "23/07/26",
       "inicio": 1784807332242,
@@ -2707,7 +2707,7 @@
     },
     {
       "tipo": "A",
-      "plano": "novo",
+      "plano": "antigo",
       "data": "Wed Jul 22 2026",
       "dataStr": "22/07/26",
       "inicio": 1784720115752,
@@ -2889,7 +2889,7 @@
     },
     {
       "tipo": "D",
-      "plano": "novo",
+      "plano": "antigo",
       "data": "Tue Jul 21 2026",
       "dataStr": "21/07/26",
       "inicio": 1784634072662,
@@ -3089,7 +3089,7 @@
     },
     {
       "tipo": "C",
-      "plano": "novo",
+      "plano": "antigo",
       "data": "Fri Jul 17 2026",
       "dataStr": "17/07/26",
       "inicio": 1784288718319,
@@ -3273,7 +3273,7 @@
     },
     {
       "tipo": "B",
-      "plano": "novo",
+      "plano": "antigo",
       "data": "Wed Jul 15 2026",
       "dataStr": "15/07/26",
       "inicio": 1784116276260,
@@ -3437,7 +3437,7 @@
     },
     {
       "tipo": "A",
-      "plano": "novo",
+      "plano": "antigo",
       "data": "Tue Jul 14 2026",
       "dataStr": "14/07/26",
       "inicio": 1784031241420,
@@ -3619,7 +3619,7 @@
     },
     {
       "tipo": "D",
-      "plano": "novo",
+      "plano": "antigo",
       "data": "Mon Jul 13 2026",
       "dataStr": "13/07/26",
       "inicio": 1783942117100,
@@ -3819,7 +3819,7 @@
     },
     {
       "tipo": "C",
-      "plano": "novo",
+      "plano": "antigo",
       "data": "Thu Jul 09 2026",
       "dataStr": "09/07/26",
       "inicio": 1783597224526,
@@ -4003,7 +4003,7 @@
     },
     {
       "tipo": "B",
-      "plano": "novo",
+      "plano": "antigo",
       "data": "Wed Jul 08 2026",
       "dataStr": "08/07/26",
       "inicio": 1783509400125,
@@ -4167,7 +4167,7 @@
     },
     {
       "tipo": "A",
-      "plano": "novo",
+      "plano": "antigo",
       "data": "Tue Jul 07 2026",
       "dataStr": "07/07/26",
       "inicio": 1783422879715,
@@ -4349,7 +4349,7 @@
     },
     {
       "tipo": "D",
-      "plano": "novo",
+      "plano": "antigo",
       "data": "Mon Jul 06 2026",
       "dataStr": "06/07/26",
       "inicio": 1783336525360,
@@ -4549,7 +4549,7 @@
     },
     {
       "tipo": "C",
-      "plano": "novo",
+      "plano": "antigo",
       "data": "Fri Jul 03 2026",
       "dataStr": "03/07/26",
       "inicio": 1783076458142,
@@ -4732,7 +4732,7 @@
     },
     {
       "tipo": "B",
-      "plano": "novo",
+      "plano": "antigo",
       "data": "Thu Jul 02 2026",
       "dataStr": "02/07/26",
       "inicio": 1782990341931,
@@ -4895,7 +4895,7 @@
     },
     {
       "tipo": "A",
-      "plano": "novo",
+      "plano": "antigo",
       "data": "Wed Jul 01 2026",
       "dataStr": "01/07/26",
       "inicio": 1782904220135,
@@ -5076,7 +5076,7 @@
     },
     {
       "tipo": "D",
-      "plano": "novo",
+      "plano": "antigo",
       "data": "Tue Jun 30 2026",
       "dataStr": "30/06/26",
       "inicio": 1782817722567,
@@ -5275,7 +5275,7 @@
     },
     {
       "tipo": "C",
-      "plano": "novo",
+      "plano": "antigo",
       "data": "Fri Jun 26 2026",
       "dataStr": "26/06/26",
       "inicio": 1782472270916,
@@ -5458,7 +5458,7 @@
     },
     {
       "tipo": "B",
-      "plano": "novo",
+      "plano": "antigo",
       "data": "Thu Jun 25 2026",
       "dataStr": "25/06/26",
       "inicio": 1782385710180,
@@ -5621,7 +5621,7 @@
     },
     {
       "tipo": "A",
-      "plano": "novo",
+      "plano": "antigo",
       "data": "Wed Jun 24 2026",
       "dataStr": "24/06/26",
       "inicio": 1782301375608,
@@ -5802,7 +5802,7 @@
     },
     {
       "tipo": "D",
-      "plano": "novo",
+      "plano": "antigo",
       "data": "Tue Jun 23 2026",
       "dataStr": "23/06/26",
       "inicio": 1782212677086,
@@ -6001,7 +6001,7 @@
     },
     {
       "tipo": "C",
-      "plano": "novo",
+      "plano": "antigo",
       "data": "Mon Jun 22 2026",
       "dataStr": "22/06/26",
       "inicio": 1782126496946,
@@ -6173,7 +6173,7 @@
     },
     {
       "tipo": "B",
-      "plano": "novo",
+      "plano": "antigo",
       "data": "Fri Jun 19 2026",
       "dataStr": "19/06/26",
       "inicio": 1781867371933,
@@ -6336,7 +6336,7 @@
     },
     {
       "tipo": "A",
-      "plano": "novo",
+      "plano": "antigo",
       "data": "Thu Jun 18 2026",
       "dataStr": "18/06/26",
       "inicio": 1781780990049,
@@ -6517,7 +6517,7 @@
     },
     {
       "tipo": "D",
-      "plano": "novo",
+      "plano": "antigo",
       "data": "Wed Jun 17 2026",
       "dataStr": "17/06/26",
       "inicio": 1781694378890,
@@ -6702,7 +6702,7 @@
     },
     {
       "tipo": "C",
-      "plano": "novo",
+      "plano": "antigo",
       "data": "Mon Jun 15 2026",
       "dataStr": "15/06/26",
       "inicio": 1781521398816,
@@ -6871,7 +6871,7 @@
     },
     {
       "tipo": "B",
-      "plano": "novo",
+      "plano": "antigo",
       "data": "Fri Jun 12 2026",
       "dataStr": "12/06/26",
       "inicio": 1781262555010,
@@ -7020,7 +7020,7 @@
     },
     {
       "tipo": "A",
-      "plano": "novo",
+      "plano": "antigo",
       "data": "Thu Jun 11 2026",
       "dataStr": "11/06/26",
       "inicio": 1781175829705,
@@ -7187,7 +7187,7 @@
     },
     {
       "tipo": "D",
-      "plano": "novo",
+      "plano": "antigo",
       "data": "Wed Jun 10 2026",
       "dataStr": "10/06/26",
       "inicio": 1781089453420,
@@ -7372,7 +7372,7 @@
     },
     {
       "tipo": "C",
-      "plano": "novo",
+      "plano": "antigo",
       "data": "Tue Jun 09 2026",
       "dataStr": "09/06/26",
       "inicio": 1781003159725,
@@ -7541,7 +7541,7 @@
     },
     {
       "tipo": "B",
-      "plano": "novo",
+      "plano": "antigo",
       "data": "Mon Jun 08 2026",
       "dataStr": "08/06/26",
       "inicio": 1780916842279,
@@ -7690,7 +7690,7 @@
     },
     {
       "tipo": "A",
-      "plano": "novo",
+      "plano": "antigo",
       "data": "Wed Jun 03 2026",
       "dataStr": "03/06/26",
       "inicio": 1780484617294,
@@ -7857,7 +7857,7 @@
     },
     {
       "tipo": "D",
-      "plano": "novo",
+      "plano": "antigo",
       "data": "Tue Jun 02 2026",
       "dataStr": "02/06/26",
       "inicio": 1780398191248,
@@ -8042,7 +8042,7 @@
     },
     {
       "tipo": "C",
-      "plano": "novo",
+      "plano": "antigo",
       "data": "Mon Jun 01 2026",
       "dataStr": "01/06/26",
       "inicio": 1780311890782,
@@ -8193,7 +8193,7 @@
     },
     {
       "tipo": "B",
-      "plano": "novo",
+      "plano": "antigo",
       "data": "Fri May 29 2026",
       "dataStr": "29/05/26",
       "inicio": 1780052651532,
@@ -8342,7 +8342,7 @@
     },
     {
       "tipo": "A",
-      "plano": "novo",
+      "plano": "antigo",
       "data": "Thu May 28 2026",
       "dataStr": "28/05/26",
       "inicio": 1779966291654,
@@ -8503,7 +8503,7 @@
     },
     {
       "tipo": "D",
-      "plano": "novo",
+      "plano": "antigo",
       "data": "Wed May 27 2026",
       "dataStr": "27/05/26",
       "inicio": 1779879526096,
@@ -8682,7 +8682,7 @@
     },
     {
       "tipo": "C",
-      "plano": "novo",
+      "plano": "antigo",
       "data": "Mon May 25 2026",
       "dataStr": "25/05/26",
       "inicio": 1779708146413,
@@ -8833,7 +8833,7 @@
     },
     {
       "tipo": "B",
-      "plano": "novo",
+      "plano": "antigo",
       "data": "Fri May 22 2026",
       "dataStr": "22/05/26",
       "inicio": 1779448084074,
@@ -8976,7 +8976,7 @@
     },
     {
       "tipo": "A",
-      "plano": "novo",
+      "plano": "antigo",
       "data": "Thu May 21 2026",
       "dataStr": "21/05/26",
       "inicio": 1779361617187,
@@ -9137,7 +9137,7 @@
     },
     {
       "tipo": "D",
-      "plano": "novo",
+      "plano": "antigo",
       "data": "Wed May 20 2026",
       "dataStr": "20/05/26",
       "inicio": 1779275243614,
@@ -9316,7 +9316,7 @@
     },
     {
       "tipo": "C",
-      "plano": "novo",
+      "plano": "antigo",
       "data": "Tue May 19 2026",
       "dataStr": "19/05/26",
       "inicio": 1779188548132,
@@ -9429,7 +9429,7 @@
     },
     {
       "tipo": "B",
-      "plano": "novo",
+      "plano": "antigo",
       "data": "Mon May 18 2026",
       "dataStr": "18/05/26",
       "inicio": 1779102041698,
@@ -9572,7 +9572,7 @@
     },
     {
       "tipo": "A",
-      "plano": "novo",
+      "plano": "antigo",
       "data": "Thu May 14 2026",
       "dataStr": "14/05/26",
       "inicio": 1778756667763,
@@ -12098,6 +12098,25 @@
       "massaLivreGordura": 71.3,
       "aguaIntracelular": 32.9,
       "aguaExtracelular": 19.4
+    },
+    {
+      "data": "2026-08-12",
+      "dataStr": "12/08/2026",
+      "pontuacao": 80,
+      "peso": 92.5,
+      "imc": 26.7,
+      "aguaCorporal": 52.5,
+      "massaGorda": 20.7,
+      "massaProteica": 14.2,
+      "minerais": 5,
+      "massaMuscular": 66.7,
+      "massaMuscularEsq": 41,
+      "gorduraVisceral": 8,
+      "gorduraSubcutanea": 18.5,
+      "cinturaQuadril": 0.9,
+      "massaLivreGordura": 71.7,
+      "aguaIntracelular": 32.9,
+      "aguaExtracelular": 19.6
     }
   ],
   "diasCompletos": {
