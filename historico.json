@@ -12076,7 +12076,10 @@
   },
   "suplementos": {
     "data": "Sun Aug 16 2026",
-    "feitos": []
+    "feitos": [
+      "d3k2",
+      "magnesio"
+    ]
   },
   "avaliacoes": [
     {
@@ -12136,6 +12139,7 @@
       "Sat Jul 11 2026",
       "Sat Jul 25 2026",
       "Sat Jun 27 2026",
+      "Sun Aug 16 2026",
       "Sun Jun 28 2026",
       "Thu Aug 06 2026",
       "Thu Jul 02 2026",
