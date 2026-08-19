@@ -1,6 +1,177 @@
 {
   "treinos": [
     {
+      "tipo": "C",
+      "plano": "novo",
+      "data": "Wed Aug 19 2026",
+      "dataStr": "19/08/26",
+      "inicio": 1787137806408,
+      "fim": 1787146062999,
+      "exNames": [
+        "Esteira (aquecimento)",
+        "Agachamento no Smith",
+        "Cadeira extensora",
+        "Leg press 45°",
+        "Mesa flexora",
+        "Sky-flexão de joelho máquina",
+        "Agachamento sumô com halter",
+        "Cadeira abdutora",
+        "Cadeira adutora",
+        "Esteira (finalização)"
+      ],
+      "series": [
+        [],
+        [
+          {
+            "peso": 5,
+            "reps": 12,
+            "tempo": 34
+          },
+          {
+            "peso": 5,
+            "reps": 12,
+            "tempo": 138
+          },
+          {
+            "peso": 5,
+            "reps": 12,
+            "tempo": 75
+          }
+        ],
+        [
+          {
+            "peso": 52,
+            "reps": 10,
+            "tempo": 43
+          },
+          {
+            "peso": 52,
+            "reps": 10,
+            "tempo": 35
+          },
+          {
+            "peso": 52,
+            "reps": 10,
+            "tempo": 31
+          },
+          {
+            "peso": 52,
+            "reps": 10,
+            "tempo": 35
+          }
+        ],
+        [
+          {
+            "peso": 50,
+            "reps": 10,
+            "tempo": 41
+          },
+          {
+            "peso": 50,
+            "reps": 10,
+            "tempo": 35
+          },
+          {
+            "peso": 50,
+            "reps": 10,
+            "tempo": 34
+          },
+          {
+            "peso": 50,
+            "reps": 10,
+            "tempo": 42
+          }
+        ],
+        [
+          {
+            "peso": 39,
+            "reps": 12,
+            "tempo": 48
+          },
+          {
+            "peso": 39,
+            "reps": 12,
+            "tempo": 45
+          },
+          {
+            "peso": 39,
+            "reps": 12,
+            "tempo": 48
+          }
+        ],
+        [
+          {
+            "peso": 5,
+            "reps": 10,
+            "tempo": 73
+          },
+          {
+            "peso": 5,
+            "reps": 10,
+            "tempo": 66
+          },
+          {
+            "peso": 5,
+            "reps": 10,
+            "tempo": 59
+          }
+        ],
+        [
+          null,
+          null,
+          null,
+          null
+        ],
+        [
+          {
+            "peso": 59,
+            "reps": 15,
+            "tempo": 45
+          },
+          {
+            "peso": 59,
+            "reps": 15,
+            "tempo": 31
+          },
+          {
+            "peso": 59,
+            "reps": 15,
+            "tempo": 36
+          }
+        ],
+        [
+          {
+            "peso": 66,
+            "reps": 15,
+            "tempo": 55
+          },
+          {
+            "peso": 66,
+            "reps": 15,
+            "tempo": 34
+          },
+          {
+            "peso": 66,
+            "reps": 15,
+            "tempo": 41
+          }
+        ],
+        []
+      ],
+      "pulados": [
+        6
+      ],
+      "esteiraLog": [
+        {
+          "tipo": "esteira_inicio",
+          "status": "concluida",
+          "duracaoMeta": 600,
+          "duracaoFeita": 600
+        }
+      ],
+      "kcal": 940
+    },
+    {
       "tipo": "B",
       "plano": "novo",
       "data": "Tue Aug 18 2026",
@@ -12505,11 +12676,18 @@
   ],
   "hidratacao": {
     "data": "Wed Aug 19 2026",
-    "feitos": []
+    "feitos": [
+      "acordar",
+      "pretreino",
+      "treino"
+    ]
   },
   "suplementos": {
     "data": "Wed Aug 19 2026",
-    "feitos": []
+    "feitos": [
+      "pretreino_mix",
+      "d3k2"
+    ]
   },
   "avaliacoes": [
     {
