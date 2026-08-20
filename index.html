@@ -852,6 +852,80 @@ const TREINOS_ANTIGOS = {
   }
 };
 
+/* Plano anterior — vigente de 11/05/2026 a 11/08/2026, substituído após a
+   avaliação física de 12/08/2026. Mantido aqui como referência e para que
+   o histórico de treinos feitos nesse período continue exibindo os nomes
+   corretos dos exercícios. */
+const TREINOS_ANTIGOS_V2 = {
+  A:{
+    nome:'Treino A (11/05–11/08)', info:'Peito · Tríceps · Ombros',
+    exercicios:[
+      {tipo:'esteira_inicio'},
+      {tipo:'conjugado', nome:'Supino inclinado c/ halter', nome2:'Crucifixo inclinado c/ halter',
+       link:'https://www.youtube.com/watch?v=g9X0oHBuMQc', link2:'https://www.youtube.com/watch?v=ZMFCua60Gus',
+       series:3,reps:10},
+      {tipo:'normal', nome:'Supino reto c/ halter', link:'https://www.youtube.com/watch?v=BZEnjisP_CY', series:3,reps:12},
+      {tipo:'normal', nome:'Crucifixo máquina', link:'https://www.youtube.com/watch?v=SQW-rwYDBWE', series:3,reps:12},
+      {tipo:'normal', nome:'Tríceps barra cross', link:'https://w12evostorage.w12app.com.br/exercicios-gifs/02011305-Cable-Pushdown_Upper-Arms-FIX_360.gif', series:3,reps:12},
+      {tipo:'normal', nome:'Tríceps testa c/ barra', link:'https://www.youtube.com/watch?v=Vhb_zXyeOSc', series:3,reps:12},
+      {tipo:'normal', nome:'Tríceps banco', link:'https://www.youtube.com/watch?v=w7RqgKFygBQ', series:3,reps:12},
+      {tipo:'normal', nome:'Elevação lateral sentado', link:'https://www.youtube.com/watch?v=Y-oDA1AfYTU', series:3,reps:10},
+      {tipo:'normal', nome:'Elevação lateral no cross', link:'https://www.youtube.com/watch?v=U0ZM4qcWB8M', series:3,reps:10},
+      {tipo:'esteira_fim'},
+    ]
+  },
+  B:{
+    nome:'Treino B (11/05–11/08)', info:'Costas · Bíceps · Abdômen',
+    exercicios:[
+      {tipo:'esteira_inicio'},
+      {tipo:'conjugado', nome:'Puxada aberta', nome2:'Puxada fechada',
+       link:'https://www.youtube.com/watch?v=WEEnNiJwV-8', link2:'https://www.youtube.com/watch?v=bhXztQz1FSE',
+       series:3,reps:10},
+      {tipo:'normal', nome:'Facepull', link:'https://www.youtube.com/watch?v=w0jdtWXUE84', series:3,reps:15},
+      {tipo:'normal', nome:'Remada cavalinho', link:'https://www.youtube.com/watch?v=pM72YW95_DY', series:3,reps:12},
+      {tipo:'normal', nome:'Remada máquina fechada', link:'https://www.youtube.com/watch?v=paOfeVlogwk', series:3,reps:12},
+      {tipo:'normal', nome:'Rosca martelo', link:'https://www.youtube.com/watch?v=SHewBqisWrA', series:3,reps:12},
+      {tipo:'normal', nome:'Rosca bíceps barra W', link:'', series:3,reps:12},
+      {tipo:'normal', nome:'Abdominal remador', link:'https://www.youtube.com/watch?v=PomBnhZH5a0', series:3,reps:12},
+      {tipo:'esteira_fim'},
+    ]
+  },
+  C:{
+    nome:'Treino C (11/05–11/08)', info:'Pernas · Glúteos',
+    exercicios:[
+      {tipo:'esteira_inicio'},
+      {tipo:'normal', nome:'Cadeira extensora', link:'https://www.youtube.com/watch?v=KpXT1dzKUUQ', series:3,reps:12},
+      {tipo:'normal', nome:'Leg press 45°', link:'https://www.youtube.com/watch?v=-BDtKDpL-Cg', series:3,reps:10},
+      {tipo:'normal', nome:'Hack articulado', link:'https://www.youtube.com/watch?v=LjiAtELOQWk', series:3,reps:12},
+      {tipo:'normal', nome:'Mesa flexora', link:'https://www.youtube.com/watch?v=9e3AvkskqVM', series:3,reps:12},
+      {tipo:'normal', nome:'Sky-flexão de joelho máquina', link:'https://www.youtube.com/watch?v=Kk-J3wdxEhU', series:3,reps:10},
+      {tipo:'normal', nome:'Agachamento sumô c/ halter', link:'https://www.youtube.com/watch?v=wd7LPBlSm28', series:3,reps:12},
+      {tipo:'normal', nome:'Cadeira abdutora', link:'https://www.youtube.com/watch?v=02Hw1nvierA', series:3,reps:10},
+      {tipo:'normal', nome:'Cadeira adutora', link:'https://www.youtube.com/watch?v=eluVAjrSNNQ', series:3,reps:15},
+      {tipo:'normal', nome:'Panturrilha Banco', link:'https://youtu.be/pbkhHeK55zQ?si=vw5AqU79wjghoYyS', series:3,reps:12},
+      {tipo:'esteira_fim'},
+    ]
+  },
+  D:{
+    nome:'Treino D (11/05–11/08)', info:'Ombros · Bíceps · Tríceps · Core',
+    exercicios:[
+      {tipo:'esteira_inicio'},
+      {tipo:'normal', nome:'Elevação lateral', link:'https://www.youtube.com/watch?v=1UH9BySUGXg', series:3,reps:12},
+      {tipo:'normal', nome:'Elevação frontal anilha', link:'https://www.youtube.com/watch?v=FzL_52qjNis', series:3,reps:12},
+      {tipo:'normal', nome:'Desenvolvimento c/ halter', link:'https://www.youtube.com/watch?v=Qq3W5a5yalI', series:3,reps:12},
+      {tipo:'normal', nome:'Crucifixo invertido máquina', link:'https://www.youtube.com/watch?v=6vJHWnfmmi0', series:3,reps:15},
+      {tipo:'normal', nome:'Bíceps concentrado', link:'https://w12evostorage.w12app.com.br/exercicios-gifs/16141305-Lever-Preacher-Curl-(version-2)_Upper-Arms_360.gif', series:3,reps:10},
+      {tipo:'normal', nome:'Bíceps martelo', link:'https://w12evostorage.w12app.com.br/exercicios-gifs/24851305-Dumbbell-Hammer-Curl-(female)_Upper-Arms-FIX_360.gif', series:3,reps:10},
+      {tipo:'normal', nome:'Tríceps corda', link:'https://www.youtube.com/watch?v=eXKX6pSYrVE', series:3,reps:12},
+      {tipo:'normal', nome:'Tríceps barra W', link:'https://www.youtube.com/watch?v=yi-MlJARlSg', series:3,reps:10},
+      {tipo:'conjugado', nome:'Prancha ventral', nome2:'Abdômen paralela',
+       link:'https://www.youtube.com/watch?v=ypA5NH4hqTU', link2:'https://www.youtube.com/watch?v=9xAOQbJdq3A',
+       series:3, reps:30, isTime:true, reps2:12, isTime2:false},
+      {tipo:'esteira_fim'},
+    ]
+  }
+};
+
 /* ════ STORAGE ════ */
 const GH_USER  = 'RafaelRodriPinto';
 const GH_REPO  = 'Treino';
@@ -1145,27 +1219,32 @@ function migrarHistoricoAntigo(){
 }
 
 /* Migração de plano — quando os exercícios do treino mudam (nova avaliação física),
-   arquiva o plano anterior como "antigo" e zera o contador de sessões do novo ciclo */
-const PLANO_VERSAO = '2026-08-12'; // muda toda vez que TREINOS é substituído por um novo plano
+   arquiva o plano anterior como "antigo" e recalcula as sessões do ciclo atual.
+   Baseada em CONTEÚDO (nomes dos exercícios), não em uma flag de "já rodou uma vez" —
+   assim é seguro rodar em toda abertura do app, sem risco de ficar "travada" numa
+   migração que não deu certo, e sem apagar sessões de treinos já feitos no plano novo. */
 function migrarPlanoV2(){
-  let versaoSalva=null;
-  try{versaoSalva=localStorage.getItem('gym_plano_versao')}catch(e){}
-  if(versaoSalva===PLANO_VERSAO)return; // já está na versão atual, nada a fazer
-
   try{
     const hist=JSON.parse(localStorage.getItem('gym_hist_v6')||'[]');
     let mudou=false;
     hist.forEach(h=>{
-      if(h.plano==='novo'){h.plano='antigo';mudou=true}
+      if(h.plano!=='novo')return; // só reavalia quem está marcado como plano atual
+      const exsAtuais=TREINOS[h.tipo]?TREINOS[h.tipo].exercicios:[];
+      const nomesReais=exsAtuais.filter(e=>e.tipo!=='esteira_inicio'&&e.tipo!=='esteira_fim').map(e=>e.nome);
+      const nomesHist=(h.exNames||[]).filter(n=>n&&!n.includes('Esteira'));
+      const bate = nomesReais.length===nomesHist.length && nomesReais.every((n,i)=>n===nomesHist[i]);
+      if(!bate){h.plano='antigo';mudou=true;} // nomes não batem com o plano atual → é de um plano anterior
     });
-    if(mudou)localStorage.setItem('gym_hist_v6',JSON.stringify(hist));
+    if(mudou){
+      localStorage.setItem('gym_hist_v6',JSON.stringify(hist));
+      // recalcula sessões só com base no que sobrou como 'novo' (plano atual) —
+      // preserva corretamente treinos já feitos hoje no plano novo
+      const sess={A:0,B:0,C:0,D:0};
+      hist.filter(h=>h.plano==='novo').forEach(h=>{if(sess[h.tipo]!==undefined)sess[h.tipo]++});
+      localStorage.setItem('gym_sess_v6',JSON.stringify(sess));
+      if(getToken())sincronizarGitHub();
+    }
   }catch(e){}
-
-  // zera sessões — novo ciclo de treino começa do zero
-  try{localStorage.setItem('gym_sess_v6',JSON.stringify({A:0,B:0,C:0,D:0}))}catch(e){}
-
-  try{localStorage.setItem('gym_plano_versao',PLANO_VERSAO)}catch(e){}
-  if(getToken())sincronizarGitHub();
 }
 // sessões concluídas por tipo (apenas treinos novos A-D)
 function loadSessoes(){try{return JSON.parse(localStorage.getItem('gym_sess_v6')||'{"A":0,"B":0,"C":0,"D":0}')}catch(e){return{A:0,B:0,C:0,D:0}}}
@@ -2596,34 +2675,37 @@ function renderHist(tab){
     });
     div.innerHTML=html;
   }else if(tab==='treinos'){
-    // Lista dos treinos antigos A, B, C para referência
+    // Lista dos treinos antigos para referência (todos os planos anteriores)
     let html='<div class="card" style="margin-bottom:14px;background:rgba(245,158,11,.07);border-color:rgba(245,158,11,.2)"><div style="font-size:12px;color:var(--amber);line-height:1.6">📋 Lista dos treinos anteriores para consulta. Estes treinos não estão disponíveis para execução — são apenas referência.</div></div>';
-    Object.keys(TREINOS_ANTIGOS).forEach(t=>{
-      const tr=TREINOS_ANTIGOS[t];
-      const exs=tr.exercicios.filter(e=>e.tipo==='normal'||e.tipo==='conjugado');
-      html+=`<div class="card">
-        <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
-          <span style="font-size:22px;font-weight:600;font-family:var(--mono);background:linear-gradient(135deg,var(--accent2),var(--green));-webkit-background-clip:text;-webkit-text-fill-color:transparent">${t}</span>
-          <div>
-            <div style="font-size:14px;font-weight:500">${tr.nome}</div>
-            <div style="font-size:11px;color:var(--muted)">${tr.info}</div>
-          </div>
-        </div>
-        <div style="display:flex;align-items:center;gap:6px;margin-bottom:10px;padding:8px 10px;background:var(--surface2);border-radius:8px">
-          <span style="font-size:11px;color:var(--muted);font-family:var(--mono)">🏃 Esteira aquecimento 10min</span>
-        </div>
-        ${exs.map((ex,i)=>`
-          <div style="display:flex;justify-content:space-between;align-items:flex-start;padding:9px 0;border-bottom:1px solid var(--border)">
-            <div style="flex:1">
-              <div style="font-size:13px;font-weight:500">${ex.nome}</div>
-              ${ex.nome2?`<div style="font-size:11px;color:var(--amber);margin-top:2px">+ ${ex.nome2}</div>`:''}
+    const gruposAntigos=[TREINOS_ANTIGOS_V2, TREINOS_ANTIGOS]; // mais recente primeiro
+    gruposAntigos.forEach(grupo=>{
+      Object.keys(grupo).forEach(t=>{
+        const tr=grupo[t];
+        const exs=tr.exercicios.filter(e=>e.tipo==='normal'||e.tipo==='conjugado');
+        html+=`<div class="card">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+            <span style="font-size:22px;font-weight:600;font-family:var(--mono);background:linear-gradient(135deg,var(--accent2),var(--green));-webkit-background-clip:text;-webkit-text-fill-color:transparent">${t}</span>
+            <div>
+              <div style="font-size:14px;font-weight:500">${tr.nome}</div>
+              <div style="font-size:11px;color:var(--muted)">${tr.info}</div>
             </div>
-            <span style="font-size:11px;font-family:var(--mono);color:var(--muted);white-space:nowrap;margin-left:10px">${ex.series||3}×${ex.isTime?ex.reps+'s':ex.reps+' reps'}</span>
-          </div>`).join('')}
-        <div style="display:flex;align-items:center;gap:6px;margin-top:10px;padding:8px 10px;background:var(--surface2);border-radius:8px">
-          <span style="font-size:11px;color:var(--muted);font-family:var(--mono)">🏃 Esteira finalização 20min</span>
-        </div>
-      </div>`;
+          </div>
+          <div style="display:flex;align-items:center;gap:6px;margin-bottom:10px;padding:8px 10px;background:var(--surface2);border-radius:8px">
+            <span style="font-size:11px;color:var(--muted);font-family:var(--mono)">🏃 Esteira aquecimento 10min</span>
+          </div>
+          ${exs.map((ex,i)=>`
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;padding:9px 0;border-bottom:1px solid var(--border)">
+              <div style="flex:1">
+                <div style="font-size:13px;font-weight:500">${ex.nome}</div>
+                ${ex.nome2?`<div style="font-size:11px;color:var(--amber);margin-top:2px">+ ${ex.nome2}</div>`:''}
+              </div>
+              <span style="font-size:11px;font-family:var(--mono);color:var(--muted);white-space:nowrap;margin-left:10px">${ex.series||3}×${ex.isTime?ex.reps+'s':ex.reps+' reps'}</span>
+            </div>`).join('')}
+          <div style="display:flex;align-items:center;gap:6px;margin-top:10px;padding:8px 10px;background:var(--surface2);border-radius:8px">
+            <span style="font-size:11px;color:var(--muted);font-family:var(--mono)">🏃 Esteira finalização 20min</span>
+          </div>
+        </div>`;
+      });
     });
     div.innerHTML=html;
   }
@@ -2641,8 +2723,9 @@ function buildHistCard(h){
     return nomesReais.every((n,i)=>n===nomesHistFiltrado[i]);
   }
   const exsNovos=TREINOS[h.tipo]?TREINOS[h.tipo].exercicios:null;
+  const exsAntigosV2=TREINOS_ANTIGOS_V2[h.tipo]?TREINOS_ANTIGOS_V2[h.tipo].exercicios:null;
   const exsAntigos=TREINOS_ANTIGOS[h.tipo]?TREINOS_ANTIGOS[h.tipo].exercicios:null;
-  const exs = nomesBatem(exsNovos)?exsNovos : (nomesBatem(exsAntigos)?exsAntigos : []);
+  const exs = nomesBatem(exsNovos)?exsNovos : (nomesBatem(exsAntigosV2)?exsAntigosV2 : (nomesBatem(exsAntigos)?exsAntigos : []));
   let exHtml='';
   // esteiras primeiro, se houver registro
   if(h.esteiraLog&&h.esteiraLog.length){
