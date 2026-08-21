@@ -12923,20 +12923,12 @@
     }
   ],
   "hidratacao": {
-    "data": "Thu Aug 20 2026",
-    "feitos": [
-      "acordar",
-      "pretreino",
-      "treino",
-      "postreino"
-    ]
+    "data": "Fri Aug 21 2026",
+    "feitos": []
   },
   "suplementos": {
-    "data": "Thu Aug 20 2026",
-    "feitos": [
-      "pretreino_mix",
-      "d3k2"
-    ]
+    "data": "Fri Aug 21 2026",
+    "feitos": []
   },
   "avaliacoes": [
     {
