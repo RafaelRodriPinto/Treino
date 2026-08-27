@@ -1,8 +1,256 @@
 {
   "treinos": [
     {
-      "tipo": "C",
+      "tipo": "D",
       "plano": "novo",
+      "data": "Wed Aug 26 2026",
+      "dataStr": "26/08/26",
+      "inicio": 1787742083635,
+      "fim": 1787749552539,
+      "exNames": [
+        "Esteira (aquecimento)",
+        "Elevação lateral",
+        "Elevação frontal pegada invertida",
+        "Desenvolvimento com halter",
+        "Crucifixo invertido máquina",
+        "Supino reto com halter",
+        "Crucifixo máquina",
+        "Bíceps martelo",
+        "Rosca bíceps barra W",
+        "Tríceps corda",
+        "Abdominal - prancha ventral",
+        "Esteira (finalização)"
+      ],
+      "series": [
+        [],
+        [
+          {
+            "peso": 8,
+            "reps": 12,
+            "tempo": 47
+          },
+          {
+            "peso": 8,
+            "reps": 12,
+            "tempo": 46
+          },
+          {
+            "peso": 8,
+            "reps": 12,
+            "tempo": 48
+          },
+          {
+            "peso": 8,
+            "reps": 12,
+            "tempo": 62
+          }
+        ],
+        [
+          {
+            "peso": 15,
+            "reps": 12,
+            "tempo": 56
+          },
+          {
+            "peso": 15,
+            "reps": 12,
+            "tempo": 54
+          },
+          {
+            "peso": 15,
+            "reps": 12,
+            "tempo": 62
+          }
+        ],
+        [
+          {
+            "peso": 12,
+            "reps": 12,
+            "tempo": 45
+          },
+          {
+            "peso": 12,
+            "reps": 12,
+            "tempo": 48
+          },
+          {
+            "peso": 12,
+            "reps": 12,
+            "tempo": 47
+          },
+          {
+            "peso": 12,
+            "reps": 12,
+            "tempo": 45
+          }
+        ],
+        [
+          {
+            "peso": 5,
+            "reps": 12,
+            "tempo": 66
+          },
+          {
+            "peso": 5,
+            "reps": 12,
+            "tempo": 51
+          },
+          {
+            "peso": 5,
+            "reps": 12,
+            "tempo": 40
+          },
+          {
+            "peso": 5,
+            "reps": 12,
+            "tempo": 85
+          }
+        ],
+        [
+          {
+            "peso": 16,
+            "reps": 12,
+            "tempo": 57
+          },
+          {
+            "peso": 16,
+            "reps": 12,
+            "tempo": 57
+          },
+          {
+            "peso": 16,
+            "reps": 12,
+            "tempo": 57
+          },
+          {
+            "peso": 16,
+            "reps": 12,
+            "tempo": 55
+          }
+        ],
+        [
+          {
+            "peso": 7,
+            "reps": 10,
+            "tempo": 3
+          },
+          {
+            "peso": 7,
+            "reps": 10,
+            "tempo": 47
+          },
+          {
+            "peso": 7,
+            "reps": 10,
+            "tempo": 41
+          }
+        ],
+        [
+          {
+            "peso": 12,
+            "reps": 10,
+            "tempo": 46
+          },
+          {
+            "peso": 12,
+            "reps": 10,
+            "tempo": 45
+          },
+          {
+            "peso": 12,
+            "reps": 10,
+            "tempo": 36
+          },
+          {
+            "peso": 12,
+            "reps": 10,
+            "tempo": 62
+          }
+        ],
+        [
+          {
+            "peso": 20,
+            "reps": 12,
+            "tempo": 52
+          },
+          {
+            "peso": 20,
+            "reps": 12,
+            "tempo": 52
+          },
+          {
+            "peso": 20,
+            "reps": 12,
+            "tempo": 57
+          },
+          {
+            "peso": 20,
+            "reps": 12,
+            "tempo": 54
+          }
+        ],
+        [
+          {
+            "peso": 30,
+            "reps": 15,
+            "tempo": 44
+          },
+          {
+            "peso": 30,
+            "reps": 15,
+            "tempo": 43
+          },
+          {
+            "peso": 30,
+            "reps": 15,
+            "tempo": 39
+          }
+        ],
+        [
+          {
+            "peso": 0,
+            "reps": 30,
+            "peso2": 0,
+            "reps2": 12,
+            "tempo": 40
+          },
+          {
+            "peso": 0,
+            "reps": 30,
+            "peso2": 0,
+            "reps2": 12,
+            "tempo": 40
+          },
+          {
+            "peso": 0,
+            "reps": 30,
+            "peso2": 0,
+            "reps2": 12,
+            "tempo": 44
+          }
+        ],
+        []
+      ],
+      "pulados": [],
+      "esteiraLog": [
+        {
+          "tipo": "esteira_inicio",
+          "status": "concluida",
+          "duracaoMeta": 600,
+          "duracaoFeita": 600
+        },
+        {
+          "tipo": "esteira_fim",
+          "status": "concluida",
+          "duracaoMeta": 1200,
+          "duracaoFeita": 1200
+        }
+      ],
+      "kcal": 802
+    },
+    {
+      "tipo": "C",
+      "plano": "antigo",
       "data": "Tue Aug 25 2026",
       "dataStr": "25/08/26",
       "inicio": 1787655624485,
@@ -179,7 +427,7 @@
     },
     {
       "tipo": "B",
-      "plano": "novo",
+      "plano": "antigo",
       "data": "Mon Aug 24 2026",
       "dataStr": "24/08/26",
       "inicio": 1787569189400,
@@ -393,7 +641,7 @@
     },
     {
       "tipo": "A",
-      "plano": "novo",
+      "plano": "antigo",
       "data": "Fri Aug 21 2026",
       "dataStr": "21/08/26",
       "inicio": 1787309934091,
@@ -612,7 +860,7 @@
     },
     {
       "tipo": "D",
-      "plano": "novo",
+      "plano": "antigo",
       "data": "Thu Aug 20 2026",
       "dataStr": "20/08/26",
       "inicio": 1787223924876,
@@ -860,7 +1108,7 @@
     },
     {
       "tipo": "C",
-      "plano": "novo",
+      "plano": "antigo",
       "data": "Wed Aug 19 2026",
       "dataStr": "19/08/26",
       "inicio": 1787137806408,
@@ -1031,7 +1279,7 @@
     },
     {
       "tipo": "B",
-      "plano": "novo",
+      "plano": "antigo",
       "data": "Tue Aug 18 2026",
       "dataStr": "18/08/26",
       "inicio": 1787050872100,
@@ -1245,7 +1493,7 @@
     },
     {
       "tipo": "A",
-      "plano": "novo",
+      "plano": "antigo",
       "data": "Mon Aug 17 2026",
       "dataStr": "17/08/26",
       "inicio": 1786965160255,
@@ -13533,11 +13781,11 @@
     }
   ],
   "hidratacao": {
-    "data": "Wed Aug 26 2026",
+    "data": "Thu Aug 27 2026",
     "feitos": []
   },
   "suplementos": {
-    "data": "Wed Aug 26 2026",
+    "data": "Thu Aug 27 2026",
     "feitos": []
   },
   "avaliacoes": [
