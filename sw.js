@@ -1,4 +1,4 @@
-const CACHE = 'treino-v3'; // versão bumped — força atualização em todos os dispositivos
+const CACHE = 'treino-v4'; // versão bumped — força atualização em todos os dispositivos (correção de bug de encoding + sessões zeradas + restaurar destrutivo)
 
 const ASSETS = [
   './',
