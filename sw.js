@@ -1,4 +1,4 @@
-const CACHE = 'treino-v4'; // versão bumped — força atualização em todos os dispositivos (correção de bug de encoding + sessões zeradas + restaurar destrutivo)
+const CACHE = 'treino-v5'; // versão bumped — corrige mojibake que sobrava em estoque/resumos semanais
 
 const ASSETS = [
   './',
