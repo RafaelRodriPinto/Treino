@@ -745,6 +745,12 @@ body{display:flex;flex-direction:column;height:100%;max-height:100vh}
 const PRAZO = new Date('2026-11-12T23:59:59');
 const META_SESSOES = 16;
 const INICIO_PLANO = new Date('2026-08-12T00:00:00');
+// Identificador explícito do plano atual — muda toda vez que TREINOS for substituído por
+// um novo plano (nova avaliação física). Usado para marcar cada treino salvo com o plano
+// exato a que pertence, em vez de depender só de comparar os nomes dos exercícios (frágil:
+// um bug de encoding numa sincronização pode corromper acentos e fazer a comparação falhar
+// silenciosamente, zerando sessões que na verdade foram feitas).
+const PLANO_ATUAL_ID = '2026-08-12';
 
 // tipo: 'esteira_inicio'|'esteira_fim'|'normal'|'conjugado'
 // conjugado = dois exercícios no mesmo slot
@@ -992,7 +998,13 @@ async function ghGet(){
     if(r.status===404)return {content:[],sha:null};
     if(!r.ok)return null;
     const d=await r.json();
-    const content=JSON.parse(atob(d.content.replace(/\n/g,'')));
+    // atob() sozinho devolve os bytes como string "latin1" — sem reconverter para UTF-8,
+    // todo acento vira mojibake, e o problema PIORA a cada sincronização (cada ida e volta
+    // corrompe de novo o que já estava corrompido). Isso precisa ser o inverso exato do
+    // btoa(unescape(encodeURIComponent(...))) usado no ghPut.
+    const raw=atob(d.content.replace(/\n/g,''));
+    const utf8=decodeURIComponent(escape(raw));
+    const content=JSON.parse(utf8);
     return {content, sha:d.sha};
   }catch(e){return null}
 }
@@ -1072,74 +1084,91 @@ function normalizarRemoto(remotoContent){
   };
 }
 
+/* Mescla os dados do GitHub com o que já está no aparelho — NUNCA substitui, sempre une.
+   Usada tanto pela sincronização automática quanto pelo botão "Restaurar do GitHub": dessa
+   forma, restaurar nunca mais apaga um treino feito localmente que ainda não tinha subido
+   (por exemplo, terminar um treino e apertar "Restaurar" segundos depois, antes do
+   sync automático — que tem 3s de debounce — completar).
+   Retorna o array de treinos já mesclado (usado para recalcular sessões e para reenviar
+   ao GitHub em seguida). */
+function mesclarComRemoto(remotoContent){
+  const r=normalizarRemoto(remotoContent);
+  // repara qualquer texto que tenha vindo corrompido do GitHub (proteção extra, além do
+  // reparo que já roda em migrarPlanoV2 sobre os dados locais)
+  repararTextoHistorico(r.treinos);
+
+  const localTreinos=loadHist();
+  // merge treinos: une local + remoto, remove duplicatas por inicio+tipo — local vem
+  // primeiro na lista, então em caso de conflito de chave o registro local prevalece
+  const todos=[...localTreinos,...r.treinos];
+  const vistos=new Set();
+  const mergedTreinos=todos.filter(h=>{
+    const k=(h.inicio||0)+'_'+h.tipo;
+    if(vistos.has(k))return false;
+    vistos.add(k);return true;
+  });
+  mergedTreinos.sort((a,b)=>(b.inicio||0)-(a.inicio||0));
+  if(mergedTreinos.length>120)mergedTreinos.splice(120);
+  try{localStorage.setItem('gym_hist_v6',JSON.stringify(mergedTreinos))}catch(e){}
+
+  // merge peso: une por data (local tem prioridade se houver conflito no mesmo dia)
+  const localPeso=loadPesoLog();
+  const pesoPorData={};
+  r.peso.forEach(p=>pesoPorData[p.data]=p);
+  localPeso.forEach(p=>pesoPorData[p.data]=p); // local sobrescreve
+  const mergedPeso=Object.values(pesoPorData).sort((a,b)=>a.ts-b.ts);
+  savePesoLog(mergedPeso);
+
+  // hidratação e suplementos: só do dia atual — local sempre ganha se for hoje, senão usa remoto se mais recente
+  const localHidrat=loadHidratHoje();
+  const mergedHidrat=(r.hidratacao&&r.hidratacao.data===today()&&!localHidrat.feitos.length)?r.hidratacao:localHidrat;
+  saveHidratHoje(mergedHidrat);
+
+  const localSuple=loadSupleHoje();
+  const mergedSuple=(r.suplementos&&r.suplementos.data===today()&&!localSuple.feitos.length)?r.suplementos:localSuple;
+  saveSupleHoje(mergedSuple);
+
+  // avaliações: une por data, local tem prioridade
+  const localAvals=loadAvaliacoes();
+  const avalsPorData={};
+  (r.avaliacoes||[]).forEach(a=>avalsPorData[a.data]=a);
+  localAvals.forEach(a=>avalsPorData[a.data]=a);
+  const mergedAvals=Object.values(avalsPorData).sort((a,b)=>new Date(a.data)-new Date(b.data));
+  try{localStorage.setItem('gym_avaliacoes',JSON.stringify(mergedAvals))}catch(e){}
+
+  // dias completos (streaks): une os arrays de cada tipo (hidrat/suple)
+  const localDC=loadDiasCompletos();
+  const remotoDC=r.diasCompletos||{};
+  const mergedDC={};
+  ['hidrat','suple'].forEach(tipo=>{
+    const setDias=new Set([...(localDC[tipo]||[]),...(remotoDC[tipo]||[])]);
+    mergedDC[tipo]=Array.from(setDias).sort();
+  });
+  saveDiasCompletos(mergedDC);
+
+  // estoque: local tem prioridade
+  const localEstoque=loadEstoque();
+  const mergedEstoque=(r.estoque&&r.estoque.length&&!localStorage.getItem('gym_estoque'))?r.estoque:localEstoque;
+  saveEstoque(mergedEstoque);
+
+  // resumos semanais: une por semId (identificador único da semana)
+  const localResumosMap={};
+  loadResumosSemana().forEach(x=>localResumosMap[x.semId]=x);
+  (r.resumosSemanais||[]).forEach(x=>{if(!localResumosMap[x.semId])localResumosMap[x.semId]=x;});
+  const mergedResumos=Object.values(localResumosMap).sort((a,b)=>b.ts-a.ts).slice(0,52);
+  saveResumosSemana(mergedResumos);
+
+  return mergedTreinos;
+}
+
 function sincronizarGitHub(){
   // debounce — espera 3s antes de sincronizar (evita múltiplas chamadas seguidas)
   clearTimeout(_syncTimeout);
   _syncTimeout=setTimeout(async()=>{
     const token=getToken(); if(!token)return;
-    const localTreinos=loadHist();
     const remoto=await ghGet();
     if(!remoto)return;
-    const r=normalizarRemoto(remoto.content);
-
-    // merge treinos: une local + remoto, remove duplicatas por inicio+tipo
-    const todos=[...localTreinos,...r.treinos];
-    const vistos=new Set();
-    const mergedTreinos=todos.filter(h=>{
-      const k=(h.inicio||0)+'_'+h.tipo;
-      if(vistos.has(k))return false;
-      vistos.add(k);return true;
-    });
-    mergedTreinos.sort((a,b)=>(b.inicio||0)-(a.inicio||0));
-    if(mergedTreinos.length>120)mergedTreinos.splice(120);
-    try{localStorage.setItem('gym_hist_v6',JSON.stringify(mergedTreinos))}catch(e){}
-
-    // merge peso: une por data (local tem prioridade se houver conflito no mesmo dia)
-    const localPeso=loadPesoLog();
-    const pesoPorData={};
-    r.peso.forEach(p=>pesoPorData[p.data]=p);
-    localPeso.forEach(p=>pesoPorData[p.data]=p); // local sobrescreve
-    const mergedPeso=Object.values(pesoPorData).sort((a,b)=>a.ts-b.ts);
-    savePesoLog(mergedPeso);
-
-    // hidratação e suplementos: só do dia atual — local sempre ganha se for hoje, senão usa remoto se mais recente
-    const localHidrat=loadHidratHoje();
-    const mergedHidrat=(r.hidratacao&&r.hidratacao.data===today()&&!localHidrat.feitos.length)?r.hidratacao:localHidrat;
-    saveHidratHoje(mergedHidrat);
-
-    const localSuple=loadSupleHoje();
-    const mergedSuple=(r.suplementos&&r.suplementos.data===today()&&!localSuple.feitos.length)?r.suplementos:localSuple;
-    saveSupleHoje(mergedSuple);
-
-    // avaliações: une por data, local tem prioridade
-    const localAvals=loadAvaliacoes();
-    const avalsPorData={};
-    (r.avaliacoes||[]).forEach(a=>avalsPorData[a.data]=a);
-    localAvals.forEach(a=>avalsPorData[a.data]=a);
-    const mergedAvals=Object.values(avalsPorData).sort((a,b)=>new Date(a.data)-new Date(b.data));
-    try{localStorage.setItem('gym_avaliacoes',JSON.stringify(mergedAvals))}catch(e){}
-
-    // dias completos (streaks): une os arrays de cada tipo (hidrat/suple)
-    const localDC=loadDiasCompletos();
-    const remotoDC=r.diasCompletos||{};
-    const mergedDC={};
-    ['hidrat','suple'].forEach(tipo=>{
-      const setDias=new Set([...(localDC[tipo]||[]),...(remotoDC[tipo]||[])]);
-      mergedDC[tipo]=Array.from(setDias).sort();
-    });
-    saveDiasCompletos(mergedDC);
-
-    // estoque: local tem prioridade
-    const localEstoque=loadEstoque();
-    const mergedEstoque=(r.estoque&&r.estoque.length&&!localStorage.getItem('gym_estoque'))?r.estoque:localEstoque;
-    saveEstoque(mergedEstoque);
-
-    // resumos semanais: une por semId (identificador único da semana)
-    const localResumosMap={};
-    loadResumosSemana().forEach(x=>localResumosMap[x.semId]=x);
-    (r.resumosSemanais||[]).forEach(x=>{if(!localResumosMap[x.semId])localResumosMap[x.semId]=x;});
-    const mergedResumos=Object.values(localResumosMap).sort((a,b)=>b.ts-a.ts).slice(0,52);
-    saveResumosSemana(mergedResumos);
+    const mergedTreinos=mesclarComRemoto(remoto.content);
 
     // salva tudo no GitHub
     const payload=montarPayloadCompleto(mergedTreinos);
@@ -1151,7 +1180,11 @@ function sincronizarGitHub(){
   },3000);
 }
 
-/* Restaura histórico do GitHub para o localStorage (usado na tela de config) */
+/* Restaura (mescla) o histórico do GitHub com o que está no aparelho — usado na tela de
+   config. Antes isso SUBSTITUÍA o histórico local pelo do GitHub; se um treino tivesse
+   acabado de ser feito e ainda não tivesse sincronizado (debounce de 3s), ele era apagado.
+   Agora sempre mescla — nunca perde um treino feito localmente, mesmo que ainda não tenha
+   subido pro GitHub. */
 async function restaurarDoGitHub(){
   mostrarToast('Buscando histórico no GitHub...');
   const remoto=await ghGet();
@@ -1159,22 +1192,15 @@ async function restaurarDoGitHub(){
   const r=normalizarRemoto(remoto.content);
   if(!r.treinos.length&&!r.peso.length){mostrarToast('Nenhum dado encontrado no GitHub');return}
 
-  try{localStorage.setItem('gym_hist_v6',JSON.stringify(r.treinos))}catch(e){}
-  // recalcula sessões
-  const sess={A:0,B:0,C:0,D:0};
-  r.treinos.filter(h=>h.plano==='novo').forEach(h=>{if(sess[h.tipo]!==undefined)sess[h.tipo]++});
-  try{localStorage.setItem('gym_sess_v6',JSON.stringify(sess))}catch(e){}
+  const mergedTreinos=mesclarComRemoto(remoto.content);
+  migrarPlanoV2(); // reclassifica plano/sessões já com o texto corrigido e os dados mesclados
+  preencherResumosPerdidos();
 
-  if(r.peso.length)savePesoLog(r.peso);
-  if(r.hidratacao)saveHidratHoje(r.hidratacao);
-  if(r.suplementos)saveSupleHoje(r.suplementos);
-  if(r.avaliacoes&&r.avaliacoes.length){try{localStorage.setItem('gym_avaliacoes',JSON.stringify(r.avaliacoes))}catch(e){}}
-  if(r.diasCompletos)saveDiasCompletos(r.diasCompletos);
-  if(r.estoque&&r.estoque.length)saveEstoque(r.estoque);
-  if(r.resumosSemanais&&r.resumosSemanais.length)saveResumosSemana(r.resumosSemanais);
-
-  mostrarToast('✓ '+r.treinos.length+' treinos e dados de saúde restaurados!');
+  mostrarToast('✓ Histórico e dados de saúde restaurados (mesclado com o que já estava no aparelho)!');
   setTimeout(()=>{renderHome();renderHist(_histTab);if(document.getElementById('page-saude').classList.contains('active'))showNav('saude')},1500);
+
+  // reenvia pro GitHub a versão já mesclada/corrigida, pra não deixar texto corrompido lá
+  if(getToken())sincronizarGitHub();
 }
 
 function mostrarToast(msg){
@@ -1253,17 +1279,64 @@ function migrarHistoricoAntigo(){
    Baseada em CONTEÚDO (nomes dos exercícios), não em uma flag de "já rodou uma vez" —
    assim é seguro rodar em toda abertura do app, sem risco de ficar "travada" numa
    migração que não deu certo, e sem apagar sessões de treinos já feitos no plano novo. */
+/* Corrige texto corrompido por um bug antigo de encoding na sincronização com o GitHub
+   (acentos virando "mÃ¡quina" etc, às vezes em várias camadas). Reaplica o processo de
+   decodificação até o texto estabilizar — é seguro rodar em texto já correto (não faz nada)
+   e em texto puro ASCII (não faz nada). */
+function corrigirMojibake(str){
+  if(typeof str!=='string'||!str)return str;
+  let prev=str;
+  for(let i=0;i<6;i++){
+    let nxt;
+    try{ nxt=decodeURIComponent(escape(prev)); }catch(e){ break; }
+    if(nxt===prev)break;
+    prev=nxt;
+  }
+  return prev;
+}
+/* Aplica a correção de mojibake em todos os nomes de exercício salvos no histórico.
+   Retorna true se algo mudou (para saber se precisa regravar/ressincronizar). */
+function repararTextoHistorico(hist){
+  let mudou=false;
+  (hist||[]).forEach(h=>{
+    if(Array.isArray(h.exNames)){
+      const novos=h.exNames.map(n=>corrigirMojibake(n));
+      if(JSON.stringify(novos)!==JSON.stringify(h.exNames)){h.exNames=novos;mudou=true;}
+    }
+  });
+  return mudou;
+}
+/* Migração de plano — quando os exercícios do treino mudam (nova avaliação física),
+   arquiva o plano anterior como "antigo" e recalcula as sessões do ciclo atual.
+   Usa planoId (identificador explícito, ver PLANO_ATUAL_ID) sempre que o registro já tem
+   um — é uma comparação robusta que não depende de string. Para registros antigos que ainda
+   não têm planoId, cai no fallback de comparar os nomes dos exercícios (e, ao confirmar que
+   batem, já carimba o planoId para não precisar repetir essa comparação frágil de novo).
+   Também repara qualquer texto corrompido por sincronizações antigas antes de comparar —
+   sem isso a comparação de nomes falha silenciosamente e zera sessões já feitas. */
 function migrarPlanoV2(){
   try{
     const hist=JSON.parse(localStorage.getItem('gym_hist_v6')||'[]');
-    let mudou=false;
+    let mudou=repararTextoHistorico(hist);
+
     hist.forEach(h=>{
-      if(h.plano!=='novo')return; // só reavalia quem está marcado como plano atual
+      if(h.planoId){
+        const deveSerNovo = h.planoId===PLANO_ATUAL_ID;
+        const novoValor = deveSerNovo?'novo':'antigo';
+        if(h.plano!==novoValor){h.plano=novoValor;mudou=true;}
+        return;
+      }
+      // fallback para registros salvos antes do planoId existir
       const exsAtuais=TREINOS[h.tipo]?TREINOS[h.tipo].exercicios:[];
       const nomesReais=exsAtuais.filter(e=>e.tipo!=='esteira_inicio'&&e.tipo!=='esteira_fim').map(e=>e.nome);
       const nomesHist=(h.exNames||[]).filter(n=>n&&!n.includes('Esteira'));
       const bate = nomesReais.length===nomesHist.length && nomesReais.every((n,i)=>n===nomesHist[i]);
-      if(!bate){h.plano='antigo';mudou=true;} // nomes não batem com o plano atual → é de um plano anterior
+      if(bate){
+        h.planoId=PLANO_ATUAL_ID; // carimba pra não depender de comparar nomes de novo
+        if(h.plano!=='novo'){h.plano='novo';mudou=true;}
+      }else if(h.plano==='novo'){
+        h.plano='antigo';mudou=true; // nomes não batem com o plano atual → é de um plano anterior
+      }
     });
     if(mudou){
       localStorage.setItem('gym_hist_v6',JSON.stringify(hist));
@@ -1616,9 +1689,9 @@ function clearAllTicks(){
 }
 
 /* ════ HOME ════ */
-function getSemanaAtualId(){
-  // identifica a semana atual no formato ano-numerosemana, baseado em segunda-feira
-  const d=new Date();
+function getSemanaAtualId(dataRef){
+  // identifica a semana (da data informada, ou de hoje) no formato ano-numerosemana
+  const d=dataRef||new Date();
   const onejan=new Date(d.getFullYear(),0,1);
   const diasPassados=Math.floor((d-onejan)/86400000);
   const semana=Math.ceil((diasPassados+onejan.getDay()+1)/7);
@@ -1714,6 +1787,64 @@ function salvarResumoSemanalNoHistorico(segunda,sexta,dados){
   if(resumos.length>52)resumos.splice(52); // guarda até 1 ano
   saveResumosSemana(resumos);
   if(getToken())sincronizarGitHub();
+}
+
+/* O resumo semanal só era gerado se o app fosse aberto justamente na segunda-feira daquela
+   semana — se você não abrisse o app naquele dia específico, a semana ficava sem resumo pra
+   sempre. Esta função roda no início (todo dia, não só segunda) e preenche retroativamente
+   qualquer semana, desde o início do plano atual, que já passou e ainda não tem resumo salvo —
+   nunca mexe na semana corrente (que ainda está em andamento). */
+function preencherResumosPerdidos(){
+  const hist=loadHist();
+  const novos=hist.filter(h=>h.plano==='novo'&&h.inicio);
+  if(!novos.length)return;
+
+  const resumos=loadResumosSemana();
+  const idsExistentes=new Set(resumos.map(r=>r.semId));
+
+  // segunda-feira da semana atual — nunca fecha a semana corrente antes dela terminar
+  const hoje=new Date();hoje.setHours(0,0,0,0);
+  const diaSemana=hoje.getDay();
+  const offsetSegunda=diaSemana===0?6:diaSemana-1;
+  const segundaAtual=new Date(hoje);segundaAtual.setDate(hoje.getDate()-offsetSegunda);
+
+  // segunda-feira da semana do primeiro treino do plano atual
+  const primeiroTs=Math.min(...novos.map(h=>h.inicio));
+  const primeiraData=new Date(primeiroTs);primeiraData.setHours(0,0,0,0);
+  const diaSemana0=primeiraData.getDay();
+  const offset0=diaSemana0===0?6:diaSemana0-1;
+  let cursor=new Date(primeiraData);cursor.setDate(cursor.getDate()-offset0);
+
+  let mudou=false;
+  while(cursor<segundaAtual){
+    const seg=new Date(cursor);
+    const sex=new Date(cursor);sex.setDate(sex.getDate()+4);sex.setHours(23,59,59,999);
+    const semId=getSemanaAtualId(seg);
+
+    if(!idsExistentes.has(semId)){
+      const dados=calcularDadosSemanais(seg.getTime(),sex.getTime());
+      if(dados.totalTreinos>0){
+        resumos.push({
+          semId,
+          dataStr: seg.toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit'}) + ' – ' + sex.toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit',year:'2-digit'}),
+          totalTreinos: dados.totalTreinos,
+          totalKcal: dados.totalKcal,
+          diffPeso: dados.diffPeso,
+          pesoFinal: dados.pesoFinal,
+          ts: seg.getTime()
+        });
+        idsExistentes.add(semId);
+        mudou=true;
+      }
+    }
+    cursor.setDate(cursor.getDate()+7);
+  }
+  if(mudou){
+    resumos.sort((a,b)=>b.ts-a.ts);
+    if(resumos.length>52)resumos.splice(52);
+    saveResumosSemana(resumos);
+    if(getToken())sincronizarGitHub();
+  }
 }
 
 function renderHome(){
@@ -2461,7 +2592,7 @@ function finalizarTreino(){
   const vol=E.series.flat().filter(Boolean).reduce((a,s)=>a+(s.peso*(s.reps||0))+(s.peso2||0)*(s.reps2||0),0);
   const kcal=estimarCaloriasTreino(dur,vol);
   saveHist({
-    tipo:E.tipo,plano:'novo',data:today(),dataStr:todayStr(),
+    tipo:E.tipo,plano:'novo',planoId:PLANO_ATUAL_ID,data:today(),dataStr:todayStr(),
     inicio:E.inicio,fim:E.fim,
     exNames:TREINOS[E.tipo].exercicios.map(ex=>ex.nome||exNome(ex)),
     series:E.series,pulados:E.pulados||[],
@@ -3168,6 +3299,7 @@ function carregarTema(){
 carregarTema();
 migrarHistoricoAntigo();
 migrarPlanoV2();
+preencherResumosPerdidos();
 renderHome();
 
 atualizarStatusBackup();
