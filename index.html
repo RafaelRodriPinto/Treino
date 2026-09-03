@@ -1094,8 +1094,12 @@ function normalizarRemoto(remotoContent){
 function mesclarComRemoto(remotoContent){
   const r=normalizarRemoto(remotoContent);
   // repara qualquer texto que tenha vindo corrompido do GitHub (proteção extra, além do
-  // reparo que já roda em migrarPlanoV2 sobre os dados locais)
+  // reparo que já roda em migrarPlanoV2 sobre os dados locais) — cobre treinos e também
+  // estoque, resumos semanais, avaliações etc., que podem ainda estar corrompidos lá
   repararTextoHistorico(r.treinos);
+  r.estoque=repararValorRecursivo(r.estoque);
+  r.resumosSemanais=repararValorRecursivo(r.resumosSemanais);
+  r.avaliacoes=repararValorRecursivo(r.avaliacoes);
 
   const localTreinos=loadHist();
   // merge treinos: une local + remoto, remove duplicatas por inicio+tipo — local vem
@@ -1294,6 +1298,44 @@ function corrigirMojibake(str){
   }
   return prev;
 }
+/* Aplica corrigirMojibake recursivamente em qualquer valor (string, array ou objeto) —
+   usada pra reparar QUALQUER dado salvo, não só os nomes de exercício. O primeiro reparo
+   (repararTextoHistorico, abaixo) só cobria exNames; estoque de suplementos e os títulos
+   dos resumos semanais (que têm um "–" no meio, ex: "17/08 – 21/08/26") também tinham sido
+   salvos corrompidos e ficaram de fora — por isso continuavam aparecendo errados mesmo
+   depois da primeira correção. */
+function repararValorRecursivo(v){
+  if(typeof v==='string')return corrigirMojibake(v);
+  if(Array.isArray(v))return v.map(repararValorRecursivo);
+  if(v&&typeof v==='object'){
+    const out={};
+    for(const k in v)out[k]=repararValorRecursivo(v[k]);
+    return out;
+  }
+  return v;
+}
+/* Passa o reparo em TODAS as chaves de localStorage usadas pelo app (não só o histórico de
+   treinos) — estoque, resumos semanais, avaliações, peso, hidratação, suplementos. Roda no
+   início, então qualquer texto que ainda esteja corrompido de sincronizações antigas é
+   corrigido de uma vez, em qualquer lugar que ele apareça. */
+function repararTodosOsDadosLocais(){
+  const CHAVES=['gym_estoque','gym_resumos_semanais','gym_avaliacoes','gym_peso_log','gym_hidrat','gym_suple','gym_dias_completos'];
+  let mudou=false;
+  CHAVES.forEach(k=>{
+    try{
+      const raw=localStorage.getItem(k);
+      if(!raw)return;
+      const parsed=JSON.parse(raw);
+      const fixed=repararValorRecursivo(parsed);
+      const fixedStr=JSON.stringify(fixed);
+      if(fixedStr!==raw){
+        localStorage.setItem(k,fixedStr);
+        mudou=true;
+      }
+    }catch(e){}
+  });
+  return mudou;
+}
 /* Aplica a correção de mojibake em todos os nomes de exercício salvos no histórico.
    Retorna true se algo mudou (para saber se precisa regravar/ressincronizar). */
 function repararTextoHistorico(hist){
@@ -1316,8 +1358,10 @@ function repararTextoHistorico(hist){
    sem isso a comparação de nomes falha silenciosamente e zera sessões já feitas. */
 function migrarPlanoV2(){
   try{
+    // corrige estoque, resumos semanais, avaliações etc. já salvos corrompidos
+    let mudou=repararTodosOsDadosLocais();
     const hist=JSON.parse(localStorage.getItem('gym_hist_v6')||'[]');
-    let mudou=repararTextoHistorico(hist);
+    if(repararTextoHistorico(hist))mudou=true;
 
     hist.forEach(h=>{
       if(h.planoId){
