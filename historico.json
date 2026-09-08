@@ -14624,11 +14624,11 @@
     }
   ],
   "hidratacao": {
-    "data": "Fri Sep 04 2026",
+    "data": "Tue Sep 08 2026",
     "feitos": []
   },
   "suplementos": {
-    "data": "Fri Sep 04 2026",
+    "data": "Tue Sep 08 2026",
     "feitos": []
   },
   "avaliacoes": [
@@ -14729,6 +14729,15 @@
     }
   ],
   "resumosSemanais": [
+    {
+      "semId": "2026-S36",
+      "dataStr": "31/08 – 04/09/26",
+      "totalTreinos": 3,
+      "totalKcal": 2133,
+      "diffPeso": null,
+      "pesoFinal": null,
+      "ts": 1788145200000
+    },
     {
       "semId": "2026-S35",
       "dataStr": "17/08 – 21/08/26",
