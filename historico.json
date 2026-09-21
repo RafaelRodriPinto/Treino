@@ -1,6 +1,184 @@
 {
   "treinos": [
     {
+      "tipo": "C",
+      "plano": "novo",
+      "planoId": "2026-08-12",
+      "data": "Fri Sep 18 2026",
+      "dataStr": "18/09/26",
+      "inicio": 1789729154670,
+      "fim": 1789735359538,
+      "exNames": [
+        "Esteira (aquecimento)",
+        "Agachamento no Smith",
+        "Cadeira extensora",
+        "Leg press 45°",
+        "Mesa flexora",
+        "Sky-flexão de joelho máquina",
+        "Agachamento sumô com halter",
+        "Cadeira abdutora",
+        "Cadeira adutora",
+        "Esteira (finalização)"
+      ],
+      "series": [
+        [],
+        [
+          {
+            "peso": 5,
+            "reps": 12,
+            "tempo": 70
+          },
+          {
+            "peso": 5,
+            "reps": 12,
+            "tempo": 80
+          },
+          {
+            "peso": 5,
+            "reps": 12,
+            "tempo": 82
+          }
+        ],
+        [
+          {
+            "peso": 52,
+            "reps": 12,
+            "tempo": 37
+          },
+          {
+            "peso": 52,
+            "reps": 12,
+            "tempo": 29
+          },
+          {
+            "peso": 52,
+            "reps": 12,
+            "tempo": 32
+          },
+          {
+            "peso": 52,
+            "reps": 12,
+            "tempo": 35
+          }
+        ],
+        [
+          {
+            "peso": 60,
+            "reps": 10,
+            "tempo": 44
+          },
+          {
+            "peso": 60,
+            "reps": 10,
+            "tempo": 53
+          },
+          {
+            "peso": 60,
+            "reps": 10,
+            "tempo": 51
+          },
+          {
+            "peso": 60,
+            "reps": 10,
+            "tempo": 64
+          }
+        ],
+        [
+          {
+            "peso": 39,
+            "reps": 12,
+            "tempo": 52
+          },
+          {
+            "peso": 39,
+            "reps": 12,
+            "tempo": 48
+          },
+          {
+            "peso": 39,
+            "reps": 12,
+            "tempo": 46
+          }
+        ],
+        [
+          {
+            "peso": 7,
+            "reps": 10,
+            "tempo": 76
+          },
+          {
+            "peso": 7,
+            "reps": 10,
+            "tempo": 65
+          },
+          {
+            "peso": 7,
+            "reps": 10,
+            "tempo": 74
+          }
+        ],
+        [
+          null,
+          null,
+          null,
+          null
+        ],
+        [
+          {
+            "peso": 59,
+            "reps": 15,
+            "tempo": 36
+          },
+          {
+            "peso": 59,
+            "reps": 15,
+            "tempo": 39
+          },
+          {
+            "peso": 59,
+            "reps": 15,
+            "tempo": 49
+          }
+        ],
+        [
+          {
+            "peso": 66,
+            "reps": 15,
+            "tempo": 46
+          },
+          {
+            "peso": 66,
+            "reps": 15,
+            "tempo": 48
+          },
+          {
+            "peso": 66,
+            "reps": 15,
+            "tempo": 55
+          }
+        ],
+        []
+      ],
+      "pulados": [
+        6
+      ],
+      "esteiraLog": [
+        {
+          "tipo": "esteira_inicio",
+          "status": "concluida",
+          "duracaoMeta": 600,
+          "duracaoFeita": 600
+        },
+        {
+          "tipo": "esteira_fim",
+          "status": "concluida",
+          "duracaoMeta": 1200,
+          "duracaoFeita": 1200
+        }
+      ],
+      "kcal": 744
+    },
+    {
       "tipo": "B",
       "plano": "novo",
       "planoId": "2026-08-12",
@@ -15905,11 +16083,11 @@
     }
   ],
   "hidratacao": {
-    "data": "Fri Sep 18 2026",
+    "data": "Mon Sep 21 2026",
     "feitos": []
   },
   "suplementos": {
-    "data": "Fri Sep 18 2026",
+    "data": "Mon Sep 21 2026",
     "feitos": []
   },
   "avaliacoes": [
@@ -16010,6 +16188,15 @@
     }
   ],
   "resumosSemanais": [
+    {
+      "semId": "2026-S39",
+      "dataStr": "14/09 – 18/09/26",
+      "totalTreinos": 4,
+      "totalKcal": 2941,
+      "diffPeso": null,
+      "pesoFinal": null,
+      "ts": 1789988817795
+    },
     {
       "semId": "2026-S38",
       "dataStr": "07/09 – 11/09/26",
