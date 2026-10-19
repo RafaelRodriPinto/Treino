@@ -1,6 +1,221 @@
 {
   "treinos": [
     {
+      "tipo": "B",
+      "plano": "novo",
+      "planoId": "2026-08-12",
+      "data": "Wed Oct 14 2026",
+      "dataStr": "14/10/26",
+      "inicio": 1791976091172,
+      "fim": 1791981465788,
+      "exNames": [
+        "Esteira (aquecimento)",
+        "Puxada barra romana",
+        "Puxada fechada pegada neutra",
+        "Facepull",
+        "Remada baixa supinada",
+        "Remada máquina fechada",
+        "Rosca martelo",
+        "Rosca scott barra",
+        "Rosca 21 com barra",
+        "Abdominal remador",
+        "Esteira (finalização)"
+      ],
+      "series": [
+        [],
+        [
+          {
+            "peso": 45,
+            "reps": 12,
+            "tempo": 52
+          },
+          {
+            "peso": 45,
+            "reps": 12,
+            "tempo": 52
+          },
+          {
+            "peso": 45,
+            "reps": 12,
+            "tempo": 51
+          },
+          {
+            "peso": 45,
+            "reps": 12,
+            "tempo": 79
+          }
+        ],
+        [
+          {
+            "peso": 45,
+            "reps": 12,
+            "tempo": 51
+          },
+          {
+            "peso": 45,
+            "reps": 12,
+            "tempo": 51
+          },
+          {
+            "peso": 45,
+            "reps": 12,
+            "tempo": 49
+          },
+          {
+            "peso": 45,
+            "reps": 12,
+            "tempo": 55
+          }
+        ],
+        [
+          {
+            "peso": 30,
+            "reps": 15,
+            "tempo": 44
+          },
+          {
+            "peso": 30,
+            "reps": 15,
+            "tempo": 42
+          },
+          {
+            "peso": 30,
+            "reps": 15,
+            "tempo": 46
+          },
+          {
+            "peso": 30,
+            "reps": 15,
+            "tempo": 49
+          }
+        ],
+        [
+          {
+            "peso": 45,
+            "reps": 12,
+            "tempo": 57
+          },
+          {
+            "peso": 45,
+            "reps": 12,
+            "tempo": 47
+          },
+          {
+            "peso": 45,
+            "reps": 12,
+            "tempo": 27
+          }
+        ],
+        [
+          {
+            "peso": 45,
+            "reps": 12,
+            "tempo": 46
+          },
+          {
+            "peso": 45,
+            "reps": 12,
+            "tempo": 43
+          },
+          {
+            "peso": 45,
+            "reps": 12,
+            "tempo": 40
+          }
+        ],
+        [
+          {
+            "peso": 12,
+            "reps": 10,
+            "tempo": 44
+          },
+          {
+            "peso": 12,
+            "reps": 10,
+            "tempo": 41
+          },
+          {
+            "peso": 12,
+            "reps": 10,
+            "tempo": 37
+          },
+          {
+            "peso": 12,
+            "reps": 10,
+            "tempo": 147
+          }
+        ],
+        [
+          {
+            "peso": 20,
+            "reps": 12,
+            "tempo": 58
+          },
+          {
+            "peso": 20,
+            "reps": 12,
+            "tempo": 64
+          },
+          {
+            "peso": 20,
+            "reps": 12,
+            "tempo": 97
+          }
+        ],
+        [
+          {
+            "peso": 10,
+            "reps": 21,
+            "tempo": 57
+          },
+          {
+            "peso": 10,
+            "reps": 21,
+            "tempo": 63
+          },
+          {
+            "peso": 10,
+            "reps": 21,
+            "tempo": 73
+          }
+        ],
+        [
+          {
+            "peso": 0,
+            "reps": 12,
+            "tempo": 54
+          },
+          {
+            "peso": 0,
+            "reps": 12,
+            "tempo": 52
+          },
+          {
+            "peso": 0,
+            "reps": 12,
+            "tempo": 50
+          }
+        ],
+        []
+      ],
+      "pulados": [],
+      "esteiraLog": [
+        {
+          "tipo": "esteira_inicio",
+          "status": "pulada",
+          "duracaoMeta": 600,
+          "duracaoFeita": 0
+        },
+        {
+          "tipo": "esteira_fim",
+          "status": "concluida",
+          "duracaoMeta": 1200,
+          "duracaoFeita": 1200
+        }
+      ],
+      "kcal": 649
+    },
+    {
       "tipo": "A",
       "plano": "novo",
       "planoId": "2026-08-12",
@@ -18873,11 +19088,11 @@
     }
   ],
   "hidratacao": {
-    "data": "Wed Oct 14 2026",
+    "data": "Mon Oct 19 2026",
     "feitos": []
   },
   "suplementos": {
-    "data": "Wed Oct 14 2026",
+    "data": "Mon Oct 19 2026",
     "feitos": []
   },
   "avaliacoes": [
@@ -18978,6 +19193,24 @@
     }
   ],
   "resumosSemanais": [
+    {
+      "semId": "2026-S43",
+      "dataStr": "12/10 – 16/10/26",
+      "totalTreinos": 2,
+      "totalKcal": 1349,
+      "diffPeso": null,
+      "pesoFinal": null,
+      "ts": 1792408002775
+    },
+    {
+      "semId": "2026-S42",
+      "dataStr": "12/10 – 16/10/26",
+      "totalTreinos": 2,
+      "totalKcal": 1349,
+      "diffPeso": null,
+      "pesoFinal": null,
+      "ts": 1791774000000
+    },
     {
       "semId": "2026-S41",
       "dataStr": "28/09 – 02/10/26",
