@@ -1,6 +1,211 @@
 {
   "treinos": [
     {
+      "tipo": "B",
+      "plano": "novo",
+      "planoId": "2026-08-12",
+      "data": "Thu Oct 22 2026",
+      "dataStr": "22/10/26",
+      "inicio": 1792667476318,
+      "fim": 1792673736900,
+      "exNames": [
+        "Esteira (aquecimento)",
+        "Puxada barra romana",
+        "Puxada fechada pegada neutra",
+        "Facepull",
+        "Remada baixa supinada",
+        "Remada máquina fechada",
+        "Rosca martelo",
+        "Rosca scott barra",
+        "Rosca 21 com barra",
+        "Abdominal remador",
+        "Esteira (finalização)"
+      ],
+      "series": [
+        [],
+        [
+          {
+            "peso": 45,
+            "reps": 12,
+            "tempo": 52
+          },
+          {
+            "peso": 45,
+            "reps": 12,
+            "tempo": 55
+          },
+          {
+            "peso": 45,
+            "reps": 12,
+            "tempo": 51
+          },
+          {
+            "peso": 45,
+            "reps": 12,
+            "tempo": 69
+          }
+        ],
+        [
+          {
+            "peso": 45,
+            "reps": 12,
+            "tempo": 54
+          },
+          {
+            "peso": 45,
+            "reps": 12,
+            "tempo": 51
+          },
+          {
+            "peso": 45,
+            "reps": 12,
+            "tempo": 47
+          },
+          {
+            "peso": 45,
+            "reps": 12,
+            "tempo": 50
+          }
+        ],
+        [
+          {
+            "peso": 30,
+            "reps": 15,
+            "tempo": 47
+          },
+          {
+            "peso": 30,
+            "reps": 15,
+            "tempo": 45
+          },
+          {
+            "peso": 30,
+            "reps": 15,
+            "tempo": 41
+          },
+          {
+            "peso": 30,
+            "reps": 15,
+            "tempo": 48
+          }
+        ],
+        [
+          {
+            "peso": 45,
+            "reps": 12,
+            "tempo": 46
+          },
+          {
+            "peso": 45,
+            "reps": 12,
+            "tempo": 39
+          },
+          {
+            "peso": 45,
+            "reps": 12,
+            "tempo": 40
+          }
+        ],
+        [
+          null,
+          null,
+          null
+        ],
+        [
+          {
+            "peso": 12,
+            "reps": 10,
+            "tempo": 39
+          },
+          {
+            "peso": 12,
+            "reps": 10,
+            "tempo": 37
+          },
+          {
+            "peso": 12,
+            "reps": 10,
+            "tempo": 38
+          },
+          {
+            "peso": 12,
+            "reps": 10,
+            "tempo": 67
+          }
+        ],
+        [
+          {
+            "peso": 20,
+            "reps": 12,
+            "tempo": 58
+          },
+          {
+            "peso": 20,
+            "reps": 12,
+            "tempo": 60
+          },
+          {
+            "peso": 20,
+            "reps": 12,
+            "tempo": 58
+          }
+        ],
+        [
+          {
+            "peso": 10,
+            "reps": 21,
+            "tempo": 60
+          },
+          {
+            "peso": 10,
+            "reps": 21,
+            "tempo": 57
+          },
+          {
+            "peso": 10,
+            "reps": 21,
+            "tempo": 82
+          }
+        ],
+        [
+          {
+            "peso": 0,
+            "reps": 12,
+            "tempo": 50
+          },
+          {
+            "peso": 0,
+            "reps": 12,
+            "tempo": 51
+          },
+          {
+            "peso": 0,
+            "reps": 12,
+            "tempo": 52
+          }
+        ],
+        []
+      ],
+      "pulados": [
+        5
+      ],
+      "esteiraLog": [
+        {
+          "tipo": "esteira_inicio",
+          "status": "concluida",
+          "duracaoMeta": 600,
+          "duracaoFeita": 600
+        },
+        {
+          "tipo": "esteira_fim",
+          "status": "concluida",
+          "duracaoMeta": 1200,
+          "duracaoFeita": 1200
+        }
+      ],
+      "kcal": 722
+    },
+    {
       "tipo": "A",
       "plano": "novo",
       "planoId": "2026-08-12",
@@ -19735,11 +19940,11 @@
     }
   ],
   "hidratacao": {
-    "data": "Thu Oct 22 2026",
+    "data": "Fri Oct 23 2026",
     "feitos": []
   },
   "suplementos": {
-    "data": "Thu Oct 22 2026",
+    "data": "Fri Oct 23 2026",
     "feitos": []
   },
   "avaliacoes": [
