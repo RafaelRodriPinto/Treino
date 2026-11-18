@@ -1,6 +1,184 @@
 {
   "treinos": [
     {
+      "tipo": "C",
+      "plano": "novo",
+      "planoId": "2026-08-12",
+      "data": "Wed Nov 18 2026",
+      "dataStr": "18/11/26",
+      "inicio": 1794999994620,
+      "fim": 1795006004987,
+      "exNames": [
+        "Esteira (aquecimento)",
+        "Agachamento no Smith",
+        "Cadeira extensora",
+        "Leg press 45°",
+        "Mesa flexora",
+        "Sky-flexão de joelho máquina",
+        "Agachamento sumô com halter",
+        "Cadeira abdutora",
+        "Cadeira adutora",
+        "Esteira (finalização)"
+      ],
+      "series": [
+        [],
+        [
+          {
+            "peso": 10,
+            "reps": 12,
+            "tempo": 101
+          },
+          {
+            "peso": 10,
+            "reps": 12,
+            "tempo": 66
+          },
+          {
+            "peso": 10,
+            "reps": 12,
+            "tempo": 63
+          }
+        ],
+        [
+          {
+            "peso": 52,
+            "reps": 12,
+            "tempo": 35
+          },
+          {
+            "peso": 52,
+            "reps": 12,
+            "tempo": 42
+          },
+          {
+            "peso": 52,
+            "reps": 12,
+            "tempo": 33
+          },
+          {
+            "peso": 52,
+            "reps": 12,
+            "tempo": 33
+          }
+        ],
+        [
+          {
+            "peso": 60,
+            "reps": 10,
+            "tempo": 35
+          },
+          {
+            "peso": 60,
+            "reps": 10,
+            "tempo": 40
+          },
+          {
+            "peso": 60,
+            "reps": 10,
+            "tempo": 45
+          },
+          {
+            "peso": 60,
+            "reps": 10,
+            "tempo": 195
+          }
+        ],
+        [
+          {
+            "peso": 39,
+            "reps": 10,
+            "tempo": 29
+          },
+          {
+            "peso": 39,
+            "reps": 10,
+            "tempo": 29
+          },
+          {
+            "peso": 39,
+            "reps": 10,
+            "tempo": 35
+          }
+        ],
+        [
+          {
+            "peso": 7,
+            "reps": 10,
+            "tempo": 62
+          },
+          {
+            "peso": 7,
+            "reps": 10,
+            "tempo": 64
+          },
+          {
+            "peso": 7,
+            "reps": 10,
+            "tempo": 83
+          }
+        ],
+        [
+          null,
+          null,
+          null,
+          null
+        ],
+        [
+          {
+            "peso": 59,
+            "reps": 15,
+            "tempo": 32
+          },
+          {
+            "peso": 59,
+            "reps": 15,
+            "tempo": 36
+          },
+          {
+            "peso": 59,
+            "reps": 15,
+            "tempo": 31
+          }
+        ],
+        [
+          {
+            "peso": 66,
+            "reps": 15,
+            "tempo": 49
+          },
+          {
+            "peso": 66,
+            "reps": 15,
+            "tempo": 38
+          },
+          {
+            "peso": 66,
+            "reps": 15,
+            "tempo": 51
+          }
+        ],
+        []
+      ],
+      "pulados": [
+        6
+      ],
+      "esteiraLog": [
+        {
+          "tipo": "esteira_inicio",
+          "status": "concluida",
+          "duracaoMeta": 600,
+          "duracaoFeita": 600
+        },
+        {
+          "tipo": "esteira_fim",
+          "status": "concluida",
+          "duracaoMeta": 1200,
+          "duracaoFeita": 1200
+        }
+      ],
+      "kcal": 724
+    },
+    {
       "tipo": "B",
       "plano": "novo",
       "planoId": "2026-08-12",
@@ -22842,229 +23020,6 @@
         10
       ],
       "plano": "antigo"
-    },
-    {
-      "tipo": "A",
-      "data": "Wed Apr 22 2026",
-      "dataStr": "22/04/26",
-      "inicio": 1776867849868,
-      "fim": 1776872854574,
-      "exNames": [
-        "Esteira (aquecimento)",
-        "Supino Máquina",
-        "Voador Peitoral",
-        "Hammer Inclinado",
-        "Crucifixo Aberto c/ HBC",
-        "Tríceps Pulley",
-        "Tríceps Corda",
-        "Tríceps Francês Unilateral",
-        "Cadeira Extensora",
-        "Cadeira Adutora",
-        "Leg Horizontal (pés abduzidos)",
-        "Flexão Quadril c/ Caneleira",
-        "Abdominal Supra (solo)",
-        "Esteira (finalização)"
-      ],
-      "series": [
-        [],
-        [
-          {
-            "peso": 45,
-            "reps": 12,
-            "tempo": 2
-          },
-          {
-            "peso": 45,
-            "reps": 12,
-            "tempo": 3
-          },
-          {
-            "peso": 45,
-            "reps": 12,
-            "tempo": 1
-          }
-        ],
-        [
-          {
-            "peso": 10,
-            "reps": 12,
-            "tempo": 7
-          },
-          {
-            "peso": 10,
-            "reps": 12,
-            "tempo": 8
-          },
-          {
-            "peso": 10,
-            "reps": 12,
-            "tempo": 7
-          }
-        ],
-        [
-          {
-            "peso": 20,
-            "reps": 12,
-            "tempo": 30
-          },
-          {
-            "peso": 20,
-            "reps": 12,
-            "tempo": 31
-          },
-          {
-            "peso": 20,
-            "reps": 12,
-            "tempo": 30
-          }
-        ],
-        [
-          {
-            "peso": 12,
-            "reps": 12,
-            "tempo": 5
-          },
-          {
-            "peso": 12,
-            "reps": 12,
-            "tempo": 42
-          },
-          {
-            "peso": 12,
-            "reps": 12,
-            "tempo": 10
-          }
-        ],
-        [
-          {
-            "peso": 30,
-            "reps": 12,
-            "tempo": 7
-          },
-          {
-            "peso": 35,
-            "reps": 12,
-            "tempo": 7
-          },
-          {
-            "peso": 40,
-            "reps": 12,
-            "tempo": 8
-          }
-        ],
-        [
-          {
-            "peso": 20,
-            "reps": 12,
-            "tempo": 43
-          },
-          {
-            "peso": 20,
-            "reps": 12,
-            "tempo": 36
-          },
-          {
-            "peso": 20,
-            "reps": 12,
-            "tempo": 31
-          }
-        ],
-        [
-          {
-            "peso": 7,
-            "reps": 12,
-            "tempo": 32
-          },
-          {
-            "peso": 8,
-            "reps": 12,
-            "tempo": 32
-          },
-          {
-            "peso": 8,
-            "reps": 12,
-            "tempo": 31
-          }
-        ],
-        [
-          {
-            "peso": 45,
-            "reps": 12,
-            "tempo": 32
-          },
-          {
-            "peso": 45,
-            "reps": 12,
-            "tempo": 30
-          },
-          {
-            "peso": 45,
-            "reps": 12,
-            "tempo": 30
-          }
-        ],
-        [
-          {
-            "peso": 59,
-            "reps": 15,
-            "tempo": 30
-          },
-          {
-            "peso": 59,
-            "reps": 15,
-            "tempo": 29
-          },
-          {
-            "peso": 59,
-            "reps": 15,
-            "tempo": 30
-          }
-        ],
-        [
-          {
-            "peso": 64,
-            "reps": 12,
-            "tempo": 7
-          },
-          {
-            "peso": 64,
-            "reps": 12,
-            "tempo": 7
-          },
-          {
-            "peso": 64,
-            "reps": 12,
-            "tempo": 54
-          }
-        ],
-        [
-          null,
-          null,
-          null
-        ],
-        [
-          {
-            "peso": 0,
-            "reps": 12,
-            "tempo": 2
-          },
-          {
-            "peso": 0,
-            "reps": 12,
-            "tempo": 0
-          },
-          {
-            "peso": 0,
-            "reps": 12,
-            "tempo": 0
-          }
-        ],
-        []
-      ],
-      "pulados": [
-        11
-      ],
-      "plano": "antigo"
     }
   ],
   "peso": [
@@ -23083,11 +23038,11 @@
     }
   ],
   "hidratacao": {
-    "data": "Tue Nov 17 2026",
+    "data": "Wed Nov 18 2026",
     "feitos": []
   },
   "suplementos": {
-    "data": "Tue Nov 17 2026",
+    "data": "Wed Nov 18 2026",
     "feitos": []
   },
   "avaliacoes": [
