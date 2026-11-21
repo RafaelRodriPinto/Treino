@@ -147,6 +147,8 @@ body{display:flex;flex-direction:column;height:100%;max-height:100vh}
 .ex-name a{color:var(--accent2);text-decoration:none;border-bottom:1px solid rgba(165,153,255,.3)}
 .ex-conjugado{font-size:12px;color:var(--amber);margin-top:4px;font-family:var(--mono)}
 .ex-meta{font-size:13px;color:var(--muted);margin-top:5px}
+.ex-obs{font-size:12px;color:var(--amber);background:var(--amber2);border-radius:10px;padding:7px 10px;margin-top:8px;line-height:1.4}
+.ex-prog{font-size:12px;color:var(--accent2);background:rgba(124,106,247,.12);border:1px solid rgba(124,106,247,.25);border-radius:10px;padding:7px 10px;margin-top:8px;line-height:1.4}
 .series-badges{display:flex;gap:5px;margin-top:10px}
 .s-badge{width:26px;height:26px;border-radius:50%;border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:10px;font-family:var(--mono);color:var(--muted)}
 .s-badge.done{background:var(--green2);border-color:var(--green);color:var(--green)}
@@ -351,37 +353,72 @@ body{display:flex;flex-direction:column;height:100%;max-height:100vh}
         <div>
           <div style="font-size:10px;font-family:var(--mono);letter-spacing:2px;color:var(--green);text-transform:uppercase;margin-bottom:4px">Avaliação Física</div>
           <div style="font-size:22px;font-weight:600">Rafael Pinto</div>
-          <div style="font-size:12px;color:var(--muted)">12/08/2026 · 41 anos · 186cm</div>
+          <div style="font-size:12px;color:var(--muted)">16/11/2026 · 41 anos · 186cm</div>
+          <div style="font-size:11px;color:var(--accent2);margin-top:3px">Tipo de corpo: muscular acima do peso</div>
         </div>
         <div style="text-align:center;background:var(--surface);border-radius:14px;padding:10px 14px;border:1px solid var(--border)">
-          <div style="font-size:32px;font-weight:700;color:var(--amber)">80</div>
-          <div style="font-size:10px;color:var(--muted);font-family:var(--mono)">MÉDIA</div>
+          <div style="font-size:32px;font-weight:700;color:var(--green)">83</div>
+          <div style="font-size:10px;color:var(--muted);font-family:var(--mono)">BOM</div>
         </div>
       </div>
       <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:4px">
         <div style="background:var(--surface);border-radius:10px;padding:8px;text-align:center">
-          <div style="font-size:17px;font-weight:600;color:var(--amber)">92.5<span style="font-size:10px;color:var(--muted)">kg</span></div>
+          <div style="font-size:17px;font-weight:600;color:var(--amber)">91.7<span style="font-size:10px;color:var(--muted)">kg</span></div>
           <div style="font-size:9px;color:var(--muted);font-family:var(--mono)">PESO</div>
         </div>
         <div style="background:var(--surface);border-radius:10px;padding:8px;text-align:center">
-          <div style="font-size:17px;font-weight:600;color:var(--amber)">26.7</div>
+          <div style="font-size:17px;font-weight:600;color:var(--amber)">26.5</div>
           <div style="font-size:9px;color:var(--muted);font-family:var(--mono)">IMC</div>
         </div>
         <div style="background:var(--surface);border-radius:10px;padding:8px;text-align:center">
           <div style="font-size:17px;font-weight:600;color:var(--green)">82<span style="font-size:10px;color:var(--muted)">kg</span></div>
-          <div style="font-size:9px;color:var(--muted);font-family:var(--mono)">IDEAL</div>
+          <div style="font-size:9px;color:var(--muted);font-family:var(--mono)">META</div>
         </div>
         <div style="background:var(--surface);border-radius:10px;padding:8px;text-align:center">
-          <div style="font-size:17px;font-weight:600;color:var(--red)">-10.5<span style="font-size:10px;color:var(--muted)">kg</span></div>
-          <div style="font-size:9px;color:var(--muted);font-family:var(--mono)">META</div>
+          <div style="font-size:17px;font-weight:600;color:var(--red)">-9.7<span style="font-size:10px;color:var(--muted)">kg</span></div>
+          <div style="font-size:9px;color:var(--muted);font-family:var(--mono)">FALTAM</div>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:6px">
+        <div style="background:var(--surface);border-radius:10px;padding:8px;text-align:center">
+          <div style="font-size:17px;font-weight:600;color:var(--amber)">19<span style="font-size:10px;color:var(--muted)">kg</span></div>
+          <div style="font-size:9px;color:var(--muted);font-family:var(--mono)">GORDURA</div>
+        </div>
+        <div style="background:var(--surface);border-radius:10px;padding:8px;text-align:center">
+          <div style="font-size:17px;font-weight:600;color:var(--green)">41.6<span style="font-size:10px;color:var(--muted)">kg</span></div>
+          <div style="font-size:9px;color:var(--muted);font-family:var(--mono)">MÚSC.ESQ</div>
+        </div>
+        <div style="background:var(--surface);border-radius:10px;padding:8px;text-align:center">
+          <div style="font-size:17px;font-weight:600;color:var(--green)">7</div>
+          <div style="font-size:9px;color:var(--muted);font-family:var(--mono)">VISCERAL</div>
+        </div>
+        <div style="background:var(--surface);border-radius:10px;padding:8px;text-align:center">
+          <div style="font-size:17px;font-weight:600;color:var(--amber)">43</div>
+          <div style="font-size:9px;color:var(--muted);font-family:var(--mono)">IDADE CORPO</div>
         </div>
       </div>
       <div style="font-size:11px;color:var(--muted);margin-top:8px;line-height:1.5;padding:8px;background:var(--surface);border-radius:10px">
-        ⚠️ O relatório indica 76.1kg como ideal, mas para sua altura de 186cm com excelente massa muscular esquelética (41kg), a faixa realista é <b style="color:var(--text)">82–86kg</b>. Meta de 82kg é mais adequada e sustentável.
+        ⚠️ O relatório indica <b style="color:var(--text)">85.6kg</b> como peso padrão (−6.1kg, todos de gordura e 0kg de músculo) e 76.1kg como ideal teórico. Para 186cm com 41.6kg de massa muscular esquelética, 76.1kg não é realista: <b style="color:var(--text)">85.6kg é o primeiro marco</b> e <b style="color:var(--text)">82kg segue como meta final</b>, sustentável com sua massa muscular.
       </div>
     </div>
     <div style="background:var(--green2);border:1px solid rgba(62,207,142,.25);border-radius:14px;padding:10px 14px;margin-bottom:14px;font-size:12px;color:var(--text);line-height:1.6">
-      📊 <b>Evolução desde 11/05:</b> peso -0.5kg, gordura visceral 9→8, massa gorda -1kg, pontuação 79→80. Progresso real e consistente — continue assim!
+      📊 <b>Evolução desde 12/08:</b> peso −0.8kg, massa gorda −1.7kg, massa muscular +1kg, gordura visceral 8→7, pontuação 80→83. Você perdeu gordura e ganhou músculo ao mesmo tempo — por isso a balança caiu menos do que a gordura. <b>Desde 11/05:</b> massa gorda −2.7kg, gordura visceral 9→7, pontuação 79→83.
+    </div>
+
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:12px 14px;margin-bottom:14px">
+      <div style="font-size:11px;font-family:var(--mono);letter-spacing:1px;color:var(--accent2);text-transform:uppercase;margin-bottom:8px">📋 Recomendações do relatório (16/11/2026)</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px 14px;font-size:12px;line-height:1.3">
+        <div style="display:flex;justify-content:space-between"><span style="color:var(--muted)">Peso padrão</span><b>85.6kg</b></div>
+        <div style="display:flex;justify-content:space-between"><span style="color:var(--muted)">Controle de peso</span><b>−6.1kg</b></div>
+        <div style="display:flex;justify-content:space-between"><span style="color:var(--muted)">Controle de gordura</span><b>−6.1kg</b></div>
+        <div style="display:flex;justify-content:space-between"><span style="color:var(--muted)">Controle muscular</span><b>0kg</b></div>
+        <div style="display:flex;justify-content:space-between"><span style="color:var(--muted)">Ingestão calórica</span><b>2522kcal</b></div>
+        <div style="display:flex;justify-content:space-between"><span style="color:var(--muted)">Metab. basal</span><b>1940kcal</b></div>
+        <div style="display:flex;justify-content:space-between"><span style="color:var(--muted)">Idade do corpo</span><b>43</b></div>
+        <div style="display:flex;justify-content:space-between"><span style="color:var(--muted)">Nível celular</span><b>48kg</b></div>
+        <div style="display:flex;justify-content:space-between"><span style="color:var(--muted)">Avaliação de saúde</span><b>Bom</b></div>
+        <div style="display:flex;justify-content:space-between"><span style="color:var(--muted)">Nível de obesidade</span><b>Sobrepeso</b></div>
+      </div>
     </div>
 
     <!-- 1. TRACKER DE PESO SEMANAL -->
@@ -440,30 +477,30 @@ body{display:flex;flex-direction:column;height:100%;max-height:100vh}
     <div style="font-size:10px;font-family:var(--mono);letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:10px">Gordura por segmento (do laudo)</div>
     <div class="card" style="padding:14px;margin-bottom:14px">
       <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;text-align:center;margin-bottom:8px">
-        <div><div style="font-size:15px;font-weight:600;color:var(--amber)">1.3kg</div><div style="font-size:9px;color:var(--muted);font-family:var(--mono)">BRAÇO ESQ · 185.7%</div></div>
-        <div><div style="font-size:15px;font-weight:600;color:var(--red)">10.7kg</div><div style="font-size:9px;color:var(--muted);font-family:var(--mono)">TRONCO · 222.9%</div></div>
-        <div><div style="font-size:15px;font-weight:600;color:var(--amber)">1.3kg</div><div style="font-size:9px;color:var(--muted);font-family:var(--mono)">BRAÇO DIR · 185.7%</div></div>
+        <div><div style="font-size:15px;font-weight:600;color:var(--amber)">1.2kg</div><div style="font-size:9px;color:var(--muted);font-family:var(--mono)">BRAÇO ESQ · 171.4%</div></div>
+        <div><div style="font-size:15px;font-weight:600;color:var(--red)">9.8kg</div><div style="font-size:9px;color:var(--muted);font-family:var(--mono)">TRONCO · 204.1%</div></div>
+        <div><div style="font-size:15px;font-weight:600;color:var(--amber)">1.2kg</div><div style="font-size:9px;color:var(--muted);font-family:var(--mono)">BRAÇO DIR · 171.4%</div></div>
       </div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;text-align:center;margin-bottom:10px">
-        <div><div style="font-size:15px;font-weight:600;color:var(--amber)">2.7kg</div><div style="font-size:9px;color:var(--muted);font-family:var(--mono)">PERNA ESQ · 135%</div></div>
-        <div><div style="font-size:15px;font-weight:600;color:var(--amber)">2.9kg</div><div style="font-size:9px;color:var(--muted);font-family:var(--mono)">PERNA DIR · 145%</div></div>
+        <div><div style="font-size:15px;font-weight:600;color:var(--amber)">2.5kg</div><div style="font-size:9px;color:var(--muted);font-family:var(--mono)">PERNA ESQ · 125%</div></div>
+        <div><div style="font-size:15px;font-weight:600;color:var(--amber)">2.6kg</div><div style="font-size:9px;color:var(--muted);font-family:var(--mono)">PERNA DIR · 130%</div></div>
       </div>
-      <div style="font-size:12px;color:var(--text);line-height:1.6;padding:8px;background:var(--red2);border-radius:10px">🔴 A gordura está bem mais concentrada no <b>tronco</b> (222.9% da referência) do que nos braços (185.7%) e pernas (135-145%) — esse padrão de gordura abdominal é o que mais se relaciona com a gordura visceral (8) e é a prioridade de redução, especialmente com a esteira e o déficit calórico já recomendados.</div>
+      <div style="font-size:12px;color:var(--text);line-height:1.6;padding:8px;background:var(--red2);border-radius:10px">🔴 A gordura continua mais concentrada no <b>tronco</b> (204.1% da referência) do que nos braços (171.4%) e pernas (125-130%) — esse padrão abdominal é o que mais se relaciona com a gordura visceral. Mas <b>todos os segmentos melhoraram desde 12/08</b>: tronco 222.9% → 204.1%, braços 185.7% → 171.4%, pernas 135/145% → 125/130%. O tronco segue como prioridade, com a esteira e o déficit calórico.</div>
     </div>
 
     <!-- MÚSCULO POR SEGMENTO -->
     <div style="font-size:10px;font-family:var(--mono);letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:10px">Músculo por segmento (do laudo)</div>
     <div class="card" style="padding:14px;margin-bottom:14px">
       <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;text-align:center;margin-bottom:8px">
-        <div><div style="font-size:15px;font-weight:600;color:var(--amber)">3.7kg</div><div style="font-size:9px;color:var(--muted);font-family:var(--mono)">BRAÇO ESQ · 94.8%</div></div>
-        <div><div style="font-size:15px;font-weight:600;color:var(--green)">31.7kg</div><div style="font-size:9px;color:var(--muted);font-family:var(--mono)">TRONCO · 103.9%</div></div>
-        <div><div style="font-size:15px;font-weight:600;color:var(--amber)">3.7kg</div><div style="font-size:9px;color:var(--muted);font-family:var(--mono)">BRAÇO DIR · 94.8%</div></div>
+        <div><div style="font-size:15px;font-weight:600;color:var(--amber)">3.8kg</div><div style="font-size:9px;color:var(--muted);font-family:var(--mono)">BRAÇO ESQ · 97.4%</div></div>
+        <div><div style="font-size:15px;font-weight:600;color:var(--green)">32.1kg</div><div style="font-size:9px;color:var(--muted);font-family:var(--mono)">TRONCO · 105.5%</div></div>
+        <div><div style="font-size:15px;font-weight:600;color:var(--amber)">3.8kg</div><div style="font-size:9px;color:var(--muted);font-family:var(--mono)">BRAÇO DIR · 97.4%</div></div>
       </div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;text-align:center;margin-bottom:10px">
-        <div><div style="font-size:15px;font-weight:600;color:var(--green)">11.7kg</div><div style="font-size:9px;color:var(--muted);font-family:var(--mono)">PERNA ESQ · 110.3%</div></div>
-        <div><div style="font-size:15px;font-weight:600;color:var(--green)">11.2kg</div><div style="font-size:9px;color:var(--muted);font-family:var(--mono)">PERNA DIR · 105.6%</div></div>
+        <div><div style="font-size:15px;font-weight:600;color:var(--green)">12kg</div><div style="font-size:9px;color:var(--muted);font-family:var(--mono)">PERNA ESQ · 113.2%</div></div>
+        <div><div style="font-size:15px;font-weight:600;color:var(--green)">11.3kg</div><div style="font-size:9px;color:var(--muted);font-family:var(--mono)">PERNA DIR · 106.6%</div></div>
       </div>
-      <div style="font-size:12px;color:var(--text);line-height:1.6;padding:8px;background:var(--green2);border-radius:10px">🟢 Tronco e pernas estão <b>acima do padrão</b> de referência (103.9% a 110.3%) — reflexo direto dos treinos de perna e costas. Os braços estão levemente abaixo (94.8%), o que é comum e não é motivo de preocupação — a progressão de carga em bíceps/tríceps (que já tem nos Treinos A, B e D) deve equilibrar isso com o tempo.</div>
+      <div style="font-size:12px;color:var(--text);line-height:1.6;padding:8px;background:var(--green2);border-radius:10px">🟢 Tronco e pernas estão <b>acima do padrão</b> (105.5% a 113.2%) e <b>todos os segmentos cresceram desde 12/08</b>: tronco 103.9% → 105.5%, perna esquerda 110.3% → 113.2%, braços 94.8% → 97.4%. Os braços ainda estão levemente abaixo da referência (97.4%), mas já subiram — o novo plano mantém 3 exercícios de tríceps no Treino A e 3 de bíceps no Treino B para fechar essa diferença.<br><br>⚖️ A perna esquerda (12kg) tem 0.7kg a mais que a direita (11.3kg): diferença pequena (~6%). A flexora unilateral do Treino D ajuda a equilibrar — nos unilaterais, comece pela perna direita.</div>
     </div>
 
     <!-- SUGESTÕES -->
@@ -518,6 +555,23 @@ body{display:flex;flex-direction:column;height:100%;max-height:100vh}
           D3 é lipossolúvel — acumula no corpo, diferente do magnésio que é eliminado facilmente pelos rins. Sua dose de 2.000 UI é considerada moderada/segura para uso contínuo, mas o ideal é não tomar "no escuro" por tempo indefinido.<br><br>
           <b>Recomendação:</b> após terminar este frasco (~4 meses, por volta de <b>outubro/2026</b>), faça um exame de sangue simples de <b>25-OH-vitamina D</b> em qualquer laboratório. O resultado mostra se sua dose está certa, baixa ou alta — e define se continua, ajusta ou pausa por um tempo. Não precisa de jejum nem preparo especial.
         </div>
+      </div>
+    </div>
+
+    <!-- ÔMEGA 3 -->
+    <div style="background:rgba(56,189,248,.08);border:1px solid rgba(56,189,248,.2);border-radius:var(--r2);padding:14px;margin-bottom:10px">
+      <div style="font-size:13px;font-weight:600;color:var(--blue);margin-bottom:12px">🐟 Ômega 3 Dark Lab — ✅ Você já tem!</div>
+      <div style="font-size:13px;color:var(--text);line-height:1.8">
+        <b>Produto:</b> Ômega Plus Dark Lab — 240 cápsulas ✅<br><br>
+        <b>Como tomar:</b><br>
+        • <b>2 cápsulas por dia</b> — é a porção completa do rótulo (990mg EPA + 660mg DHA = 1.650mg combinados), alinhada com a recomendação geral de 1-2g de EPA+DHA/dia<br>
+        • Pode ser as 2 juntas numa única refeição, ou <b>1 no almoço + 1 no jantar</b> — tanto faz<br>
+        • <b>Sempre com comida</b> — o ômega-3 é lipossolúvel e absorve melhor com a gordura da refeição<br>
+        • Não precisa ser junto ao pré-treino — o melhor é almoço ou jantar<br><br>
+        <b>Duração do frasco:</b><br>
+        • Sozinho, 240 cápsulas renderiam 120 dias (4 meses)<br>
+        • <b>Dividindo com a Aline</b> (2 cápsulas cada por dia = 4 por dia), rende <b>60 dias</b> — começando em 12/10/2026, acaba por volta de <b>11/12/2026</b><br>
+        • O app avisa no Estoque quando faltarem 10 dias para acabar
       </div>
     </div>
 
@@ -594,7 +648,14 @@ body{display:flex;flex-direction:column;height:100%;max-height:100vh}
     <div style="background:var(--red2);border:1px solid rgba(239,68,68,.25);border-radius:var(--r2);padding:14px;margin-bottom:10px">
       <div style="font-size:13px;font-weight:600;color:var(--red);margin-bottom:12px">🔴 Prioridade — Reduzir gordura</div>
 
-      <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:4px">Gordura visceral (atual: 8 — melhorou de 9, ainda no limite superior)</div>
+      <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:4px">Massa gorda (atual: 19kg — Sobrepeso; era 20.7kg em 12/08)</div>
+      <div style="font-size:13px;color:var(--text);line-height:1.8;margin-bottom:14px">
+        • O relatório pede <b>−6.1kg de gordura</b> (e 0kg de músculo) para chegar ao peso padrão de 85.6kg<br>
+        • A gordura do tronco (9.8kg) é mais da metade da gordura total — é onde o déficit e o cardio mais aparecem<br>
+        • Em ~3 meses você perdeu 1.7kg de gordura <b>ganhando</b> 1kg de músculo: a estratégia funciona, falta constância no déficit — inclusive no fim de semana (é onde a conta costuma fechar no zero)
+      </div>
+
+      <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:4px">Gordura visceral (atual: 7 — caiu de 9 → 8 → 7, agora dentro do padrão 1~9)</div>
       <div style="font-size:13px;color:var(--text);line-height:1.8;margin-bottom:14px">
         <b>Cardio na esteira:</b><br>
         • Velocidade 5.5 a 6.5 km/h, inclinação 2-3%, por 25-30 minutos<br>
@@ -612,14 +673,14 @@ body{display:flex;flex-direction:column;height:100%;max-height:100vh}
 
       <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:4px">Déficit calórico (~2300-2400 kcal/dia)</div>
       <div style="font-size:13px;color:var(--text);line-height:1.8;margin-bottom:14px">
-        Seu gasto real com 5 treinos/semana é ~2800-3000 kcal/dia. Meta: ~2300-2400 kcal → déficit de ~500 kcal → 0.5-1kg/semana.<br>
+        Seu gasto real com 5 treinos/semana é ~2800-3000 kcal/dia (metabolismo basal de 1940 kcal pelo relatório). Meta: ~2300-2400 kcal → déficit de ~500 kcal → 0.4-0.5kg/semana. O relatório sugere 2522 kcal/dia como ingestão de referência; seu plano fica ~120-220 kcal abaixo disso.<br>
         A distribuição de refeições está na seção "Rotina completa" acima.<br>
         <b>App para contar:</b> Lifesum ou MyFitnessPal — use por 2-3 semanas para calibrar.
       </div>
 
-      <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:4px">Gordura subcutânea e relação cintura-quadril</div>
+      <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:4px">Gordura subcutânea (17kg), nível de adiposidade (120%) e relação cintura-quadril (0.9)</div>
       <div style="font-size:13px;color:var(--text);line-height:1.8">
-        Reduzem com o mesmo protocolo. Meta cintura-quadril: abaixo de 0.85.<br>
+        Reduzem com o mesmo protocolo. Meta cintura-quadril: abaixo de 0.85. A gordura subcutânea já caiu de 18.5kg para 17kg desde 12/08.<br>
         Abdominais fortalecem o core mas não eliminam gordura local — dieta e cardio fazem isso.
       </div>
     </div>
@@ -628,17 +689,17 @@ body{display:flex;flex-direction:column;height:100%;max-height:100vh}
     <div style="background:var(--amber2);border:1px solid rgba(245,158,11,.25);border-radius:var(--r2);padding:14px;margin-bottom:10px">
       <div style="font-size:13px;font-weight:600;color:var(--amber);margin-bottom:12px">🟡 Atenção — Melhorar</div>
 
-      <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:4px">Massa proteica (atual: 14.2kg — abaixo do ideal)</div>
+      <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:4px">Massa muscular total (atual: 67.7kg — Padrão, +1kg desde 12/08)</div>
       <div style="font-size:13px;color:var(--text);line-height:1.8;margin-bottom:12px">
-        Meta: <b>167-204g proteína/dia</b>. Com sua rotina atual chega ~159g — adicione 1 scoop whey pós-treino para fechar ~183g ✓<br>
-        Fontes: frango 100g=31g | atum 170g=40g | ovo=7g | whey 1 scoop=24g | iogurte grego 200g=17g
-      </div>
-
-      <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:4px">Massa muscular total (atual: 66.7kg)</div>
-      <div style="font-size:13px;color:var(--text);line-height:1.8">
         • Progressão de carga: quando completar todas as séries facilmente, aumente 2.5kg<br>
+        • O plano de 16/11 pede "aumentando a carga" no supino inclinado e nos agachamentos livre e hack, e tem a puxada barra romana progressiva (10 → 8 → 6 reps, subindo a carga a cada série)<br>
         • Creatina no pré-treino — você já faz ✓<br>
         • 70% do crescimento muscular acontece nas primeiras 3h de sono profundo
+      </div>
+
+      <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:4px">Braços (97.4% da referência — levemente abaixo)</div>
+      <div style="font-size:13px;color:var(--text);line-height:1.8">
+        Subiram de 94.8% para 97.4% desde 12/08. Mantenha o volume de tríceps (Treino A: barra W, coice unilateral e testa no cross) e bíceps (Treino B: martelo com rotação, barra W e Scott).
       </div>
     </div>
 
@@ -646,20 +707,32 @@ body{display:flex;flex-direction:column;height:100%;max-height:100vh}
     <div style="background:var(--green2);border:1px solid rgba(62,207,142,.25);border-radius:var(--r2);padding:14px;margin-bottom:10px">
       <div style="font-size:13px;font-weight:600;color:var(--green);margin-bottom:12px">🟢 Pontos fortes — Manter e evoluir</div>
 
-      <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:4px">Massa muscular esquelética (41kg — Excelente)</div>
+      <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:4px">Massa muscular esquelética (41.6kg — Excelente; taxa 45.3%, Legal)</div>
       <div style="font-size:13px;color:var(--text);line-height:1.8;margin-bottom:12px">
-        Impressionante para 41 anos! Continue os 5 treinos com progressão de carga. Não corte abaixo de 2000 kcal. Maca + tribulus + creatina que você já usa — continue tudo. ✓
+        Subiu 0.6kg desde 12/08 — impressionante para 41 anos! Continue os 5 treinos com progressão de carga. Não corte abaixo de 2000 kcal. Maca + tribulus + creatina que você já usa — continue tudo. ✓
       </div>
 
-      <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:4px">Hidratação (52.5kg — Excelente)</div>
+      <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:4px">Massa proteica (14.5kg — acima da faixa 11.4~13.9, Legal)</div>
+      <div style="font-size:13px;color:var(--text);line-height:1.8;margin-bottom:12px">
+        Não há deficiência de proteína corporal. Mantenha a meta de <b>165-202g proteína/dia</b> (1.8-2.2g/kg) para proteger o músculo durante o déficit. Com a rotina atual chega ~159g — adicione 1 scoop whey pós-treino para fechar ~183g ✓<br>
+        Fontes: frango 100g=31g | atum 170g=40g | ovo=7g | whey 1 scoop=24g | iogurte grego 200g=17g
+      </div>
+
+      <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:4px">Gordura visceral (7 — Padrão)</div>
+      <div style="font-size:13px;color:var(--text);line-height:1.8;margin-bottom:12px">
+        Saiu do limite superior (9) para o meio da faixa saudável (1~9). Foi a melhora mais importante para a saúde nos últimos 6 meses — mantenha cardio, sono e déficit.
+      </div>
+
+      <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:4px">Hidratação (53.3kg de água corporal — Excelente)</div>
       <div style="font-size:13px;color:var(--text);line-height:1.8;margin-bottom:12px">
         • 06h30: 500ml temperatura ambiente | 07h30: 300ml com pré-treino<br>
         • 08h-09h: 500ml fresca durante treino | 09h30: 300ml pós-treino<br>
         • Resto do dia: 1.5L → Total: ~3.1L ✓<br>
-        • Água de coco pós-treino repõe potássio e magnésio naturalmente
+        • Água de coco pós-treino repõe potássio e magnésio naturalmente<br>
+        • Água intracelular alta (33.6kg) costuma acompanhar boa massa muscular; extracelular em 19.7kg (Padrão) — sem sinal de retenção
       </div>
 
-      <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:4px">Minerais (5kg — Excelente)</div>
+      <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:4px">Minerais (4.9kg — Excelente)</div>
       <div style="font-size:13px;color:var(--text);line-height:1.8">
         <b>Magnésio — ✅ Nutrends 5 Magnésio + Treonina ✅:</b><br>
         • <b>2 cápsulas</b> 30-60 min antes de dormir (22h-23h)<br>
@@ -679,22 +752,24 @@ body{display:flex;flex-direction:column;height:100%;max-height:100vh}
     <div style="background:var(--blue2);border:1px solid rgba(56,189,248,.2);border-radius:var(--r2);padding:14px;margin-bottom:14px">
       <div style="font-size:13px;font-weight:600;color:var(--blue);margin-bottom:10px">🎯 Protocolo completo + projeção</div>
       <div style="font-size:13px;color:var(--text);line-height:1.8">
-        <b>O que você já faz bem ✅:</b> treino 5x/semana às 08h, creatina 5g, própolis 70, pré-treino com guaraná + beterraba + maca + tribulus, tapioca pós-treino, D3+K2 Ecomev<br><br>
+        <b>O que você já faz bem ✅:</b> treino 5x/semana às 08h, creatina 5g, própolis 70, pré-treino com guaraná + beterraba + maca + tribulus, tapioca pós-treino, D3+K2 Ecomev, ômega 3 Dark Lab<br><br>
         <b>O que adicionar ➕:</b><br>
         • D3/K2 Ecomev 1 cápsula junto ao pré-treino ✅ já tem!<br>
+        • Ômega 3 Dark Lab 2 cápsulas por dia, com almoço ou jantar ✅<br>
         • Nutrends 5 Magnésio + Treonina 2 cápsulas às 22h-23h ✅<br>
         • <b>50g frango desfiado</b> na tapioca → fecha ~40g proteína pós-treino ✓<br>
         • ~2300-2400 kcal/dia em 5 refeições<br><br>
         <b>O que reduzir ❌:</b> álcool, açúcar simples, frituras<br><br>
-        <b>Projeção:</b><br>
-        • Em 2 meses (09/07): -4 a 6kg → 87-89kg, cintura -3cm<br>
-        • Em 4 meses: ~84-86kg, gordura visceral 9→6-7, pontuação ~83-85<br>
-        • Em 6 meses: ~82kg, gordura visceral abaixo de 5, pontuação <b>87-90</b>
+        <b>Ritmo real (12/08 → 16/11, ~14 semanas):</b> peso −0.8kg, gordura −1.7kg, músculo +1kg. A projeção anterior (−4 a −6kg em 2 meses) não se confirmou na balança porque o músculo cresceu enquanto a gordura caía — a composição melhorou mais do que o peso mostra.<br><br>
+        <b>Projeção até o fim do plano (16/02/2027, ~13 semanas) — estimativa:</b><br>
+        • Mantendo o ritmo atual: ~91kg, gordura ~18kg, gordura visceral 6-7<br>
+        • Com déficit constante de ~500 kcal/dia (0.4-0.5kg/semana): −5 a −6kg → <b>85-87kg</b> (o peso padrão do relatório é 85.6kg), gordura ~14-15kg, gordura visceral 5-6, pontuação ~85-87<br>
+        • Meta de 82kg: por volta de <b>abril–maio/2027</b>, se o déficit for mantido
       </div>
     </div>
 
     <div style="font-size:11px;color:var(--muted);text-align:center;padding:8px 0 16px;line-height:1.6">
-      Baseado na avaliação Unique Health de 12/08/2026 · Treino matinal às 08h.<br>Quando realizar nova avaliação, envie os dados para atualizar as sugestões.
+      Baseado na avaliação Unique Health de 16/11/2026 · Treino matinal às 08h.<br>Quando realizar nova avaliação, envie os dados para atualizar as sugestões.
     </div>
   </div>
 </div>
@@ -742,21 +817,92 @@ body{display:flex;flex-direction:column;height:100%;max-height:100vh}
 /* ════════════════════════════════════════════
    DADOS DOS TREINOS
 ════════════════════════════════════════════ */
-const PRAZO = new Date('2026-11-12T23:59:59');
+const PRAZO = new Date('2027-02-16T23:59:59');
 const META_SESSOES = 16;
-const INICIO_PLANO = new Date('2026-08-12T00:00:00');
+const INICIO_PLANO = new Date('2026-11-16T00:00:00');
+// Resumos semanais são plano-agnósticos: contam todo treino concluído a partir desta data (início do plano de 12/08/2026),
+// senão a troca de plano zeraria as semanas do plano anterior.
+const INICIO_RESUMOS = new Date('2026-08-12T00:00:00');
 // Identificador explícito do plano atual — muda toda vez que TREINOS for substituído por
 // um novo plano (nova avaliação física). Usado para marcar cada treino salvo com o plano
 // exato a que pertence, em vez de depender só de comparar os nomes dos exercícios (frágil:
 // um bug de encoding numa sincronização pode corromper acentos e fazer a comparação falhar
 // silenciosamente, zerando sessões que na verdade foram feitas).
-const PLANO_ATUAL_ID = '2026-08-12';
+const PLANO_ATUAL_ID = '2026-11-16';
 
 // tipo: 'esteira_inicio'|'esteira_fim'|'normal'|'conjugado'
 // conjugado = dois exercícios no mesmo slot
 const TREINOS = {
   A:{
-    nome:'Treino A', info:'Peito · Tríceps · Ombros',
+    nome:'Treino A', info:'Peito · Tríceps · Abdômen',
+    exercicios:[
+      {tipo:'esteira_inicio'},
+      {tipo:'normal', nome:'Supino inclinado', link:'https://youtu.be/6SbNwbo9I5w?is=Yq7XowB4jVI15s8x', series:4,reps:10, obs:'Aumentando a carga'},
+      {tipo:'normal', nome:'Supino medial anilha', link:'', series:4,reps:10},
+      {tipo:'normal', nome:'Crucifixo cross polia baixa', link:'https://youtube.com/shorts/8RKMEZjY8uU?si=OLQCYacAEcHSQQfX', series:3,reps:12},
+      {tipo:'normal', nome:'Pullover', link:'https://youtu.be/OY_rr4ivULQ', series:4,reps:10},
+      {tipo:'normal', nome:'Tríceps barra W', link:'https://youtu.be/yi-MlJARlSg', series:4,reps:10},
+      {tipo:'normal', nome:'Tríceps coice unilateral no cross', link:'https://youtu.be/mS52-zvdIhI', series:4,reps:10},
+      {tipo:'normal', nome:'Tríceps testa cross polia alta', link:'', series:4,reps:10, obs:'Com barra reta'},
+      {tipo:'normal', nome:'Abdominal remador', link:'https://youtu.be/PomBnhZH5a0', series:4,reps:20},
+      {tipo:'esteira_fim'},
+    ]
+  },
+  B:{
+    nome:'Treino B', info:'Costas · Bíceps · Abdômen',
+    exercicios:[
+      {tipo:'esteira_inicio'},
+      {tipo:'normal', nome:'Puxada articulada', link:'https://youtu.be/Ixy-hMYqoVg', series:4,reps:12},
+      {tipo:'normal', nome:'Remada curvada máquina', link:'https://youtu.be/5w-VrSUAV84', series:4,reps:10},
+      {tipo:'normal', nome:'Remada máquina aberta', link:'https://youtu.be/9LZd1c_Ljg8', series:4,reps:10, obs:'Com rotação'},
+      // Progressivo: 3 séries, cada uma com sua meta de repetições (10 → 8 → 6) e carga crescente
+      {tipo:'normal', nome:'Puxada barra romana', link:'', series:3,reps:10, repsPorSerie:[10,8,6], obs:'Aumentando a carga'},
+      {tipo:'normal', nome:'Bíceps martelo com rotação', link:'', series:4,reps:12},
+      {tipo:'normal', nome:'Rosca bíceps barra W', link:'', series:4,reps:10},
+      {tipo:'normal', nome:'Scott máquina', link:'https://youtu.be/HmlOMImb1ZU', series:4,reps:10},
+      {tipo:'normal', nome:'Abdominal canivete', link:'https://youtu.be/LdOQPQa4Jug', series:4,reps:20},
+      {tipo:'esteira_fim'},
+    ]
+  },
+  C:{
+    nome:'Treino C', info:'Pernas · Ombros · Core',
+    exercicios:[
+      {tipo:'esteira_inicio'},
+      {tipo:'normal', nome:'Agachamento livre', link:'https://youtu.be/R6ih1zDWEbQ', series:4,reps:12, obs:'Aumentando a carga'},
+      {tipo:'normal', nome:'Agachamento hack', link:'https://youtu.be/sNYyzEiOZdI', series:4,reps:12, obs:'Aumentando a carga'},
+      {tipo:'normal', nome:'Leg press 45°', link:'https://www.youtube.com/watch?v=-BDtKDpL-Cg', series:4,reps:12},
+      {tipo:'normal', nome:'Cadeira adutora', link:'https://youtu.be/eluVAjrSNNQ', series:4,reps:12, obs:'Com 2 tempos'},
+      {tipo:'normal', nome:'Encolhimento de ombro', link:'https://youtu.be/6DrHvPWnE8s', series:4,reps:15},
+      {tipo:'normal', nome:'Remada alta com halter', link:'https://youtu.be/8cyRhfAYEhM', series:4,reps:12},
+      {tipo:'normal', nome:'Prancha tocando ombro', link:'https://youtu.be/kKlu_oyAn-8', series:4,reps:60, isTime:true},
+      {tipo:'esteira_fim'},
+    ]
+  },
+  D:{
+    nome:'Treino D', info:'Ombros · Pernas · Posterior',
+    exercicios:[
+      {tipo:'esteira_inicio'},
+      {tipo:'normal', nome:'Desenvolvimento Arnold', link:'https://youtu.be/_VmbOirKF-A', series:4,reps:10},
+      {tipo:'normal', nome:'Posterior de ombro cross unilateral', link:'https://youtu.be/jF2WuvsyN5A', series:4,reps:10},
+      {tipo:'normal', nome:'Elevação frontal no cross com barra', link:'', series:4,reps:10},
+      {tipo:'normal', nome:'Hack invertido articulado', link:'https://youtu.be/KY8edn9d1QM', series:4,reps:12},
+      {tipo:'normal', nome:'Panturrilha no hack', link:'', series:4,reps:12},
+      {tipo:'normal', nome:'Cadeira abdutora', link:'https://youtu.be/02Hw1nvierA', series:4,reps:12, obs:'Com 2 tempos'},
+      {tipo:'conjugado', nome:'Cadeira flexora unilateral', nome2:'Cadeira flexora',
+       link:'https://youtu.be/3T9SjfGSfBY', link2:'https://youtu.be/thacKNxXjjA',
+       series:4, reps:10, reps2:12},
+      {tipo:'normal', nome:'Levantamento terra', link:'', series:4,reps:12},
+      {tipo:'esteira_fim'},
+    ]
+  }
+};
+
+/* Plano anterior — vigente de 12/08/2026 a 15/11/2026, substituído após a avaliação
+   física de 16/11/2026. Mantido aqui como referência e para que o histórico de treinos
+   feitos nesse período continue exibindo os nomes corretos dos exercícios. */
+const TREINOS_ANTIGOS_V3 = {
+  A:{
+    nome:'Treino A (12/08–15/11)', info:'Peito · Tríceps · Ombros',
     exercicios:[
       {tipo:'esteira_inicio'},
       {tipo:'normal', nome:'Supino máquina anilha', link:'', series:4,reps:10},
@@ -772,7 +918,7 @@ const TREINOS = {
     ]
   },
   B:{
-    nome:'Treino B', info:'Costas · Bíceps · Abdômen',
+    nome:'Treino B (12/08–15/11)', info:'Costas · Bíceps · Abdômen',
     exercicios:[
       {tipo:'esteira_inicio'},
       {tipo:'normal', nome:'Puxada barra romana', link:'', series:4,reps:12},
@@ -788,7 +934,7 @@ const TREINOS = {
     ]
   },
   C:{
-    nome:'Treino C', info:'Pernas · Glúteos',
+    nome:'Treino C (12/08–15/11)', info:'Pernas · Glúteos',
     exercicios:[
       {tipo:'esteira_inicio'},
       {tipo:'normal', nome:'Agachamento no Smith', link:'https://w12evostorage.w12app.com.br/exercicios-gifs/26171305-Smith-Chair-Squat-(female)_Thighs_360.gif', series:3,reps:12},
@@ -803,7 +949,7 @@ const TREINOS = {
     ]
   },
   D:{
-    nome:'Treino D', info:'Ombros · Peito · Bíceps · Tríceps · Core',
+    nome:'Treino D (12/08–15/11)', info:'Ombros · Peito · Bíceps · Tríceps · Core',
     exercicios:[
       {tipo:'esteira_inicio'},
       {tipo:'normal', nome:'Elevação lateral', link:'https://www.youtube.com/watch?v=1UH9BySUGXg', series:4,reps:12},
@@ -822,6 +968,7 @@ const TREINOS = {
     ]
   }
 };
+
 
 const ORDEM = ['A','B','C','D'];
 const REST_SERIE = 50, REST_EX = 60;
@@ -1152,7 +1299,7 @@ function mesclarComRemoto(remotoContent){
 
   // estoque: local tem prioridade
   const localEstoque=loadEstoque();
-  const mergedEstoque=(r.estoque&&r.estoque.length&&!localStorage.getItem('gym_estoque'))?r.estoque:localEstoque;
+  const mergedEstoque=garantirItensEstoque((r.estoque&&r.estoque.length&&!localStorage.getItem('gym_estoque'))?r.estoque:localEstoque);
   saveEstoque(mergedEstoque);
 
   // resumos semanais: une por semId (identificador único da semana)
@@ -1382,13 +1529,16 @@ function migrarPlanoV2(){
         h.plano='antigo';mudou=true; // nomes não batem com o plano atual → é de um plano anterior
       }
     });
-    if(mudou){
+    // recalcula as sessões do plano atual a partir do histórico (só o que está como 'novo') e
+    // corrige o contador salvo se ele divergir — cobre a troca de plano (o contador do plano
+    // anterior não pode vazar para o novo) e preserva treinos já feitos hoje no plano novo
+    const sessCalc={A:0,B:0,C:0,D:0};
+    hist.filter(h=>h.plano==='novo').forEach(h=>{if(sessCalc[h.tipo]!==undefined)sessCalc[h.tipo]++});
+    const sessSalva=loadSessoes();
+    const sessDiverge=['A','B','C','D'].some(t=>(sessSalva[t]||0)!==sessCalc[t]);
+    if(mudou||sessDiverge){
       localStorage.setItem('gym_hist_v6',JSON.stringify(hist));
-      // recalcula sessões só com base no que sobrou como 'novo' (plano atual) —
-      // preserva corretamente treinos já feitos hoje no plano novo
-      const sess={A:0,B:0,C:0,D:0};
-      hist.filter(h=>h.plano==='novo').forEach(h=>{if(sess[h.tipo]!==undefined)sess[h.tipo]++});
-      localStorage.setItem('gym_sess_v6',JSON.stringify(sess));
+      localStorage.setItem('gym_sess_v6',JSON.stringify(sessCalc));
       if(getToken())sincronizarGitHub();
     }
   }catch(e){}
@@ -1554,6 +1704,7 @@ function renderHidratChecklist(){
 const SUPLE_ETAPAS=[
   {id:'pretreino_mix',label:'Mix pré-treino + creatina 5g + própolis 70 (07h30)',icon:'💪'},
   {id:'d3k2',label:'Vitamina D3+K2 — 1 cápsula (07h30)',icon:'☀️'},
+  {id:'omega3',label:'Ômega 3 Dark Lab — 2 cápsulas (almoço ou jantar, com comida)',icon:'🐟'},
   {id:'magnesio',label:'Nutrends 5 Magnésio + Treonina — 2 cápsulas (22h-23h)',icon:'🌙'},
 ];
 function loadSupleHoje(){
@@ -1636,6 +1787,12 @@ function loadAvaliacoes(){
      massaMuscular:66.7,massaMuscularEsq:41,gorduraVisceral:8,
      gorduraSubcutanea:18.5,cinturaQuadril:0.9,massaLivreGordura:71.7,
      aguaIntracelular:32.9,aguaExtracelular:19.6},
+    {data:'2026-11-16',dataStr:'16/11/2026',pontuacao:83,peso:91.7,imc:26.5,
+     aguaCorporal:53.3,massaGorda:19,massaProteica:14.5,minerais:4.9,
+     massaMuscular:67.7,massaMuscularEsq:41.6,gorduraVisceral:7,
+     gorduraSubcutanea:17,cinturaQuadril:0.9,massaLivreGordura:72.7,
+     aguaIntracelular:33.6,aguaExtracelular:19.7,
+     percGordura:20.7,idadeCorpo:43,bmr:1940,ingestaoCalorica:2522,pesoPadrao:85.6},
   ];
   try{
     const a=JSON.parse(localStorage.getItem('gym_avaliacoes')||'null');
@@ -1668,14 +1825,36 @@ function renderAvaliacoesLista(){
     return`<div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;${i<avals.length-1?'border-bottom:1px solid var(--border)':''}">
       <div>
         <div style="font-size:13px;font-weight:500">${a.dataStr}</div>
-        <div style="font-size:11px;color:var(--muted)">Pontuação: ${a.pontuacao} · IMC ${a.imc}</div>
+        <div style="font-size:11px;color:var(--muted)">Pontuação: ${a.pontuacao} · IMC ${a.imc}${a.massaGorda!=null?' · gordura '+a.massaGorda+'kg':''}</div>
       </div>
       <div style="text-align:right">
         <div style="font-size:15px;font-family:var(--mono);font-weight:600">${a.peso}kg</div>
         <div style="font-size:11px">${diffPeso}</div>
       </div>
     </div>`;
+  }).join('') + buildEvolucaoAvaliacoes(avals);
+}
+/* Quadro comparativo entre todas as avaliações salvas (valores lado a lado + variação da última
+   em relação à anterior; verde = melhorou, vermelho = piorou). */
+function buildEvolucaoAvaliacoes(avals){
+  if(!avals||avals.length<2)return'';
+  const linhas=[['Peso (kg)','peso',-1],['Massa gorda (kg)','massaGorda',-1],['Massa muscular (kg)','massaMuscular',1],['Músc. esquelética (kg)','massaMuscularEsq',1],['Gordura visceral','gorduraVisceral',-1],['Pontuação','pontuacao',1]];
+  const ult=avals[avals.length-1], ant=avals[avals.length-2];
+  const cab=avals.map(a=>`<th style="font-size:10px;font-family:var(--mono);color:var(--muted);font-weight:400;text-align:right;padding:4px 3px">${(a.dataStr||'').slice(0,5)}</th>`).join('');
+  const corpo=linhas.map(([nome,k,bom])=>{
+    const cels=avals.map(a=>`<td style="font-size:12px;font-family:var(--mono);text-align:right;padding:5px 3px">${a[k]!=null?a[k]:'–'}</td>`).join('');
+    let d='–',cor='var(--muted)';
+    if(ult[k]!=null&&ant[k]!=null){
+      const v=+(ult[k]-ant[k]).toFixed(1);
+      d=(v>0?'+':'')+v;
+      cor=v===0?'var(--muted)':((v>0)===(bom>0)?'var(--green)':'var(--red)');
+    }
+    return`<tr style="border-top:1px solid var(--border)"><td style="font-size:11px;padding:5px 3px 5px 0">${nome}</td>${cels}<td style="font-size:12px;font-family:var(--mono);text-align:right;padding:5px 0 5px 3px;color:${cor};font-weight:600">${d}</td></tr>`;
   }).join('');
+  return`<div style="margin-top:12px;padding-top:10px;border-top:1px solid var(--border2)">
+    <div style="font-size:10px;font-family:var(--mono);letter-spacing:1px;color:var(--muted);text-transform:uppercase;margin-bottom:4px">Evolução entre avaliações (Δ = última vs anterior)</div>
+    <table style="width:100%;border-collapse:collapse"><thead><tr><th></th>${cab}<th style="font-size:10px;font-family:var(--mono);color:var(--muted);font-weight:400;text-align:right;padding:4px 0 4px 3px">Δ</th></tr></thead><tbody>${corpo}</tbody></table>
+  </div>`;
 }
 
 function buildMetricRow(nome,valor,ideal,status){
@@ -1700,18 +1879,22 @@ function showNav(tab){
   if(tab==='saude'){
     showPage('saude');
     const metricas=[
-      ['Água corporal total','52.5kg','42.7~52.1','excelente'],
-      ['Massa gorda','20.7kg','9.1~18.2','ruim'],
-      ['Massa proteica','14.2kg','11.4~13.9','ok'],
-      ['Minerais','5kg','3.9~4.8','excelente'],
-      ['Massa muscular','66.7kg','54.9~75.5','ok'],
-      ['Massa muscular esquelética','41kg','32.8~40','excelente'],
-      ['Gordura visceral','8','1~9','ruim'],
-      ['Gordura subcutânea','18.5kg','6.5~12.7','ruim'],
+      ['Água corporal total','53.3kg','42.7~52.1','excelente'],
+      ['Massa gorda','19kg','9.1~18.2','ruim'],
+      ['Relação de gordura','20.7%','10~20','ruim'],
+      ['Massa proteica','14.5kg','11.4~13.9','excelente'],
+      ['Minerais','4.9kg','3.9~4.8','excelente'],
+      ['Massa muscular','67.7kg','54.9~75.5','ok'],
+      ['Massa muscular esquelética','41.6kg','32.8~40','excelente'],
+      ['Taxa de músculo esquelético','45.3%','35.7~43.6','excelente'],
+      ['Massa óssea','3.9kg','3.3~4','ok'],
+      ['Gordura visceral','7','1~9','ok'],
+      ['Gordura subcutânea','17kg','6.5~12.7','ruim'],
+      ['Relação gordura subcutânea','18.5%','8.6~16.7','ruim'],
       ['Relação cintura-quadril','0.9','0.8~0.9','ruim'],
-      ['Massa livre de gordura','71.7kg','55.6~69.3','excelente'],
-      ['Água intracelular','32.9kg','26.5~32.4','excelente'],
-      ['Água extracelular','19.6kg','16.3~19.9','ok'],
+      ['Massa livre de gordura','72.7kg','55.6~69.3','excelente'],
+      ['Água intracelular','33.6kg','26.5~32.4','ok'],
+      ['Água extracelular','19.7kg','16.3~19.9','ok'],
     ];
     const el=document.getElementById('comp-body');
     if(el)el.innerHTML=metricas.map(m=>buildMetricRow(...m)).join('');
@@ -1743,7 +1926,7 @@ function getSemanaAtualId(dataRef){
 }
 function calcularDadosSemanais(segundaMs, sextaMs){
   const hist=loadHist();
-  const treinosSemana=hist.filter(h=>h.plano==='novo'&&h.inicio>=segundaMs&&h.inicio<=sextaMs);
+  const treinosSemana=hist.filter(h=>h.inicio&&h.inicio>=segundaMs&&h.inicio<=sextaMs); // qualquer plano — a frequência semanal não depende do plano
   const totalTreinos=treinosSemana.length;
   const totalKcal=treinosSemana.reduce((a,h)=>{
     const kcalSalvo=h.kcal||0;
@@ -1840,7 +2023,7 @@ function salvarResumoSemanalNoHistorico(segunda,sexta,dados){
    nunca mexe na semana corrente (que ainda está em andamento). */
 function preencherResumosPerdidos(){
   const hist=loadHist();
-  const novos=hist.filter(h=>h.plano==='novo'&&h.inicio);
+  const novos=hist.filter(h=>h.inicio&&h.inicio>=INICIO_RESUMOS.getTime()); // todos os planos desde 12/08/2026
   if(!novos.length)return;
 
   const resumos=loadResumosSemana();
@@ -1918,7 +2101,7 @@ function renderHome(){
     const ex=TREINOS[pend.tipo].exercicios[pend.exIdx];
     document.getElementById('home-pending').innerHTML=`<div class="pending-card">
       <div class="pending-label">● Em andamento</div>
-      <div class="pending-name">Treino ${pend.tipo} · ${exNome(ex)}<br><span style="font-size:12px;color:var(--muted)">Série ${(pend.serieIdxs?pend.serieIdxs[pend.exIdx]:pend.serieIdx||0)+1}/3</span></div>
+      <div class="pending-name">Treino ${pend.tipo} · ${exNome(ex)}<br><span style="font-size:12px;color:var(--muted)">Série ${(pend.serieIdxs?pend.serieIdxs[pend.exIdx]:pend.serieIdx||0)+1}/${(ex&&ex.series)||3}</span></div>
       <button class="btn btn-primary" onclick="retomar()" style="margin-bottom:6px">↩ Retomar de onde parei</button>
       <button class="btn btn-red" onclick="descartar()">Descartar</button>
     </div>`;
@@ -2015,6 +2198,31 @@ function retomar(){
 }
 
 /* ════ EXERCICIO ════ */
+/* Meta de repetições de um exercício. Suporta: reps fixas (4×10), reps por série — "Progressivo"
+   (3 séries de 10 / 8 / 6 com carga crescente) — e conjugado com reps diferentes em cada
+   exercício (10 + 12). */
+function repsSerie(ex,i){ // meta de repetições da série i (0-based)
+  if(Array.isArray(ex.repsPorSerie)&&ex.repsPorSerie.length)return ex.repsPorSerie[Math.min(i,ex.repsPorSerie.length-1)];
+  return ex.reps;
+}
+function metaReps(ex){ // só a parte das repetições, ex.: "10 reps" · "10 / 8 / 6 reps" · "10 reps + 12 reps"
+  const u=(v,t)=>t?v+'s':v+' reps';
+  if(Array.isArray(ex.repsPorSerie)&&ex.repsPorSerie.length)return ex.repsPorSerie.join(' / ')+(ex.isTime?'s':' reps');
+  if(ex.tipo==='conjugado'){
+    if(ex.reps2==null&&ex.isTime2==null)return u(ex.reps,ex.isTime)+' cada';
+    return u(ex.reps,ex.isTime)+' + '+u(ex.reps2!=null?ex.reps2:ex.reps,ex.isTime2!=null?ex.isTime2:ex.isTime);
+  }
+  return u(ex.reps,ex.isTime);
+}
+function metaCurta(ex){return (ex.series||3)+'×'+metaReps(ex)}
+/* Rótulo curto de cada exercício do conjugado — se os dois começam com a mesma palavra
+   (ex.: "Cadeira flexora unilateral" + "Cadeira flexora") usa o nome completo para não ficar ambíguo */
+function rotulosConj(ex){
+  const a=ex.nome.split(' ')[0], b=(ex.nome2||'').split(' ')[0];
+  return a.toLowerCase()===b.toLowerCase()?[ex.nome,ex.nome2]:[a,b];
+}
+function ehProgressivo(ex){return Array.isArray(ex.repsPorSerie)&&ex.repsPorSerie.length>0}
+
 function exNome(ex){
   if(!ex)return'';
   if(ex.tipo==='esteira_inicio')return'Esteira (aquecimento)';
@@ -2062,23 +2270,28 @@ function renderExCard(){
     const n2=ex.link2?`<a href="${ex.link2}" target="_blank">${ex.nome2}</a>`:ex.nome2;
     nomeHtml=`${n1} <span style="color:var(--amber)">+</span> ${n2}`;
     linkHtml=`<div class="link-row">
-      ${ex.link?`<a class="link-btn" href="${ex.link}" target="_blank">▶ Ver ${ex.nome.split(' ')[0]}</a>`:''}
-      ${ex.link2?`<a class="link-btn" href="${ex.link2}" target="_blank">▶ Ver ${ex.nome2.split(' ')[0]}</a>`:''}
+      ${ex.link?`<a class="link-btn" href="${ex.link}" target="_blank">▶ Ver ${rotulosConj(ex)[0]}</a>`:''}
+      ${ex.link2?`<a class="link-btn" href="${ex.link2}" target="_blank">▶ Ver ${rotulosConj(ex)[1]}</a>`:''}
     </div>`;
   }else{
     nomeHtml=ex.link?`<a href="${ex.link}" target="_blank">${ex.nome}</a>`:ex.nome;
     if(ex.link)linkHtml=`<div class="link-row"><a class="link-btn" href="${ex.link}" target="_blank">▶ Ver exercício</a></div>`;
   }
 
-  const metaText=ex.tipo==='conjugado'
-    ?`${ex.series||3} séries × ${ex.isTime?ex.reps+'s':ex.reps+' reps'} cada`
-    :`${ex.series||3} séries × ${ex.isTime?ex.reps+'s':ex.reps+' reps'}`;
+  const metaText=`${ex.series||3} séries × ${metaReps(ex)}`;
+  const serieAtual=E.serieIdxs[E.exIdx];
+  const prog=ehProgressivo(ex);
+  const progHtml=prog&&serieAtual<(ex.series||3)
+    ?`<div class="ex-prog">📈 Progressivo — série ${serieAtual+1}: <b>${repsSerie(ex,serieAtual)} reps</b> · aumente a carga a cada série</div>`:'';
+  const obsHtml=ex.obs?`<div class="ex-obs">📝 Observação: ${ex.obs}</div>`:'';
 
   document.getElementById('ex-card').innerHTML=`
-    <div class="ex-tag">Exercício ${normDone+1} de ${normTotal}${ex.tipo==='conjugado'?' · conjugado':''}</div>
+    <div class="ex-tag">Exercício ${normDone+1} de ${normTotal}${ex.tipo==='conjugado'?' · conjugado':''}${prog?' · progressivo':''}</div>
     <div class="ex-name">${nomeHtml}</div>
-    ${ex.tipo==='conjugado'?`<div class="ex-conjugado">⚡ Faça os dois em sequência</div>`:''}
+    ${ex.tipo==='conjugado'?`<div class="ex-conjugado">⚡ Faça os dois em sequência · descanso só no final</div>`:''}
     <div class="ex-meta">${metaText}</div>
+    ${progHtml}
+    ${obsHtml}
     <div class="series-badges">${badges}</div>
     ${linkHtml}`;
 }
@@ -2095,11 +2308,11 @@ function renderSeriesDone(){
           <span style="font-size:10px;color:var(--muted)">✎ editar</span>
         </div>
         <div style="display:flex;gap:4px;flex-wrap:wrap">
-          <span style="font-size:10px;color:var(--accent2);font-family:var(--mono)">${ex.nome.split(' ')[0]}:</span>
+          <span style="font-size:10px;color:var(--accent2);font-family:var(--mono)">${rotulosConj(ex)[0]}:</span>
           <span class="pill">${s.peso}kg</span><span class="pill">${s.reps} reps</span><span class="pill g">${s.tempo}s</span>
         </div>
         <div style="display:flex;gap:4px;flex-wrap:wrap">
-          <span style="font-size:10px;color:var(--amber);font-family:var(--mono)">${ex.nome2.split(' ')[0]}:</span>
+          <span style="font-size:10px;color:var(--amber);font-family:var(--mono)">${rotulosConj(ex)[1]}:</span>
           <span class="pill">${s.peso2}kg</span><span class="pill">${s.reps2} reps</span>
         </div>
       </div>`;
@@ -2181,7 +2394,12 @@ function renderActionArea(){
   const ur2=getUltimaReps2();
   const jaRodando=!!E.serieStartTs;
   const repsLabel=ex.isTime?'Meta (seg)':'Repetições';
-  const repsPlaceholder=ex.isTime?ex.reps:'0';
+  const serieAtual=E.serieIdxs[E.exIdx];
+  const prog=ehProgressivo(ex);
+  const metaAtual=repsSerie(ex,serieAtual);
+  const repsPlaceholder=ex.isTime?ex.reps:(metaAtual||'0');
+  // progressivo: pré-preenche com a meta DESSA série (10, depois 8, depois 6); nos demais, repete a série anterior
+  const repsValor=prog?metaAtual:ur;
 
   let inputsHtml='';
   if(ex.tipo==='conjugado'){
@@ -2204,7 +2422,7 @@ function renderActionArea(){
   }else{
     inputsHtml=`<div class="input-grid">
       <div class="field"><label>Peso (kg)</label><input type="number" id="inp-peso" min="0" step="0.5" inputmode="decimal" placeholder="0" value="${up}"></div>
-      <div class="field"><label>${repsLabel}</label><input type="number" id="inp-reps" min="1" step="1" inputmode="numeric" placeholder="${repsPlaceholder}" value="${ur}"></div>
+      <div class="field"><label>${repsLabel}</label><input type="number" id="inp-reps" min="1" step="1" inputmode="numeric" placeholder="${repsPlaceholder}" value="${repsValor}"></div>
     </div>`;
   }
 
@@ -2311,7 +2529,7 @@ function finalizarSerie(){
     if(proxIdx!==-1){
       const pex=TREINOS[E.tipo].exercicios[proxIdx];
       proxLabel=pex.tipo==='esteira_fim'?'Esteira finalização (20 min)':
-        `${exNome(pex)} — ${pex.series||3}×${pex.isTime?pex.reps+'s':pex.reps+' reps'}`;
+        `${exNome(pex)} — ${metaCurta(pex)}`;
     }
     iniciarDescanso(REST_EX,'DESCANSO ENTRE EXERCÍCIOS','ac','Troque de equipamento',proxLabel,()=>avancarExercicio());
   }
@@ -2391,7 +2609,7 @@ function abrirLista(){
     const click=locked?'':`onclick="${pulado?`retornarPulado(${i})`:`irParaEx(${i})`}"`;
     html+=`<div class="modal-item ${cls}" ${click}>
       <span class="mi-num">${i+1}</span>
-      <span class="mi-name">${exNome(ex)}<br><span style="font-size:10px;color:var(--muted)">${ex.series||3}×${ex.isTime?ex.reps+'s':ex.reps+' reps'}</span></span>
+      <span class="mi-name">${exNome(ex)}<br><span style="font-size:10px;color:var(--muted)">${metaCurta(ex)}</span></span>
       ${badge}</div>`;
   });
   document.getElementById('modal-items').innerHTML=html;
@@ -2882,7 +3100,7 @@ function renderHist(tab){
   }else if(tab==='treinos'){
     // Lista dos treinos antigos para referência (todos os planos anteriores)
     let html='<div class="card" style="margin-bottom:14px;background:rgba(245,158,11,.07);border-color:rgba(245,158,11,.2)"><div style="font-size:12px;color:var(--amber);line-height:1.6">📋 Lista dos treinos anteriores para consulta. Estes treinos não estão disponíveis para execução — são apenas referência.</div></div>';
-    const gruposAntigos=[TREINOS_ANTIGOS_V2, TREINOS_ANTIGOS]; // mais recente primeiro
+    const gruposAntigos=[TREINOS_ANTIGOS_V3, TREINOS_ANTIGOS_V2, TREINOS_ANTIGOS]; // mais recente primeiro
     gruposAntigos.forEach(grupo=>{
       Object.keys(grupo).forEach(t=>{
         const tr=grupo[t];
@@ -2903,8 +3121,9 @@ function renderHist(tab){
               <div style="flex:1">
                 <div style="font-size:13px;font-weight:500">${ex.nome}</div>
                 ${ex.nome2?`<div style="font-size:11px;color:var(--amber);margin-top:2px">+ ${ex.nome2}</div>`:''}
+                ${ex.obs?`<div style="font-size:10px;color:var(--muted);margin-top:2px">📝 ${ex.obs}</div>`:''}
               </div>
-              <span style="font-size:11px;font-family:var(--mono);color:var(--muted);white-space:nowrap;margin-left:10px">${ex.series||3}×${ex.isTime?ex.reps+'s':ex.reps+' reps'}</span>
+              <span style="font-size:11px;font-family:var(--mono);color:var(--muted);white-space:nowrap;margin-left:10px">${metaCurta(ex)}</span>
             </div>`).join('')}
           <div style="display:flex;align-items:center;gap:6px;margin-top:10px;padding:8px 10px;background:var(--surface2);border-radius:8px">
             <span style="font-size:11px;color:var(--muted);font-family:var(--mono)">🏃 Esteira finalização 20min</span>
@@ -2928,9 +3147,10 @@ function buildHistCard(h){
     return nomesReais.every((n,i)=>n===nomesHistFiltrado[i]);
   }
   const exsNovos=TREINOS[h.tipo]?TREINOS[h.tipo].exercicios:null;
+  const exsAntigosV3=TREINOS_ANTIGOS_V3[h.tipo]?TREINOS_ANTIGOS_V3[h.tipo].exercicios:null;
   const exsAntigosV2=TREINOS_ANTIGOS_V2[h.tipo]?TREINOS_ANTIGOS_V2[h.tipo].exercicios:null;
   const exsAntigos=TREINOS_ANTIGOS[h.tipo]?TREINOS_ANTIGOS[h.tipo].exercicios:null;
-  const exs = nomesBatem(exsNovos)?exsNovos : (nomesBatem(exsAntigosV2)?exsAntigosV2 : (nomesBatem(exsAntigos)?exsAntigos : []));
+  const exs = nomesBatem(exsNovos)?exsNovos : (nomesBatem(exsAntigosV3)?exsAntigosV3 : (nomesBatem(exsAntigosV2)?exsAntigosV2 : (nomesBatem(exsAntigos)?exsAntigos : [])));
   let exHtml='';
   // esteiras primeiro, se houver registro
   if(h.esteiraLog&&h.esteiraLog.length){
@@ -3093,15 +3313,15 @@ function buildSystemPrompt(){
   return `Você é um assistente pessoal de treino e saúde do Rafael Pinto, integrado ao app de treino dele.
 
 CONTEXTO DO RAFAEL:
-- Idade: 41 anos | Altura: 186cm | Peso: 92.5kg | Meta: 82kg
+- Idade: 41 anos | Altura: 186cm | Peso: 91.7kg (avaliação de 16/11/2026) | Meta: 82kg
 - Treina de segunda a sexta às 08h na academia
-- Plano atual (desde 12/08/2026): Treinos A (Peito/Tríceps/Ombros), B (Costas/Bíceps/Abdômen), C (Pernas/Glúteos), D (Ombros/Peito/Bíceps/Tríceps/Core) — ${META_SESSOES} sessões cada até ${PRAZO.toLocaleDateString('pt-BR')}
+- Plano atual (desde 16/11/2026): Treinos A (Peito/Tríceps/Abdômen), B (Costas/Bíceps/Abdômen — com puxada barra romana progressiva 10/8/6 reps), C (Pernas/Ombros/Core), D (Ombros/Pernas/Posterior — com conjugado cadeira flexora unilateral 10 reps + cadeira flexora 12 reps) — ${META_SESSOES} sessões cada até ${PRAZO.toLocaleDateString('pt-BR')}
 - Sessões concluídas: A=${sess.A||0}/${META_SESSOES}, B=${sess.B||0}/${META_SESSOES}, C=${sess.C||0}/${META_SESSOES}, D=${sess.D||0}/${META_SESSOES}
 - Pré-treino: mix próprio em partes iguais (30g cada) de guaraná, beterraba, farinha de uva, maca peruana e tribulus terrestre — total 150g. Linhaça dourada e psyllium são consumidos separados (fora do pré-treino) + creatina 5g + própolis 70
 - Pós-treino: tapioca + 50g frango desfiado + 1 ovo + mussarela + 2 ovos cozidos (~40g proteína)
-- Suplementos: creatina 5g (pré-treino), D3+K2 Ecomev 1 cápsula (manhã), Nutrends 5 Magnésio + Treonina 2 cápsulas (22h-23h)
-- Avaliação física mais recente (12/08/2026): pontuação 80, gordura visceral 8 (melhorou de 9), massa muscular esquelética 41kg (excelente). Evolução desde 11/05: peso -0.5kg, massa gorda -1kg
-- Meta proteína: 167-204g/dia | Meta calórica: 2300-2400 kcal/dia
+- Suplementos: creatina 5g (pré-treino), D3+K2 Ecomev 1 cápsula (manhã), Ômega 3 Dark Lab 2 cápsulas (almoço ou jantar, com comida; frasco de 240 dividido com a Aline, começou em 12/10/2026), Nutrends 5 Magnésio + Treonina 2 cápsulas (22h-23h)
+- Avaliação física mais recente (16/11/2026): pontuação 83 (bom), massa gorda 19kg, gordura visceral 7 (melhorou de 8), massa muscular 67.7kg, massa muscular esquelética 41.6kg (excelente), idade do corpo 43. Evolução desde 12/08: peso -0.8kg, massa gorda -1.7kg, massa muscular +1kg. O relatório indica peso padrão de 85.6kg (-6.1kg de gordura, 0kg de músculo) e ingestão calórica de referência de 2522kcal
+- Meta proteína: 165-202g/dia | Meta calórica: 2300-2400 kcal/dia
 
 Responda de forma direta, prática e personalizada. Use os dados do Rafael para respostas específicas. Seja conciso mas completo. Escreva em português brasileiro.`;
 }
@@ -3201,17 +3421,32 @@ function limparApiKey(){
 }
 
 /* ════ ESTOQUE DE SUPLEMENTOS — aviso de quando vai acabar ════ */
+// Itens novos que precisam aparecer mesmo para quem já tem estoque salvo no aparelho/GitHub.
+// Ômega 3 Dark Lab: 240 cápsulas divididas com a Aline → 2 caps cada/dia = 4/dia → 60 dias a partir de 12/10/2026.
+const ESTOQUE_ITENS_NOVOS=[
+  {id:'omega3',nome:'Ômega 3 Dark Lab (240 caps, dividido com a Aline)',inicio:'2026-10-12',duracaoDias:60,dosesPorDia:4},
+];
+function garantirItensEstoque(lista){
+  const base=Array.isArray(lista)?lista.slice():[]; // cópia: não altera o array original
+  const ids=new Set(base.map(i=>i&&i.id));
+  ESTOQUE_ITENS_NOVOS.forEach(n=>{if(!ids.has(n.id))base.push({...n})});
+  return base;
+}
 function loadEstoque(){
   try{
     const e=JSON.parse(localStorage.getItem('gym_estoque')||'null');
-    if(e)return e;
+    if(Array.isArray(e)){
+      const completo=garantirItensEstoque(e);
+      if(completo.length!==e.length)saveEstoque(completo); // grava só quando entrou item novo
+      return completo;
+    }
   }catch(err){}
   // seed inicial baseado no que você já tem
-  return[
+  return garantirItensEstoque([
     {id:'d3k2',nome:'Vitamina D3+K2 Ecomev',inicio:'2026-06-01',duracaoDias:120,dosesPorDia:1},
     {id:'magnesio',nome:'Nutrends 5 Magnésio + Treonina',inicio:'2026-06-17',duracaoDias:30,dosesPorDia:2},
     {id:'creatina',nome:'Creatina monohidratada',inicio:null,duracaoDias:null,dosesPorDia:1},
-  ];
+  ]);
 }
 function saveEstoque(e){try{localStorage.setItem('gym_estoque',JSON.stringify(e))}catch(err){}}
 function diasRestantesEstoque(item){
