@@ -1,4 +1,4 @@
-const CACHE = 'treino-v5'; // versão bumped — corrige mojibake que sobrava em estoque/resumos semanais
+const CACHE = 'treino-v7'; // versão bumped — novo plano de 16/11/2026 (séries por repetição, conjugado 10+12), avaliação de 16/11 e migração de plano
 
 const ASSETS = [
   './',
