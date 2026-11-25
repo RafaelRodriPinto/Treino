@@ -1,6 +1,218 @@
 {
   "treinos": [
     {
+      "tipo": "B",
+      "plano": "novo",
+      "planoId": "2026-11-16",
+      "data": "Wed Nov 25 2026",
+      "dataStr": "25/11/26",
+      "inicio": 1795604194355,
+      "fim": 1795611128632,
+      "exNames": [
+        "Esteira (aquecimento)",
+        "Puxada articulada",
+        "Remada curvada máquina",
+        "Remada máquina aberta",
+        "Puxada barra romana",
+        "Bíceps martelo com rotação",
+        "Rosca bíceps barra W",
+        "Scott máquina",
+        "Abdominal canivete",
+        "Esteira (finalização)"
+      ],
+      "series": [
+        [],
+        [
+          {
+            "peso": 40,
+            "reps": 12,
+            "tempo": 2
+          },
+          {
+            "peso": 40,
+            "reps": 12,
+            "tempo": 43
+          },
+          {
+            "peso": 40,
+            "reps": 12,
+            "tempo": 40
+          },
+          {
+            "peso": 40,
+            "reps": 12,
+            "tempo": 39
+          }
+        ],
+        [
+          {
+            "peso": 15,
+            "reps": 10,
+            "tempo": 2
+          },
+          {
+            "peso": 15,
+            "reps": 10,
+            "tempo": 40
+          },
+          {
+            "peso": 15,
+            "reps": 10,
+            "tempo": 42
+          },
+          {
+            "peso": 15,
+            "reps": 10,
+            "tempo": 39
+          }
+        ],
+        [
+          {
+            "peso": 20,
+            "reps": 10,
+            "tempo": 2
+          },
+          {
+            "peso": 20,
+            "reps": 10,
+            "tempo": 43
+          },
+          {
+            "peso": 20,
+            "reps": 10,
+            "tempo": 43
+          },
+          {
+            "peso": 20,
+            "reps": 10,
+            "tempo": 43
+          }
+        ],
+        [
+          {
+            "peso": 52,
+            "reps": 10,
+            "tempo": 62
+          },
+          {
+            "peso": 59,
+            "reps": 8,
+            "tempo": 44
+          },
+          {
+            "peso": 59,
+            "reps": 6,
+            "tempo": 38
+          }
+        ],
+        [
+          {
+            "peso": 12,
+            "reps": 10,
+            "tempo": 46
+          },
+          {
+            "peso": 12,
+            "reps": 10,
+            "tempo": 40
+          },
+          {
+            "peso": 12,
+            "reps": 10,
+            "tempo": 38
+          },
+          {
+            "peso": 12,
+            "reps": 10,
+            "tempo": 46
+          }
+        ],
+        [
+          {
+            "peso": 20,
+            "reps": 10,
+            "tempo": 2
+          },
+          {
+            "peso": 20,
+            "reps": 10,
+            "tempo": 42
+          },
+          {
+            "peso": 20,
+            "reps": 10,
+            "tempo": 42
+          },
+          {
+            "peso": 20,
+            "reps": 10,
+            "tempo": 47
+          }
+        ],
+        [
+          {
+            "peso": 39,
+            "reps": 10,
+            "tempo": 2
+          },
+          {
+            "peso": 39,
+            "reps": 10,
+            "tempo": 42
+          },
+          {
+            "peso": 39,
+            "reps": 10,
+            "tempo": 42
+          },
+          {
+            "peso": 39,
+            "reps": 10,
+            "tempo": 40
+          }
+        ],
+        [
+          {
+            "peso": 0,
+            "reps": 12,
+            "tempo": 58
+          },
+          {
+            "peso": 0,
+            "reps": 12,
+            "tempo": 44
+          },
+          {
+            "peso": 0,
+            "reps": 12,
+            "tempo": 55
+          },
+          {
+            "peso": 0,
+            "reps": 12,
+            "tempo": 41
+          }
+        ],
+        []
+      ],
+      "pulados": [],
+      "esteiraLog": [
+        {
+          "tipo": "esteira_inicio",
+          "status": "concluida",
+          "duracaoMeta": 600,
+          "duracaoFeita": 600
+        },
+        {
+          "tipo": "esteira_fim",
+          "status": "concluida",
+          "duracaoMeta": 1200,
+          "duracaoFeita": 1200
+        }
+      ],
+      "kcal": 768
+    },
+    {
       "tipo": "A",
       "plano": "novo",
       "planoId": "2026-11-16",
@@ -22903,218 +23115,6 @@
         12
       ],
       "plano": "antigo"
-    },
-    {
-      "tipo": "A",
-      "data": "Tue Apr 28 2026",
-      "dataStr": "28/04/26",
-      "inicio": 1777374296508,
-      "fim": 1777381054059,
-      "exNames": [
-        "Esteira (aquecimento)",
-        "Supino Máquina",
-        "Voador Peitoral",
-        "Hammer Inclinado",
-        "Crucifixo Aberto c/ HBC",
-        "Tríceps Pulley",
-        "Tríceps Corda",
-        "Tríceps Francês Unilateral",
-        "Cadeira Extensora",
-        "Cadeira Adutora",
-        "Leg Horizontal (pés abduzidos)",
-        "Flexão Quadril c/ Caneleira",
-        "Abdominal Supra (solo)",
-        "Esteira (finalização)"
-      ],
-      "series": [
-        [],
-        [
-          {
-            "peso": 39,
-            "reps": 12,
-            "tempo": 50
-          },
-          {
-            "peso": 45,
-            "reps": 12,
-            "tempo": 42
-          },
-          {
-            "peso": 45,
-            "reps": 12,
-            "tempo": 15
-          }
-        ],
-        [
-          {
-            "peso": 5,
-            "reps": 12,
-            "tempo": 1
-          },
-          {
-            "peso": 5,
-            "reps": 12,
-            "tempo": 1
-          },
-          {
-            "peso": 5,
-            "reps": 12,
-            "tempo": 4
-          }
-        ],
-        [
-          {
-            "peso": 15,
-            "reps": 10,
-            "tempo": 50
-          },
-          {
-            "peso": 15,
-            "reps": 8,
-            "tempo": 45
-          },
-          {
-            "peso": 15,
-            "reps": 8,
-            "tempo": 39
-          }
-        ],
-        [
-          {
-            "peso": 12,
-            "reps": 12,
-            "tempo": 4
-          },
-          {
-            "peso": 12,
-            "reps": 12,
-            "tempo": 59
-          },
-          {
-            "peso": 12,
-            "reps": 12,
-            "tempo": 57
-          }
-        ],
-        [
-          {
-            "peso": 35,
-            "reps": 12,
-            "tempo": 51
-          },
-          {
-            "peso": 35,
-            "reps": 12,
-            "tempo": 39
-          },
-          {
-            "peso": 35,
-            "reps": 12,
-            "tempo": 41
-          }
-        ],
-        [
-          {
-            "peso": 15,
-            "reps": 12,
-            "tempo": 39
-          },
-          {
-            "peso": 15,
-            "reps": 12,
-            "tempo": 38
-          },
-          {
-            "peso": 15,
-            "reps": 12,
-            "tempo": 43
-          }
-        ],
-        [
-          {
-            "peso": 7,
-            "reps": 12,
-            "tempo": 44
-          },
-          {
-            "peso": 7,
-            "reps": 12,
-            "tempo": 62
-          },
-          {
-            "peso": 7,
-            "reps": 12,
-            "tempo": 67
-          }
-        ],
-        [
-          {
-            "peso": 45,
-            "reps": 12,
-            "tempo": 47
-          },
-          {
-            "peso": 45,
-            "reps": 12,
-            "tempo": 50
-          },
-          {
-            "peso": 45,
-            "reps": 12,
-            "tempo": 2
-          }
-        ],
-        [
-          {
-            "peso": 59,
-            "reps": 12,
-            "tempo": 32
-          },
-          {
-            "peso": 59,
-            "reps": 12,
-            "tempo": 30
-          },
-          {
-            "peso": 59,
-            "reps": 12,
-            "tempo": 30
-          }
-        ],
-        [
-          {
-            "peso": 5,
-            "reps": 12,
-            "tempo": 44
-          },
-          {
-            "peso": 5,
-            "reps": 12,
-            "tempo": 73
-          },
-          {
-            "peso": 5,
-            "reps": 12,
-            "tempo": 62
-          }
-        ],
-        [
-          null,
-          null,
-          null
-        ],
-        [
-          null,
-          null,
-          null
-        ],
-        []
-      ],
-      "pulados": [
-        11,
-        12
-      ],
-      "plano": "antigo"
     }
   ],
   "peso": [
@@ -23133,11 +23133,11 @@
     }
   ],
   "hidratacao": {
-    "data": "Tue Nov 24 2026",
+    "data": "Wed Nov 25 2026",
     "feitos": []
   },
   "suplementos": {
-    "data": "Tue Nov 24 2026",
+    "data": "Wed Nov 25 2026",
     "feitos": []
   },
   "avaliacoes": [
